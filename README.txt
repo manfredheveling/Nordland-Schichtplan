@@ -27,6 +27,7 @@ ENTHALTENE FUNKTIONEN
 - Erinnerungs-Einstellungen werden beim Teilen eines Termins mit übertragen
 - Teilen/Export über die Teilen-Funktion des Geräts
 - Kalenderexport als ICS-Datei
+- Einzelne Termine direkt als ICS-Kalenderdatei teilen; Datum, Uhrzeit, Notiz und bis zu zwei Erinnerungen werden für externe Kalender mitgegeben
 - Erinnerungsoptionen und Browser-Benachrichtigungen
 - Offline-Caching bei Bereitstellung über HTTPS
 
@@ -34,7 +35,7 @@ WICHTIGE GRENZEN
 - Termine, Favoriten und Einstellungen bleiben lokal auf dem jeweiligen Gerät. Favoriten werden in der privaten Datensicherung mitgesichert, aber nicht an Kollegen weitergegeben. Datei-Export oder WhatsApp-Versand ist keine automatische Synchronisierung.
 - Die Auswahl direkt aus den Telefonkontakten wird nur von kompatiblen Browsern unterstützt; die manuelle Eingabe von Name und Telefonnummer ist immer möglich.
 - Termin-Links enthalten die Termindaten direkt im Link. Die App muss dafür bereits über HTTPS veröffentlicht sein (z. B. GitHub Pages), und der Empfänger muss denselben App-Link öffnen. Beim Öffnen bestätigt der Empfänger die Übernahme, Aktualisierung oder Löschung.
-- Ein Lösch-Link entfernt den Termin aus der Nordland-App des Empfängers, nicht aus einem separaten Google-/Apple-/Samsung-Kalender. Bereits übernommene externe Kalendereinträge müssen dort zusätzlich manuell entfernt werden.
+- Ein Lösch-Link entfernt den Termin aus der Nordland-App des Empfängers, nicht aus einem separaten Google-/Apple-/Samsung-Kalender. Bereits übernommene externe Kalendereinträge müssen dort zusätzlich manuell entfernt werden. ICS-Dateien werden als eigenständige Kalendereinträge importiert; spätere Änderungen in der Nordland-App synchronisieren sich nicht automatisch mit dem externen Kalender.
 - Es gibt keine automatische Synchronisierung und keinen Server. Änderungen und Löschungen werden nur wirksam, wenn der Empfänger den jeweiligen neuen Link öffnet und bestätigt.
 - Browser-Erinnerungen hängen von Browser, Berechtigungen und Geräteeinstellungen ab. Eine zuverlässige Zustellung bei vollständig geschlossener App kann ohne Push-Server nicht garantiert werden.
 - Der PIN ist ein lokaler App-Schutz, keine Verschlüsselung der gespeicherten Daten.
