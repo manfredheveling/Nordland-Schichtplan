@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#173b63">
+<meta name="description" content="Nordland Schichtplan – persönlicher Schichtkalender">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Nordland – Schichtplan</title>
+<style>
+:root{--bg:#f2f5f9;--panel:#fff;--text:#172334;--muted:#66758a;--line:#dce3ec;--blue:#173b63;--accent:#2874b9;--soft:#eaf2fb;--shadow:0 8px 24px #173b6312}
+[data-theme=dark]{--bg:#111923;--panel:#1b2735;--text:#edf3fa;--muted:#a9b7c8;--line:#344355;--blue:#8db9e8;--accent:#69a9e7;--soft:#263b52;--shadow:0 8px 24px #0003}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:#173b63;color:white;padding:18px max(18px,calc((100vw - 980px)/2));display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-weight:800;font-size:20px;letter-spacing:.2px}.brand small{display:block;font-size:11px;font-weight:500;opacity:.8;letter-spacing:1.3px}
+main{max-width:980px;margin:0 auto;padding:18px 14px 90px}.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+button,.btn{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:11px;padding:10px 13px;font:inherit;font-weight:650;cursor:pointer}
+button.primary{background:var(--accent);border-color:var(--accent);color:white}button:disabled{opacity:.45;cursor:not-allowed}
+.tabs{display:flex;gap:6px;overflow:auto;margin:0 0 14px;padding-bottom:3px}.tabs button{white-space:nowrap}.tabs button.active{background:var(--blue);color:white;border-color:var(--blue)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow);margin-bottom:14px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px}.muted{color:var(--muted)}.small{font-size:12px}.title{font-size:20px;font-weight:800;margin:0 0 10px}.sub{font-size:13px;color:var(--muted);margin-top:-5px}
+.monthhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.monthhead strong{font-size:18px}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.weekday{text-align:center;color:var(--muted);font-size:11px;font-weight:700;padding:4px 0}
+.day{touch-action:none;user-select:none;-webkit-user-select:none;min-height:82px;border:1px solid var(--line);border-radius:10px;padding:6px;background:var(--panel);text-align:left;position:relative}
+.day.out{opacity:.35}.day.today{outline:2px solid var(--accent)}.day.selected{border:2px solid var(--accent);padding:5px}
+.day .num{font-weight:800;font-size:13px}.shift{display:block;font-size:10px;font-weight:800;border-radius:5px;padding:2px 3px;margin-top:5px;text-align:center}
+.F{background:#d9f2df;color:#17612c}.S{background:#d9eaff;color:#174b80}.N{background:#ffd9d9;color:#8a2020}.X{background:#e4ece7;color:#42624d}
+[data-theme=dark] .F{background:#245b36;color:#d5ffe0}[data-theme=dark] .S{background:#244d78;color:#d9eaff}[data-theme=dark] .N{background:#702d2d;color:#ffd9d9}[data-theme=dark] .X{background:#294637;color:#c9f1d5}
+.dot{width:5px;height:5px;background:#e17b39;border-radius:50%;display:inline-block;margin:4px 2px 0}.day.range-start,.day.range-end,.day.in-range{outline:2px solid #b68a24;background:var(--soft)}.day.drag-range{background:#dcecff!important;outline:2px solid #2874b9!important}[data-theme=dark] .day.drag-range{background:#294968!important}.special-label{display:block;font-size:10px;font-weight:800;line-height:1.15;margin-top:3px;padding:3px 2px;border-radius:5px;background:#111;color:#fff;text-align:center;overflow-wrap:anywhere}.shift-time{display:block;font-size:8px;font-weight:700;line-height:1.1;margin-top:1px;text-align:center;color:var(--text)}.range-tools{display:grid;grid-template-columns:1fr 1fr;gap:10px}.hint{font-size:12px;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:5px;margin:9px 0}.field label{font-size:12px;color:var(--muted);font-weight:700}
+input,select,textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--text);font:inherit}
+textarea{min-height:85px;resize:vertical}.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.item{padding:11px 0;border-bottom:1px solid var(--line)}.item:last-child{border:0}.pill{display:inline-block;padding:3px 8px;border-radius:99px;background:var(--soft);color:var(--blue);font-size:11px;font-weight:800}
+.notice{padding:12px;border-radius:12px;background:var(--soft);color:var(--text);font-size:13px;margin:10px 0}
+.hidden{display:none!important}.bottomnav{position:fixed;bottom:0;left:0;right:0;background:var(--panel);border-top:1px solid var(--line);display:flex;justify-content:center;gap:5px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));z-index:5}
+.bottomnav button{flex:1;max-width:180px;padding:9px 4px;font-size:12px}
+dialog{border:1px solid var(--line);border-radius:18px;background:var(--panel);color:var(--text);width:min(92vw,480px);padding:20px;box-shadow:0 20px 80px #0005}
+dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+@media(max-width:560px){main{padding:12px 10px 90px}.card{padding:13px}.day{min-height:76px;padding:4px}.day.selected{padding:3px}.shift{font-size:9px;padding:2px 1px}.grid2{grid-template-columns:1fr}.brand{font-size:18px}}
+</style>
+</head>
+<body>
+<header><div class="brand">NORDLAND <small>SCHICHTPLAN</small></div><div class="small">Manfred Heveling</div></header>
+<main>
+ <div class="toolbar">
+  <label class="small" style="display:flex;align-items:center;gap:6px">Plan <select id="planSelect" style="width:auto;padding:8px"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></label><button id="themeBtn">☾ Darstellung</button><button id="shareBtn" class="primary">Teilen / Export</button><button id="backupBtn">Datensicherung</button>
+ </div>
+ <nav class="tabs">
+  <button class="active" data-tab="calendar">Kalender</button><button data-tab="day">Tagesdetails</button><button data-tab="settings">Einstellungen</button>
+ </nav>
+ <section id="calendar">
+  <div class="card">
+   <div class="monthhead"><button id="prevMonth">‹</button><strong id="monthLabel"></strong><button id="nextMonth">›</button></div>
+   <div class="calendar" id="calendarGrid"></div>
+  </div>
+  <div class="card"><div class="row"><div><div class="title" id="selectedTitle">Ausgewählter Tag</div><div class="sub" id="selectedShift"></div></div><button id="openDay">Details</button></div><div id="selectedEvents" class="muted small"></div></div>
+ </section>
+ <section id="day" class="hidden">
+  <div class="card">
+   <div class="row"><div><h2 class="title" id="dayHeading">Tagesdetails</h2><div class="sub" id="dayShift"></div></div><input id="dayDate" type="date" style="max-width:155px"></div>
+   <div class="title" style="font-size:16px;margin-top:18px">Urlaub, AZK und LZK – Zeitraum eintragen</div>
+   <p class="hint">Du kannst Von- und Bis-Datum hier eingeben oder im Monatskalender einen Tag gedrückt halten und über weitere Tage ziehen. Nach dem Loslassen wählst du die Eintragsart.</p>
+   <div class="range-tools"><div class="field"><label>Von</label><input id="periodStart" type="date"></div><div class="field"><label>Bis</label><input id="periodEnd" type="date"></div></div>
+   <div class="field"><label>Eintrag</label><select id="periodType"><option value="Urlaub">Urlaub</option><option value="AZK">AZK</option><option value="LZK">LZK</option></select></div>
+   <div class="actions"><button class="primary" id="savePeriod">Zeitraum speichern</button><button id="cancelPeriod">Abbrechen</button></div>
+   <div id="periodList"></div>
+   <div class="title" style="font-size:16px;margin-top:22px">Persönliche Termine und Notizen</div>
+   <div id="eventList"></div>
+   <div class="actions"><button class="primary" id="addEvent">+ Termin / Notiz</button></div>
+  </div>
+ </section>
+ <section id="settings" class="hidden">
+  <div class="card">
+   <h2 class="title">Schichtpläne A bis D</h2>
+   <p class="sub">Alle vier Pläne verwenden dieselbe 28-Tage-Folge. Wähle oben im Kalender, welchen Plan du ansehen möchtest.</p>
+   <div class="grid2">
+    <div class="field"><label>Plan A – Montag Früh</label><input id="anchorA" type="date" value="2026-10-26"></div>
+    <div class="field"><label>Plan B – Montag Früh</label><input id="anchorB" type="date" value="2026-11-16"></div>
+    <div class="field"><label>Plan C – Montag Früh</label><input id="anchorC" type="date" value="2026-11-09"></div>
+    <div class="field"><label>Plan D – Montag Früh</label><input id="anchorD" type="date" value="2026-11-02"></div>
+   </div>
+   <div class="notice">Festgelegte Folge (28 Tage): Früh Mo–Mi, Nacht Do–So, frei Mo–Di, Spät Mi–Sa, frei So, Spät Mo–Di, frei Mi, Früh Do–So, Nacht Mo–Mi, frei Do–So. Startpunkte: A 26.10.2026 · B 16.11.2026 · C 09.11.2026 · D 02.11.2026.</div>
+   <div class="actions"><button class="primary" id="saveSettings">Einstellungen speichern</button><button id="exportICS">Kalenderdatei (ICS) erstellen</button></div>
+  </div>
+  <div class="card">
+   <h2 class="title">PIN-Schutz</h2><p class="sub">Optionaler 4-stelliger PIN für diese App auf diesem Gerät.</p>
+   <div class="field"><label>4-stelliger PIN (leer = ausgeschaltet)</label><input id="pinInput" inputmode="numeric" maxlength="4" type="password" placeholder="PIN festlegen"></div>
+   <button id="savePin">PIN speichern</button>
+  </div>
+  <div class="card">
+   <h2 class="title">Erinnerungen</h2><p class="sub">Erinnerungen werden auf diesem Gerät verwaltet. Browser-Benachrichtigungen müssen erlaubt sein; zuverlässige Hintergrundzustellung ist ohne Server nicht auf jedem Gerät möglich.</p>
+   <label><input id="reminderToggle" type="checkbox" style="width:auto"> Benachrichtigungen für persönliche Termine aktivieren</label>
+   <div class="actions"><button id="enableNotifications">Benachrichtigungen erlauben</button></div>
+  </div>
+  <div class="card" id="favoritesCard">
+   <h2 class="title">Kontakte & Favoriten</h2>
+   <p class="sub">Verwalte hier deine persönlichen Favoriten. Die Liste bleibt auf diesem Gerät und wird nicht automatisch an Kollegen weitergegeben.</p>
+   <div class="field"><label>Name</label><input id="favoriteName" maxlength="80" placeholder="z. B. Vorname Nachname"></div>
+   <div class="field"><label>Telefonnummer</label><input id="favoritePhone" type="tel" maxlength="30" placeholder="z. B. +49 151 12345678"></div>
+   <div class="actions"><button class="primary" id="saveFavorite">Favorit hinzufügen</button><button id="pickContact">Aus Telefonkontakten wählen</button><button id="cancelFavoriteEdit" class="hidden">Bearbeiten abbrechen</button></div>
+   <p class="hint">Wenn die Kontaktauswahl auf deinem Gerät nicht unterstützt wird, kannst du Name und Nummer oben einfach von Hand eintragen.</p>
+   <div id="favoriteList" aria-live="polite"></div>
+  </div>
+  <div class="card">
+   <h2 class="title">Daten übertragen</h2>
+   <p class="sub">Sichere deine Daten als Datei und importiere sie auf einem anderen eigenen Gerät. Die Datei enthält je nach Auswahl auch persönliche Termine.</p>
+   <div class="actions"><button class="primary" id="exportAll">Alle eigenen Daten exportieren</button><button id="importBtn">Datei importieren</button><input id="importFile" type="file" accept="application/json,.json" class="hidden"></div>
+   <div class="notice">Beim Import kannst du vorhandene Daten ersetzen oder Termine ergänzen. Exportdateien bitte vertraulich behandeln.</div>
+  </div>
+  <div class="card"><h2 class="title">Über die App</h2><p class="muted small">Nordland – Schichtplan · Erstellt für Manfred Heveling. Persönliche Daten bleiben lokal auf diesem Gerät, bis du sie ausdrücklich exportierst oder teilst.</p></div>
+ </section>
+</main>
+<nav class="bottomnav"><button data-tab="calendar" class="active">▦ Kalender</button><button data-tab="day">☷ Termine</button><button data-tab="settings">⚙ Einstellungen</button></nav>
+
+<dialog id="periodQuickDialog">
+ <h2 class="title">Zeitraum auswählen</h2>
+ <p id="periodQuickDates" class="notice"></p>
+ <div class="field"><label>Art des Eintrags</label><select id="periodQuickType"><option value="Urlaub">Urlaub</option><option value="AZK">AZK</option><option value="LZK">LZK</option></select></div>
+ <p class="hint">Du kannst den markierten Zeitraum eintragen oder vorhandene Einträge an diesen Tagen entfernen.</p>
+ <div class="dialog-actions" style="justify-content:space-between;flex-wrap:wrap"><button id="periodQuickCancel">Abbrechen</button><button id="periodQuickDelete">Eintrag löschen</button><button class="primary" id="periodQuickSave">Eintragen</button></div>
+</dialog>
+<dialog id="eventDialog">
+ <h2 class="title">Termin oder Notiz</h2>
+ <div class="field"><label>Datum</label><input id="eventDate" type="date"></div>
+ <div class="field"><label>Titel</label><input id="eventTitle" maxlength="100" placeholder="z. B. Arzttermin"></div>
+ <div class="field"><label>Uhrzeit (optional)</label><input id="eventTime" type="time"></div>
+ <div class="field"><label>Notiz (optional)</label><textarea id="eventNote" maxlength="1000"></textarea></div>
+ <div class="field"><label>Erinnerung 1</label><select id="reminderOne"><option value="off">Keine Erinnerung</option><option value="1d">1 Tag vorher</option><option value="2d">2 Tage vorher</option><option value="3h">3 Stunden vorher</option><option value="2h">2 Stunden vorher</option><option value="1h">1 Stunde vorher</option><option value="30m">30 Minuten vorher</option><option value="ontime">Am Termintag zur gewählten Uhrzeit</option></select></div>
+ <div class="field"><label>Uhrzeit für Erinnerung 1</label><input id="reminderOneTime" type="time" value="09:00"></div>
+ <div class="field"><label>Erinnerung 2 (optional)</label><select id="reminderTwo"><option value="off">Keine zweite Erinnerung</option><option value="1d">1 Tag vorher</option><option value="2d">2 Tage vorher</option><option value="3h">3 Stunden vorher</option><option value="2h">2 Stunden vorher</option><option value="1h">1 Stunde vorher</option><option value="30m">30 Minuten vorher</option><option value="ontime">Am Termintag zur gewählten Uhrzeit</option></select></div>
+ <div class="field"><label>Uhrzeit für Erinnerung 2</label><input id="reminderTwoTime" type="time" value="07:00"></div>
+ <div class="dialog-actions"><button id="cancelEvent">Abbrechen</button><button class="primary" id="saveEvent">Speichern</button></div>
+</dialog>
+<dialog id="shareDialog">
+ <h2 class="title">Schichtplan teilen</h2>
+ <p>Was soll an Kollegen übermittelt werden?</p>
+ <div class="notice">Der Schichtplan ist immer enthalten. Persönliche Daten werden nur mit deiner Zustimmung angefügt.</div>
+ <label class="item"><input type="radio" name="shareMode" value="shift" checked style="width:auto"> Nur Schichtplan – ohne persönliche Termine, Notizen und Erinnerungen</label>
+ <label class="item"><input type="radio" name="shareMode" value="all" style="width:auto"> Schichtplan inklusive Termine, Notizen und Erinnerungs-Einstellungen</label>
+ <div class="dialog-actions"><button id="cancelShare">Abbrechen</button><button class="primary" id="doShare">Weiter</button></div>
+</dialog>
+<dialog id="importDialog">
+ <h2 class="title">Daten importieren</h2><p>Wie sollen die importierten persönlichen Termine behandelt werden?</p>
+ <label class="item"><input type="radio" name="importMode" value="replace" checked style="width:auto"> Vorhandene Daten ersetzen</label>
+ <label class="item"><input type="radio" name="importMode" value="merge" style="width:auto"> Termine ergänzen (keine doppelten Einträge)</label>
+ <div class="dialog-actions"><button id="cancelImport">Abbrechen</button><button class="primary" id="confirmImport">Importieren</button></div>
+</dialog>
+<dialog id="eventShareDialog">
+ <h2 class="title" id="eventShareHeading">Termin teilen</h2>
+ <p id="eventShareDescription">Wähle einen Favoriten oder teile über das Teilen-Menü deines Handys.</p>
+ <div class="field"><label>Favorit</label><select id="eventShareContact"><option value="">Über WhatsApp/E-Mail/Teilen-Menü auswählen</option></select></div>
+ <div class="notice">Der Link enthält nur diesen Termin einschließlich seiner Erinnerungs-Einstellungen. Er funktioniert, wenn die Nordland-App auf einem HTTPS-Webspace (z. B. GitHub Pages) veröffentlicht ist.</div>
+ <div class="dialog-actions"><button id="cancelEventShare">Abbrechen</button><button class="primary" id="confirmEventShare">Link teilen</button></div>
+</dialog>
+<dialog id="linkActionDialog">
+ <h2 class="title" id="linkActionHeading">Geteilter Termin</h2>
+ <p id="linkActionText"></p>
+ <div class="notice">Der Termin wird nur in der Nordland-App auf diesem Gerät übernommen oder entfernt. Es findet keine automatische Synchronisierung mit einem externen Kalender statt.</div>
+ <div class="dialog-actions"><button id="cancelLinkAction">Abbrechen</button><button class="primary" id="confirmLinkAction">Bestätigen</button></div>
+</dialog>
+<dialog id="pinDialog"><h2 class="title">PIN eingeben</h2><div class="field"><input id="unlockPin" type="password" inputmode="numeric" maxlength="4" placeholder="4-stelliger PIN"></div><div class="dialog-actions"><button class="primary" id="unlockBtn">Entsperren</button></div></dialog>
+<script>
+const $=id=>document.getElementById(id);
+const todayISO=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const parseDate=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
+const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const plus=(d,n)=>{let x=new Date(d);x.setDate(x.getDate()+n);return x};
+const fmt=d=>d.toLocaleDateString('de-DE',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+const defaultState={anchors:{A:'2026-10-26',B:'2026-11-16',C:'2026-11-09',D:'2026-11-02'},activePlan:'A',events:[],periods:[],favorites:[],theme:'light',reminders:false,pin:''};
+let state={...defaultState,...JSON.parse(localStorage.getItem('nordlandState')||'{}')};
+state.anchors={...defaultState.anchors,...(state.anchors||{}),...(state.anchor?{A:state.anchor}:{})};
+state.favorites=Array.isArray(state.favorites)?state.favorites:[];
+let activePlan=state.activePlan||'A';
+let selected=todayISO(), month=parseDate(todayISO()); let pendingImport=null, editingId=null, rangeStart=null, rangeEnd=null, editingFavoriteId=null; let dragState=null, dragTimer=null, suppressDayClick=false;
+function save(){localStorage.setItem('nordlandState',JSON.stringify(state))}
+const shiftHours={F:'05:30–13:30',S:'13:30–21:30',N:'21:30–05:30'};
+function shiftFor(dateStr){
+ const anchor=state.anchors?.[activePlan]||state.anchors?.A;if(!anchor)return {code:'?',name:'Startdatum fehlt'};
+ const a=parseDate(anchor),d=parseDate(dateStr); let diff=Math.floor((d-a)/86400000);
+ let pos=((diff%28)+28)%28;
+ // Cycle day 0-27: Mon-Wed Früh; Thu-Sun Nacht; Mon-Tue frei; Wed-Sat Spät; Sun frei;
+ // Mon-Tue Spät; Wed frei; Thu-Sun Früh; Mon-Wed Nacht; Thu-Sun frei.
+ let code='X';
+ if(pos<=2)code='F'; else if(pos<=6)code='N'; else if(pos<=8)code='X';
+ else if(pos<=12)code='S'; else if(pos===13)code='X';
+ else if(pos<=15)code='S'; else if(pos===16)code='X';
+ else if(pos<=20)code='F'; else if(pos<=23)code='N'; else code='X';
+ return {code,name:{F:'Frühschicht',S:'Spätschicht',N:'Nachtschicht',X:'Frei'}[code]};
+}
+function eventsOn(date){return state.events.filter(e=>e.date===date)}
+function periodsOn(date){return state.periods.filter(p=>date>=p.start&&date<=p.end)}
+function periodText(date){return periodsOn(date).map(p=>p.type).join(', ')}
+function daysBetween(a,b){let out=[];for(let d=parseDate(a);d<=parseDate(b);d=plus(d,1))out.push(iso(d));return out}
+function render(){
+ document.documentElement.dataset.theme=state.theme;
+ $('monthLabel').textContent=month.toLocaleDateString('de-DE',{month:'long',year:'numeric'});
+ const grid=$('calendarGrid');grid.innerHTML='';
+ ['Mo','Di','Mi','Do','Fr','Sa','So'].forEach(x=>{let el=document.createElement('div');el.className='weekday';el.textContent=x;grid.append(el)});
+ const first=new Date(month.getFullYear(),month.getMonth(),1), offset=(first.getDay()+6)%7;
+ const start=plus(first,-offset);
+ for(let i=0;i<42;i++){let d=plus(start,i),s=iso(d),sh=shiftFor(s),ev=eventsOn(s),pt=periodText(s),el=document.createElement('button');el.className='day'+(d.getMonth()!==month.getMonth()?' out':'')+(s===todayISO()?' today':'')+(s===selected?' selected':'')+(rangeStart===s?' range-start':'')+(rangeEnd===s?' range-end':'')+(rangeStart&&rangeEnd&&s>rangeStart&&s<rangeEnd?' in-range':'');el.innerHTML=`<span class="num">${d.getDate()}</span><span class="shift ${sh.code}">${sh.code==='?'?'Start?':sh.name==='Frühschicht'?'Früh':sh.name==='Spätschicht'?'Spät':sh.name==='Nachtschicht'?'Nacht':'Frei'}</span>${shiftHours[sh.code]?`<span class="shift-time">${shiftHours[sh.code]}</span>`:''}${pt?`<span class="special-label">${escapeHtml(pt)}</span>`:''}${ev.length?'<span class="dot"></span>':''}`;el.dataset.date=s;el.onclick=()=>{if(suppressDayClick){suppressDayClick=false;return}selected=s;if(!rangeStart||rangeEnd){rangeStart=s;rangeEnd=null;$('periodStart').value=s;$('periodEnd').value='';}else{rangeEnd=s;if(rangeEnd<rangeStart){[rangeStart,rangeEnd]=[rangeEnd,rangeStart]}$('periodStart').value=rangeStart;$('periodEnd').value=rangeEnd;tab('day');}render()};grid.append(el)}
+ const sh=shiftFor(selected);$('selectedTitle').textContent=fmt(parseDate(selected));$('selectedShift').textContent=sh.name+(shiftHours[sh.code]?' · '+shiftHours[sh.code]:'');$('selectedEvents').textContent=eventsOn(selected).map(e=>e.title).join(' · ')||'Keine persönlichen Termine';
+ $('dayDate').value=selected;$('dayHeading').textContent=fmt(parseDate(selected));$('dayShift').textContent=sh.name+(shiftHours[sh.code]?' · '+shiftHours[sh.code]:'');
+ $('eventList').innerHTML=eventsOn(selected).length?eventsOn(selected).map(e=>`<div class="item"><div class="row"><strong>${escapeHtml(e.title)}</strong><span class="pill">${e.time||'ohne Uhrzeit'}</span></div>${e.note?`<div class="muted small">${escapeHtml(e.note)}</div>`:''}<div class="row small muted"><span>${e.reminder?('Erinnerung: '+(e.reminderOne||'')+' '+(e.reminderOneTime||'')+(e.reminderTwo&&e.reminderTwo!=='off'?' · '+e.reminderTwo+' '+(e.reminderTwoTime||'') :'')):'Keine Erinnerung'}</span><span><button data-edit="${e.id}">Bearbeiten</button> <button data-event-share="${e.id}">Teilen</button> <button data-event-delete-link="${e.id}">Lösch-Link</button> <button data-del="${e.id}">Löschen</button></span></div></div>`).join(''):'<p class="muted">Für diesen Tag sind keine Termine eingetragen.</p>';
+ $('periodStart').value=rangeStart||selected;$('periodEnd').value=rangeEnd||'';
+ $('periodList').innerHTML=state.periods.length?'<h3 class="title" style="font-size:15px;margin-top:16px">Gespeicherte Zeiträume</h3>'+state.periods.slice().sort((a,b)=>a.start.localeCompare(b.start)).map(p=>`<div class="item row"><span><strong>${fmt(parseDate(p.start))}</strong> bis <strong>${fmt(parseDate(p.end))}</strong><br><span class="pill">${p.type}</span></span><span><button data-period-share="${p.id}">Teilen</button> <button data-period-delete-link="${p.id}">Lösch-Link</button> <button data-period-del="${p.id}">Löschen</button></span></div>`).join(''):'<p class="hint">Noch keine Urlaubs-, AZK- oder LZK-Zeiträume gespeichert.</p>';
+ document.querySelectorAll('[data-period-del]').forEach(b=>b.onclick=()=>{state.periods=state.periods.filter(p=>p.id!==b.dataset.periodDel);save();render()});
+ document.querySelectorAll('[data-period-share]').forEach(b=>b.onclick=()=>openPeriodShare(b.dataset.periodShare,'period-upsert'));
+ document.querySelectorAll('[data-period-delete-link]').forEach(b=>b.onclick=()=>openPeriodShare(b.dataset.periodDeleteLink,'period-delete'));
+ ['A','B','C','D'].forEach(k=>{const el=$('anchor'+k);if(el)el.value=state.anchors[k]||''});$('planSelect').value=activePlan;$('pinInput').value='';$('reminderToggle').checked=!!state.reminders;
+ document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editEvent(b.dataset.edit));
+ document.querySelectorAll('[data-event-share]').forEach(b=>b.onclick=()=>openEventShare(b.dataset.eventShare,'upsert'));
+ document.querySelectorAll('[data-event-delete-link]').forEach(b=>b.onclick=()=>openEventShare(b.dataset.eventDeleteLink,'delete'));
+ document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{state.events=state.events.filter(e=>e.id!==b.dataset.del);save();render()});
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function tab(name){document.querySelectorAll('main section').forEach(s=>s.classList.toggle('hidden',s.id!==name));document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));if(name==='day')render()}
+document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>tab(b.dataset.tab));
+$('prevMonth').onclick=()=>{month=new Date(month.getFullYear(),month.getMonth()-1,1);render()};
+$('nextMonth').onclick=()=>{month=new Date(month.getFullYear(),month.getMonth()+1,1);render()};
+// Finger-/Mausauswahl: Tag gedrueckt halten und ueber weitere Tage ziehen.
+function dayAtPoint(x,y){const el=document.elementFromPoint(x,y);return el?.closest?.('#calendarGrid .day')||null}
+function orderedRange(a,b){return a<=b?[a,b]:[b,a]}
+function previewDragRange(){document.querySelectorAll('#calendarGrid .day').forEach(el=>{const d=el.dataset.date;el.classList.toggle('drag-range',!!(dragState?.current&&d>=orderedRange(dragState.start,dragState.current)[0]&&d<=orderedRange(dragState.start,dragState.current)[1]))})}
+function finishDragSelection(){if(!dragState)return;clearTimeout(dragTimer);const st=dragState;dragState=null;const end=st.current||st.start;const [a,b]=orderedRange(st.start,end);if(st.moved||st.longPressed){suppressDayClick=true;setTimeout(()=>{suppressDayClick=false},0);rangeStart=a;rangeEnd=b;selected=b;$('periodStart').value=a;$('periodEnd').value=b;render();$('periodQuickDates').textContent=a===b?fmt(parseDate(a)):fmt(parseDate(a))+' bis '+fmt(parseDate(b));const existingTypes=[...new Set(state.periods.filter(p=>a<=p.end&&b>=p.start).map(p=>p.type))];if(existingTypes.length===1)$('periodQuickType').value=existingTypes[0];$('periodQuickDialog').showModal()}else{document.querySelectorAll('.drag-range').forEach(el=>el.classList.remove('drag-range'))}}
+$('calendarGrid').addEventListener('pointerdown',e=>{const day=e.target.closest('.day');if(!day)return;dragState={start:day.dataset.date,current:day.dataset.date,moved:false,longPressed:false};dragTimer=setTimeout(()=>{if(dragState){dragState.longPressed=true;previewDragRange()}},450)});
+document.addEventListener('pointermove',e=>{if(!dragState)return;const day=dayAtPoint(e.clientX,e.clientY);if(day&&day.dataset.date!==dragState.current){dragState.current=day.dataset.date;dragState.moved=dragState.current!==dragState.start;clearTimeout(dragTimer);previewDragRange()}});
+document.addEventListener('pointerup',e=>{if(!dragState)return;const day=dayAtPoint(e.clientX,e.clientY);if(day)dragState.current=day.dataset.date;finishDragSelection()});
+document.addEventListener('pointercancel',()=>{clearTimeout(dragTimer);dragState=null;document.querySelectorAll('.drag-range').forEach(el=>el.classList.remove('drag-range'))});
+$('periodQuickCancel').onclick=()=>{$('periodQuickDialog').close();rangeStart=rangeEnd=null;render()};
+$('periodQuickSave').onclick=()=>{const a=rangeStart||selected,b=rangeEnd||a,t=$('periodQuickType').value;const overlap=state.periods.filter(p=>a<=p.end&&b>=p.start);if(overlap.length&&!confirm('Der Zeitraum überschneidet sich mit einem bestehenden Eintrag. Soll der neue Eintrag trotzdem gespeichert werden?'))return;state.periods.push({id:String(Date.now()),start:a,end:b,type:t});state.periods.sort((x,y)=>x.start.localeCompare(y.start));$('periodQuickDialog').close();rangeStart=rangeEnd=null;save();render();alert('Zeitraum wurde gespeichert.')};
+$('periodQuickDelete').onclick=()=>{const a=rangeStart||selected,b=rangeEnd||a;let changed=false;const next=[];state.periods.forEach(p=>{if(b<p.start||a>p.end||p.type!==$('periodQuickType').value){next.push(p);return}changed=true;if(p.start<a)next.push({...p,id:p.id+'-before-'+Date.now(),end:iso(plus(parseDate(a),-1))});if(p.end>b)next.push({...p,id:p.id+'-after-'+Date.now(),start:iso(plus(parseDate(b),1))})});if(!changed){alert('Im markierten Zeitraum gibt es keinen Eintrag zum Löschen.');return}if(!confirm('Den Eintrag „'+$('periodQuickType').value+'“ an den markierten Tagen wirklich löschen?'))return;state.periods=next;$('periodQuickDialog').close();rangeStart=rangeEnd=null;save();render();alert('Eintrag im markierten Zeitraum wurde gelöscht.')};
+
+$('openDay').onclick=()=>tab('day');$('dayDate').onchange=e=>{selected=e.target.value;render()};
+$('themeBtn').onclick=()=>{state.theme=state.theme==='dark'?'light':'dark';save();render()};
+$('planSelect').onchange=e=>{activePlan=e.target.value;state.activePlan=activePlan;save();render()};
+$('saveSettings').onclick=()=>{let vals={};for(const k of ['A','B','C','D']){vals[k]=$('anchor'+k).value;if(!vals[k]||parseDate(vals[k]).getDay()!==1){alert('Bitte für Plan '+k+' einen gültigen Montag auswählen.');return}}state.anchors=vals;state.activePlan=activePlan;save();render();alert('Alle vier Schichtpläne wurden gespeichert.')};
+$('addEvent').onclick=()=>openEvent();
+function openEvent(e){editingId=e?.id||null;$('eventDate').value=e?.date||selected;$('eventTitle').value=e?.title||'';$('eventTime').value=e?.time||'';$('eventNote').value=e?.note||'';$('reminderOne').value=e?.reminderOne??(e?.reminder?'1d':'off');$('reminderOneTime').value=e?.reminderOneTime||'09:00';$('reminderTwo').value=e?.reminderTwo??'off';$('reminderTwoTime').value=e?.reminderTwoTime||'07:00';$('eventDialog').showModal()}
+function editEvent(id){openEvent(state.events.find(e=>e.id===id))}
+$('cancelEvent').onclick=()=>$('eventDialog').close();
+$('saveEvent').onclick=()=>{let title=$('eventTitle').value.trim();if(!title){alert('Bitte einen Titel eingeben.');return}let e={id:editingId||String(Date.now()),date:$('eventDate').value,title,time:$('eventTime').value,note:$('eventNote').value,reminderOne:$('reminderOne').value,reminderOneTime:$('reminderOneTime').value,reminderTwo:$('reminderTwo').value,reminderTwoTime:$('reminderTwoTime').value,reminder:$('reminderOne').value!=='off'||$('reminderTwo').value!=='off'};if(editingId)state.events=state.events.map(x=>x.id===editingId?e:x);else state.events.push(e);state.events.sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));selected=e.date;save();$('eventDialog').close();render()};
+$('savePeriod').onclick=()=>{let a=$('periodStart').value,b=$('periodEnd').value,t=$('periodType').value;if(!a||!b){alert('Bitte Von- und Bis-Datum auswählen.');return}if(b<a){alert('Das Bis-Datum darf nicht vor dem Von-Datum liegen.');return}let overlap=state.periods.filter(p=>a<=p.end&&b>=p.start);if(overlap.length&&!confirm('Der Zeitraum überschneidet sich mit einem bestehenden Eintrag. Soll der neue Eintrag trotzdem gespeichert werden?'))return;state.periods.push({id:String(Date.now()),start:a,end:b,type:t});state.periods.sort((x,y)=>x.start.localeCompare(y.start));rangeStart=rangeEnd=null;save();render();alert('Zeitraum wurde gespeichert.')};
+$('cancelPeriod').onclick=()=>{rangeStart=rangeEnd=null;$('periodStart').value=selected;$('periodEnd').value='';render()};
+$('periodStart').onchange=e=>{rangeStart=e.target.value;rangeEnd=null;render()};$('periodEnd').onchange=e=>{rangeEnd=e.target.value;if(rangeStart&&rangeEnd&&rangeEnd<rangeStart){[rangeStart,rangeEnd]=[rangeEnd,rangeStart]}render()};
+$('savePin').onclick=()=>{let p=$('pinInput').value;if(p&& !/^\d{4}$/.test(p)){alert('Der PIN muss genau 4 Ziffern haben.');return}state.pin=p;save();alert(p?'PIN auf diesem Gerät aktiviert.':'PIN-Schutz ausgeschaltet.');};
+$('enableNotifications').onclick=async()=>{if(!('Notification'in window)){alert('Dieser Browser unterstützt keine Benachrichtigungen.');return}let p=await Notification.requestPermission();alert(p==='granted'?'Benachrichtigungen erlaubt.':'Benachrichtigungen nicht erlaubt.')};
+$('reminderToggle').onchange=e=>{state.reminders=e.target.checked;save()};
+function exportPayload(include,includeFavorites=false){return {app:'Nordland-Schichtplan',version:3,exportedAt:new Date().toISOString(),anchors:state.anchors,activePlan,theme:state.theme,events:include?state.events:undefined,periods:include?state.periods:undefined,reminders:include?state.reminders:undefined,favorites:includeFavorites?state.favorites:undefined}}
+function download(obj,name){let blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();URL.revokeObjectURL(url)}
+$('backupBtn').onclick=()=>tab('settings');
+$('exportAll').onclick=()=>download(exportPayload(true,true),'nordland-datensicherung.json');
+$('exportICS').onclick=()=>{const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Nordland//Schichtplan//DE','CALSCALE:GREGORIAN'];const esc=x=>String(x).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\n/g,'\\n');const dt=x=>x.replace(/-/g,'');for(const k of ['A','B','C','D']){const anchor=state.anchors[k];if(!anchor)continue;for(let i=0;i<365;i++){const d=plus(parseDate(anchor),i),date=iso(d),sh=shiftForForPlan(date,k);if(sh.code==='X')continue;const end=plus(d,1);lines.push('BEGIN:VEVENT','UID:'+k+'-'+date+'@nordland-schichtplan','DTSTAMP:'+new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,''),'DTSTART;VALUE=DATE:'+dt(date),'DTEND;VALUE=DATE:'+dt(iso(end)),'SUMMARY:'+esc('Plan '+k+' – '+sh.name),'DESCRIPTION:'+esc(sh.name+' '+(shiftHours[sh.code]||'')),'END:VEVENT')}}state.events.forEach(e=>{lines.push('BEGIN:VEVENT','UID:event-'+e.id+'@nordland-schichtplan','DTSTAMP:'+new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,''),'DTSTART;VALUE=DATE:'+dt(e.date),'DTEND;VALUE=DATE:'+dt(iso(plus(parseDate(e.date),1))),'SUMMARY:'+esc(e.title),'DESCRIPTION:'+esc(e.note||''),'END:VEVENT')});lines.push('END:VCALENDAR');const blob=new Blob([lines.join('\r\n')],{type:'text/calendar;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Nordland-Kalender.ics';a.click();URL.revokeObjectURL(url)};
+function shiftForForPlan(dateStr,plan){const old=activePlan;activePlan=plan;const result=shiftFor(dateStr);activePlan=old;return result;}
+$('importBtn').onclick=()=>$('importFile').click();
+$('importFile').onchange=async e=>{let f=e.target.files[0];if(!f)return;try{pendingImport=JSON.parse(await f.text());if(pendingImport.app!=='Nordland-Schichtplan')throw Error('Diese Datei gehört nicht zur Nordland-App.');$('importDialog').showModal()}catch(err){alert('Import nicht möglich: '+err.message)}e.target.value=''};
+$('cancelImport').onclick=()=>$('importDialog').close();
+$('confirmImport').onclick=()=>{if(!pendingImport)return;let mode=document.querySelector('input[name=importMode]:checked').value;if(pendingImport.anchors&&typeof pendingImport.anchors==='object')state.anchors={...state.anchors,...pendingImport.anchors};else if(pendingImport.anchor)state.anchors.A=pendingImport.anchor;if(Array.isArray(pendingImport.events)){if(mode==='replace')state.events=pendingImport.events;else{let ids=new Set(state.events.map(e=>e.id));state.events.push(...pendingImport.events.filter(e=>!ids.has(e.id)))}}if(Array.isArray(pendingImport.periods)){if(mode==='replace')state.periods=pendingImport.periods;else{let ids=new Set(state.periods.map(p=>p.id));state.periods.push(...pendingImport.periods.filter(p=>!ids.has(p.id)))}}if(typeof pendingImport.reminders==='boolean')state.reminders=pendingImport.reminders;if(Array.isArray(pendingImport.favorites))state.favorites=pendingImport.favorites.filter(f=>f&&typeof f.name==='string').map(f=>({id:String(f.id||('fav-'+Date.now()+Math.random())),name:f.name,phone:String(f.phone||'')}));save();renderFavorites();pendingImport=null;$('importDialog').close();render();alert('Daten wurden importiert.')};
+$('shareBtn').onclick=()=>$('shareDialog').showModal();$('cancelShare').onclick=()=>$('shareDialog').close();
+$('doShare').onclick=async()=>{let include=document.querySelector('input[name=shareMode]:checked').value==='all';let payload=exportPayload(include);$('shareDialog').close();let file=new File([JSON.stringify(payload,null,2)],'nordland-schichtplan.json',{type:'application/json'});try{if(navigator.canShare?.({files:[file]})){await navigator.share({title:'Nordland-Schichtplan',text:include?'Schichtplan mit persönlichen Terminen':'Schichtplan ohne persönliche Termine',files:[file]})}else if(navigator.share){await navigator.share({title:'Nordland-Schichtplan',text:JSON.stringify(payload)})}else{download(payload,'nordland-schichtplan.json');alert('Datei erstellt. Du kannst sie jetzt z. B. über WhatsApp versenden.')}}catch(err){if(err.name!=='AbortError')alert('Teilen nicht möglich. Bitte Datendatei exportieren und manuell versenden.')}};
+function renderFavorites(){
+ const host=$('favoriteList'); if(!host)return;
+ if(!state.favorites.length){host.innerHTML='<p class="muted small">Noch keine Favoriten gespeichert.</p>';return}
+ host.innerHTML=state.favorites.map((f,i)=>`<div class="item"><div class="row"><div style="min-width:0"><strong>${escapeHtml(f.name)}</strong><div class="muted small">${escapeHtml(f.phone||'Keine Telefonnummer')}</div></div><div class="actions" style="margin:0;justify-content:flex-end"><button data-fav-edit="${f.id}">Bearbeiten</button><button data-fav-up="${f.id}" ${i===0?'disabled':''} aria-label="Nach oben">↑</button><button data-fav-down="${f.id}" ${i===state.favorites.length-1?'disabled':''} aria-label="Nach unten">↓</button><button data-fav-delete="${f.id}">Löschen</button></div></div></div>`).join('');
+ host.querySelectorAll('[data-fav-edit]').forEach(b=>b.onclick=()=>{const f=state.favorites.find(x=>x.id===b.dataset.favEdit);if(!f)return;editingFavoriteId=f.id;$('favoriteName').value=f.name;$('favoritePhone').value=f.phone||'';$('saveFavorite').textContent='Änderungen speichern';$('cancelFavoriteEdit').classList.remove('hidden');$('favoriteName').focus()});
+ host.querySelectorAll('[data-fav-delete]').forEach(b=>b.onclick=()=>{const f=state.favorites.find(x=>x.id===b.dataset.favDelete);if(!f)return;if(!confirm('Favorit „'+f.name+'“ wirklich löschen? Bereits bestehende Freigaben werden dadurch nicht verändert.'))return;state.favorites=state.favorites.filter(x=>x.id!==f.id);if(editingFavoriteId===f.id)resetFavoriteForm();save();renderFavorites()});
+ host.querySelectorAll('[data-fav-up],[data-fav-down]').forEach(b=>b.onclick=()=>{const i=state.favorites.findIndex(x=>x.id===(b.dataset.favUp||b.dataset.favDown));const j=i+(b.hasAttribute('data-fav-up')?-1:1);if(i<0||j<0||j>=state.favorites.length)return;[state.favorites[i],state.favorites[j]]=[state.favorites[j],state.favorites[i]];save();renderFavorites()});
+}
+function escapeHtml(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function resetFavoriteForm(){editingFavoriteId=null;$('favoriteName').value='';$('favoritePhone').value='';$('saveFavorite').textContent='Favorit hinzufügen';$('cancelFavoriteEdit').classList.add('hidden')}
+$('saveFavorite').onclick=()=>{const name=$('favoriteName').value.trim(),phone=$('favoritePhone').value.trim();if(!name){alert('Bitte einen Namen eingeben.');$('favoriteName').focus();return}if(editingFavoriteId){state.favorites=state.favorites.map(f=>f.id===editingFavoriteId?{...f,name,phone}:f)}else{const duplicate=state.favorites.find(f=>phone&&f.phone.replace(/[\s()+-]/g,'')===phone.replace(/[\s()+-]/g,''));if(duplicate){alert('Diese Telefonnummer ist bereits als Favorit gespeichert. Bitte bearbeite den vorhandenen Eintrag.');return}state.favorites.push({id:'fav-'+Date.now(),name,phone})}save();resetFavoriteForm();renderFavorites()};
+$('cancelFavoriteEdit').onclick=resetFavoriteForm;
+$('pickContact').onclick=async()=>{if(!('contacts'in navigator)||typeof navigator.contacts.select!=='function'){alert('Die Kontaktauswahl wird von diesem Browser leider nicht unterstützt. Bitte Name und Telefonnummer oben manuell eintragen.');return}try{const picked=await navigator.contacts.select(['name','tel'],{multiple:false});if(!picked?.length)return;$('favoriteName').value=(picked[0].name||[])[0]||'';$('favoritePhone').value=(picked[0].tel||[])[0]||''}catch(err){if(err.name!=='AbortError')alert('Kontakt konnte nicht übernommen werden. Du kannst ihn oben manuell eintragen.')}};
+renderFavorites();
+let pendingLinkAction=null;
+function encodeLinkPayload(obj){const bytes=unescape(encodeURIComponent(JSON.stringify(obj)));return btoa(bytes).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+function decodeLinkPayload(value){let b=value.replace(/-/g,'+').replace(/_/g,'/');while(b.length%4)b+='=';return JSON.parse(decodeURIComponent(escape(atob(b))))}
+function appBaseUrl(){return location.href.split('#')[0]}
+function makeEventLink(action,event){if(!/^https?:$/.test(location.protocol))throw new Error('Die App muss zuerst über HTTPS veröffentlicht sein (zum Beispiel GitHub Pages). Aus einer lokal geöffneten Datei kann kein funktionierender App-Link entstehen.');const payload=action==='delete'?{app:'Nordland-Schichtplan',linkVersion:1,action:'delete',eventId:event.id,title:event.title}:{app:'Nordland-Schichtplan',linkVersion:1,action:'upsert',event:{...event}};return appBaseUrl()+'#nl='+encodeLinkPayload(payload)}
+function makePeriodLink(action,period){if(!/^https?:$/.test(location.protocol))throw new Error('Die App muss zuerst über HTTPS veröffentlicht sein (zum Beispiel GitHub Pages).');return appBaseUrl()+'#nl='+encodeLinkPayload({app:'Nordland-Schichtplan',linkVersion:1,action,periodId:period.id,type:period.type,start:period.start,end:period.end,period:action==='period-upsert'?{...period}:undefined})}
+let shareEventPending=null,shareActionPending='upsert',sharePeriodPending=null;
+function openPeriodShare(id,action){const p=state.periods.find(x=>x.id===id);if(!p)return;sharePeriodPending=p;shareEventPending=null;shareActionPending=action;$('eventShareHeading').textContent=action==='period-delete'?'Zeitraum-Lösch-Link teilen':'Zeitraum teilen';$('eventShareDescription').textContent=action==='period-delete'?'Der Empfänger kann genau diesen Zeitraum nach Bestätigung aus seiner Nordland-App entfernen.':'Der Empfänger kann diesen Zeitraum samt Art und Datumsbereich nach Bestätigung in seine Nordland-App übernehmen.';const sel=$('eventShareContact');sel.innerHTML='<option value="">Über WhatsApp/E-Mail/Teilen-Menü auswählen</option>'+state.favorites.map(f=>`<option value="${escapeHtml(f.id)}">${escapeHtml(f.name)}${f.phone?' · '+escapeHtml(f.phone):''}</option>`).join('');$('eventShareDialog').showModal()}
+function openEventShare(id,action){const e=state.events.find(x=>x.id===id);if(!e)return;shareEventPending=e;shareActionPending=action;$('eventShareHeading').textContent=action==='delete'?'Lösch-Link teilen':'Termin teilen';$('eventShareDescription').textContent=action==='delete'?'Deine Frau kann mit diesem Link genau diesen Termin aus ihrer Nordland-App entfernen.':'Deine Frau kann mit diesem Link den Termin samt Erinnerungs-Einstellungen übernehmen oder aktualisieren.';const sel=$('eventShareContact');sel.innerHTML='<option value="">Über WhatsApp/E-Mail/Teilen-Menü auswählen</option>'+state.favorites.map(f=>`<option value="${escapeHtml(f.id)}">${escapeHtml(f.name)}${f.phone?' · '+escapeHtml(f.phone):''}</option>`).join('');$('eventShareDialog').showModal()}
+$('cancelEventShare').onclick=()=>$('eventShareDialog').close();
+$('confirmEventShare').onclick=async()=>{if(!shareEventPending&&!sharePeriodPending)return;let link;try{link=sharePeriodPending?makePeriodLink(shareActionPending,sharePeriodPending):makeEventLink(shareActionPending,shareEventPending)}catch(err){alert(err.message);return}const fav=state.favorites.find(f=>f.id===$('eventShareContact').value);const isPeriod=!!sharePeriodPending;const isDelete=shareActionPending==='delete'||shareActionPending==='period-delete';const label=isPeriod?'Zeitraum-Link':(isDelete?'Lösch-Link':'Termin-Link');const msg=isDelete?'Bitte diesen Link öffnen und das Löschen bestätigen: ':('Bitte diesen Link öffnen und '+(isPeriod?'den Zeitraum übernehmen: ':'den Termin übernehmen bzw. aktualisieren: '));const message=msg+link;$('eventShareDialog').close();try{if(fav?.phone){const phone=fav.phone.replace(/[^\d]/g,'');if(!phone)throw new Error('Für diesen Favoriten ist keine gültige Telefonnummer gespeichert.');location.href='https://wa.me/'+phone+'?text='+encodeURIComponent(message)}else if(navigator.share){await navigator.share({title:'Nordland – '+label,text:message})}else if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(message);alert('Der Link wurde kopiert. Du kannst ihn jetzt in WhatsApp oder eine E-Mail einfügen.')}else{prompt('Diesen Link kopieren und verschicken:',message)}}catch(err){if(err.name!=='AbortError')alert('Teilen nicht möglich: '+err.message)}finally{sharePeriodPending=null;shareEventPending=null}};
+function checkIncomingLink(){const m=location.hash.match(/^#nl=(.+)$/);if(!m)return;let payload;try{payload=decodeLinkPayload(m[1])}catch(e){history.replaceState(null,'',appBaseUrl());alert('Dieser Link ist beschädigt oder unvollständig.');return}history.replaceState(null,'',appBaseUrl());if(payload.app!=='Nordland-Schichtplan'||payload.linkVersion!==1||!['upsert','delete','period-upsert','period-delete'].includes(payload.action)){alert('Dieser Link gehört nicht zu einer unterstützten Nordland-Freigabe.');return}pendingLinkAction=payload;const periodAction=payload.action.startsWith('period-');const deleting=payload.action==='delete'||payload.action==='period-delete';$('linkActionHeading').textContent=deleting?(periodAction?'Zeitraum löschen':'Termin löschen'):(periodAction?'Zeitraum übernehmen':'Termin übernehmen');$('linkActionText').textContent=periodAction?(deleting?'Soll '+(payload.type||'der Eintrag')+' vom '+fmt(parseDate(payload.start))+' bis '+fmt(parseDate(payload.end))+' aus deiner Nordland-App entfernt werden?':'Möchtest du '+(payload.period?.type||'diesen Zeitraum')+' vom '+fmt(parseDate(payload.period?.start||payload.start))+' bis '+fmt(parseDate(payload.period?.end||payload.end))+' in deine Nordland-App übernehmen?'):(deleting?'Soll „'+(payload.title||'dieser Termin')+'“ aus deiner Nordland-App entfernt werden?':'Möchtest du „'+(payload.event?.title||'diesen Termin')+'“ einschließlich der Erinnerungs-Einstellungen in deine Nordland-App übernehmen? Wenn derselbe Termin schon vorhanden ist, wird er aktualisiert.');$('linkActionDialog').showModal()}
+$('cancelLinkAction').onclick=()=>{$('linkActionDialog').close();pendingLinkAction=null};
+$('confirmLinkAction').onclick=()=>{if(!pendingLinkAction)return;const p=pendingLinkAction;if(p.action==='period-delete'){state.periods=state.periods.filter(x=>x.id!==p.periodId);alert('Der Zeitraum wurde aus deiner Nordland-App entfernt.')}else if(p.action==='period-upsert'){const period=p.period;if(!period||!period.id||!period.start||!period.end||!period.type){alert('Der Zeitraum-Link enthält unvollständige Daten.');pendingLinkAction=null;$('linkActionDialog').close();return}const i=state.periods.findIndex(x=>x.id===period.id);if(i>=0)state.periods[i]={...period};else state.periods.push({...period});state.periods.sort((a,b)=>a.start.localeCompare(b.start));selected=period.start;alert('Der Zeitraum wurde übernommen bzw. aktualisiert.')}else if(p.action==='delete'){const old=state.events.find(e=>e.id===p.eventId);state.events=state.events.filter(e=>e.id!==p.eventId);if(old){localStorage.removeItem('notified_'+p.eventId+'_one_'+old.date);localStorage.removeItem('notified_'+p.eventId+'_two_'+old.date)}alert('Der Termin wurde aus deiner Nordland-App entfernt.')}else{const e=p.event;if(!e||!e.id||!e.date||!e.title){alert('Der Termin-Link enthält unvollständige Daten.');pendingLinkAction=null;$('linkActionDialog').close();return}const i=state.events.findIndex(x=>x.id===e.id);if(i>=0)state.events[i]={...e};else state.events.push({...e});state.events.sort((a,b)=>(a.date+(a.time||'')).localeCompare(b.date+(b.time||'')));selected=e.date;alert('Der Termin einschließlich der Erinnerungs-Einstellungen wurde übernommen. Bitte aktiviere in den Einstellungen die Benachrichtigungen, falls du Erinnerungen erhalten möchtest.')}save();pendingLinkAction=null;$('linkActionDialog').close();render()};
+function reminderCheck(){if(!state.reminders||!('Notification'in window)||Notification.permission!=='granted')return;let now=new Date();const offsets={ '1d':86400000,'2d':172800000,'3h':10800000,'2h':7200000,'1h':3600000,'30m':1800000,'ontime':0};state.events.forEach(e=>{if(!e.reminder)return;[['one',e.reminderOne,e.reminderOneTime],['two',e.reminderTwo,e.reminderTwoTime]].forEach(([slot,kind,clock])=>{if(!kind||kind==='off')return;let eventDate=parseDate(e.date);if(e.time){let [hh,mm]=e.time.split(':').map(Number);eventDate.setHours(hh,mm,0,0)}else eventDate.setHours(9,0,0,0);let target;if(kind==='ontime'){target=parseDate(e.date);let [hh,mm]=(clock||'07:00').split(':').map(Number);target.setHours(hh,mm,0,0)}else{target=new Date(eventDate.getTime()-offsets[kind]);let [hh,mm]=(clock||'09:00').split(':').map(Number);target.setHours(hh,mm,0,0)}let delta=now-target;if(delta>=0&&delta<60000){let key='notified_'+e.id+'_'+slot+'_'+e.date;if(!localStorage.getItem(key)){new Notification('Erinnerung: '+e.title,{body:'Termin '+fmt(parseDate(e.date))+(e.time?' um '+e.time+' Uhr':'')});localStorage.setItem(key,'1')}}})})}
+setInterval(reminderCheck,30000);
+if(state.pin&&!sessionStorage.getItem('nordlandUnlocked')){$('pinDialog').showModal()}
+$('unlockBtn').onclick=()=>{if($('unlockPin').value===state.pin){sessionStorage.setItem('nordlandUnlocked','1');$('pinDialog').close()}else alert('PIN ist nicht korrekt.')};
+if('serviceWorker'in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+render();reminderCheck();checkIncomingLink();
+</script>
+</body></html>
