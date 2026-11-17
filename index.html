@@ -62,7 +62,7 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
  <section id="calendar">
   <div class="card">
    <div class="monthhead"><button id="prevMonth" aria-label="Vorheriger Monat">‹</button><strong id="monthLabel"></strong><div style="display:flex;gap:6px;align-items:center"><button id="todayBtn" class="primary">Heute</button><button id="nextMonth" aria-label="Nächster Monat">›</button></div></div>
-   <div class="calendar-layout"><div class="month-side"><h3 class="title" style="font-size:16px">Monat auswählen</h3><div class="month-picker" id="monthPicker"></div></div><div class="days-side"><h3 class="title" style="font-size:16px">Tagesübersicht</h3><p class="hint">Lange drücken (2 Sekunden) und über die Tage ziehen, um einen Zeitraum zu markieren.</p><div id="monthDayList" class="day-list"></div></div></div>
+   <div class="calendar-layout"><div class="month-side"><h3 class="title" style="font-size:16px">Monat auswählen</h3><div class="month-picker" id="monthPicker"></div></div><div class="days-side"><h3 class="title" style="font-size:16px">Tagesübersicht</h3><p class="hint">Lange drücken (2 Sekunden) und über die Tage ziehen, um einen Zeitraum zu markieren. Am Ende der Tagesliste geht es automatisch im nächsten Monat weiter.</p><div id="monthDayList" class="day-list"></div></div></div>
   </div>
   <div class="card"><div class="row"><div><div class="title" id="selectedTitle">Ausgewählter Tag</div><div class="sub" id="selectedShift"></div></div><button id="openDay">Details</button></div><div id="selectedEvents" class="muted small"></div></div>
  </section>
@@ -201,6 +201,21 @@ function render(){
  document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editEvent(b.dataset.edit));
  document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{state.events=state.events.filter(e=>e.id!==b.dataset.del);save();render()});
 }
+// Beim Erreichen des Listenendes automatisch zum Folgemonat wechseln
+let autoMonthAdvanceLock=false;
+$('monthDayList').addEventListener('scroll',()=>{
+ const list=$('monthDayList');
+ if(autoMonthAdvanceLock || $('calendar').classList.contains('hidden')) return;
+ if(list.scrollTop + list.clientHeight >= list.scrollHeight - 24){
+  autoMonthAdvanceLock=true;
+  month=new Date(month.getFullYear(),month.getMonth()+1,1);
+  selected=iso(new Date(month.getFullYear(),month.getMonth(),1));
+  rangeStart=rangeEnd=null;
+  render();
+  $('monthDayList').scrollTop=0;
+  setTimeout(()=>{autoMonthAdvanceLock=false},700);
+ }
+},{passive:true});
 document.addEventListener('pointermove',e=>{if(!dragSelecting)return;const row=document.elementFromPoint(e.clientX,e.clientY)?.closest('#monthDayList .day-row');if(row?.dataset.date){rangeEnd=row.dataset.date;$('periodEnd').value=rangeEnd;document.querySelectorAll('#monthDayList .day-row').forEach(x=>x.classList.toggle('in-range',x.dataset.date>=rangeStart&&x.dataset.date<=rangeEnd||x.dataset.date>=rangeEnd&&x.dataset.date<=rangeStart));}});
 document.addEventListener('pointerup',()=>{if(!dragSelecting)return;dragSelecting=false;suppressDayClick=true;if(rangeStart&&rangeEnd&&rangeEnd<rangeStart)[rangeStart,rangeEnd]=[rangeEnd,rangeStart];$('periodStart').value=rangeStart;$('periodEnd').value=rangeEnd;tab('day');render()});
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
