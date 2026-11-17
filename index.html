@@ -108,7 +108,7 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
    <h2 class="title">Ferien- und Urlaubsplaner</h2>
    <p class="hint">Plane zusammenhängende Freizeit passend zu deinem ausgewählten Schichtplan. Die App zählt nur Tage, an denen laut Schichtplan tatsächlich Dienst wäre.</p>
    <div class="grid2">
-    <div class="field"><label>Planungsjahr</label><select id="vacYear"><option>2026</option><option>2027</option><option>2028</option><option>2029</option><option>2030</option></select></div>
+    <div class="field"><label for="vacYear">Planungsjahr</label><input id="vacYear" type="number" min="2026" step="1" value="2026" inputmode="numeric" aria-describedby="vacYearHint"><small class="hint" id="vacYearHint">Ab 2026 frei auswählbar – ohne festes Endjahr. Du kannst auch 2031, 2040 oder ein späteres Jahr eingeben.</small></div>
    </div>
    <div class="vacation-modes">
     <div class="mode-heading">Wo soll deine freie Zeit liegen?</div>
@@ -121,7 +121,6 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
     <p class="mode-footnote">Bei Zeiträumen an Feriengrenzen sind bis zu 3 zusätzliche Tage davor und bis zu 3 Tage danach möglich. Die Verlängerung ist freiwillig – 0, 1, 2 oder 3 Tage je Seite werden berücksichtigt.</p>
    </div>
     <div class="field"><label>Gewünschte Dauer</label><select id="vacWeeks"><option value="1">1 Woche (7 Tage)</option><option value="2" selected>2 Wochen (14 Tage)</option><option value="3">3 Wochen (21 Tage)</option><option value="4">4 Wochen (28 Tage)</option><option value="5">5 Wochen (35 Tage)</option><option value="6">6 Wochen (42 Tage)</option><option value="custom">Eigene Dauer</option></select></div>
-   </div>
    <div class="field hidden" id="vacCustomWrap"><label>Eigene Dauer in Tagen</label><input id="vacCustomDays" type="number" min="1" max="60" value="14"></div>
    <div class="notice" style="margin:14px 0"><strong>Hinweis zu den Feriengrenzen:</strong> Ein vorgeschlagener Freizeitblock kann bei Bedarf bis zu 3 Kalendertage vor dem Beginn der Schulferien und/oder bis zu 3 Kalendertage nach dem Ende der Schulferien reichen. Diese zusätzlichen Tage sind eine Möglichkeit, aber kein Muss: Die Suche prüft auch passende Zeiträume ganz ohne Verlängerung sowie mit 1, 2 oder 3 zusätzlichen Tagen – vor und nach den Ferien unabhängig voneinander. Dein ausgewählter Schichtplan A, B, C oder D entscheidet, welche Tage tatsächlich freigestellt werden müssen.</div>
    <h3 class="title" style="font-size:16px;margin-top:16px">So sucht die App</h3>
@@ -449,6 +448,8 @@ function vacationPlanner(){
  const year=Number($('vacYear').value),weeks=$('vacWeeks').value,days=weeks==='custom'?Number($('vacCustomDays').value):Number(weeks)*7;
  const areaFilter=document.querySelector('input[name="vacAreaFilter"]:checked')?.value||'both';
  const root=$('vacResults'),allocation=$('vacAllocation');root.innerHTML='';allocation.innerHTML='';
+ if(!Number.isSafeInteger(year)||year<2026||year>9999){root.innerHTML='<p class="notice">Bitte ein gültiges Planungsjahr ab 2026 eingeben. Es gibt kein festgelegtes Endjahr.</p>';return}
+ if(year>2030&&areaFilter!=='both'){root.innerHTML='<p class="notice"><strong>Schulferientermine noch nicht verfügbar:</strong> Für '+year+' sind die niedersächsischen Ferientermine noch nicht hinterlegt. Deshalb kann die Suche „'+(areaFilter==='inside'?'Innerhalb':'Außerhalb')+' der Schulferien“ noch keine verlässlichen Ergebnisse liefern. Sobald die Ferientermine für dieses Jahr ergänzt sind, funktioniert diese Auswahl automatisch. Mit „Beides“ kannst du das gesamte Jahr schon jetzt unabhängig von den Ferien durchsuchen.</p>';return}
  if(!Number.isInteger(days)||days<1||days>60){root.innerHTML='<p class="notice">Bitte eine Dauer zwischen 1 und 60 Tagen eingeben.</p>';return}
  const yearStart=iso(new Date(year,0,1)),yearEnd=iso(new Date(year,11,31));
  const breaks=schoolBreaks.filter(b=>b[2]>=yearStart&&b[1]<=yearEnd);
@@ -466,10 +467,10 @@ function vacationPlanner(){
   const freeDays=days-work.length;
   const matchingBreaks=breaks.filter(br=>br[2]>=a&&br[1]<=b);
   const breakNames=[...new Set(matchingBreaks.map(x=>x[0]))];
-  let boundaryBefore=0,boundaryAfter=0;
+  let boundaryBefore=0,boundaryAfter=0,first=null,last=null;
   if(matchingBreaks.length){
-   const first=matchingBreaks.reduce((v,x)=>x[1]<v?x[1]:v,matchingBreaks[0][1]);
-   const last=matchingBreaks.reduce((v,x)=>x[2]>v?x[2]:v,matchingBreaks[0][2]);
+   first=matchingBreaks.reduce((v,x)=>x[1]<v?x[1]:v,matchingBreaks[0][1]);
+   last=matchingBreaks.reduce((v,x)=>x[2]>v?x[2]:v,matchingBreaks[0][2]);
    boundaryBefore=a<first?Math.round((parseDate(first)-parseDate(a))/86400000):0;
    boundaryAfter=b>last?Math.round((parseDate(b)-parseDate(last))/86400000):0;
   }
@@ -512,7 +513,7 @@ function vacationPlanner(){
   const h=document.createElement('h3');h.textContent=(i+1)+'. '+fmt(parseDate(c.start))+' bis '+fmt(parseDate(c.end));card.append(h);
   const category=document.createElement('p');category.className='small';category.style.fontWeight='800';category.textContent=c.category;card.append(category);
   const p=document.createElement('p');p.className='hint';p.textContent=c.dates.length+' Kalendertage · '+c.freeDays+' ohnehin freie Schichttage · '+c.work.length+' geplante Arbeitstage';card.append(p);
-  const detail=document.createElement('p');detail.className='small';detail.textContent=(c.breakNames.length?c.breakNames.join(', '):'Keine Schulferien im Zeitraum')+' · '+c.breakDays+' Ferientage · '+c.outsideDays+' Tage außerhalb der Ferien · '+c.holidayDays+' gesetzliche Feiertage';card.append(detail);
+  const detail=document.createElement('p');detail.className='small';detail.textContent=(c.breakNames.length?c.breakNames.join(', '):(year>2030?'Schulferientermine für dieses Jahr nicht hinterlegt':'Keine Schulferien im Zeitraum'))+' · '+c.breakDays+' Ferientage · '+c.outsideDays+' Tage außerhalb der Ferien · '+c.holidayDays+' gesetzliche Feiertage';card.append(detail);
   const shifts=document.createElement('p');shifts.className='small';shifts.textContent='Benötigte Dienste: '+c.shiftCounts.F+' Früh · '+c.shiftCounts.S+' Spät · '+c.shiftCounts.N+' Nacht';card.append(shifts);
   const btn=document.createElement('button');btn.className='primary';btn.textContent='Diesen Zeitraum auswählen';btn.onclick=()=>showVacationAllocation(c,i+1);card.append(btn);root.append(card);
  });
@@ -539,10 +540,12 @@ function applyVacationSuggestion(c,assign){
  groups.forEach((g,i)=>state.periods.push({id:'vac-'+Date.now()+'-'+i+'-'+Math.random().toString(36).slice(2,6),...g}));
  state.periods.sort((a,b)=>a.start.localeCompare(b.start));save();render();alert('Die geplanten Urlaub-/AZK-/LZK-Tage wurden übernommen.');
 }
-$('vacWeeks').onchange=()=>{$('vacCustomWrap').classList.toggle('hidden',$('vacWeeks').value!=='custom')};
-$('vacFind').onclick=vacationPlanner;
+$('vacWeeks').onchange=()=>{$('vacCustomWrap').classList.toggle('hidden',$('vacWeeks').value!=='custom');$('vacResults').innerHTML='';$('vacAllocation').innerHTML=''};
+$('vacYear').onchange=()=>{$('vacResults').innerHTML='';$('vacAllocation').innerHTML=''};
+document.querySelectorAll('input[name="vacAreaFilter"]').forEach(el=>el.addEventListener('change',()=>{$('vacResults').innerHTML='';$('vacAllocation').innerHTML=''}));
+$('vacFind').onclick=()=>{try{vacationPlanner()}catch(error){console.error('Ferienplaner-Suche fehlgeschlagen:',error);$('vacResults').innerHTML='<p class="notice">Bei der Suche ist ein Fehler aufgetreten. Bitte prüfe Planungsjahr und Dauer und versuche es erneut.</p>';$('vacAllocation').innerHTML=''}};
 let bridgeYear=new Date().getFullYear();
-function tab(name){document.querySelectorAll('main section').forEach(s=>s.classList.toggle('hidden',s.id!==name));document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));if(name==='day')render();if(name==='year')renderYearOverview();if(name==='bridge')renderBridgePlanner();if(name==='vacation'){$('vacYear').value=String(new Date().getFullYear())}}
+function tab(name){document.querySelectorAll('main section').forEach(s=>s.classList.toggle('hidden',s.id!==name));document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));if(name==='day')render();if(name==='year')renderYearOverview();if(name==='bridge')renderBridgePlanner();if(name==='vacation'){$('vacYear').value=String(Math.max(2026,new Date().getFullYear()));$('vacResults').innerHTML='';$('vacAllocation').innerHTML=''}}
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>tab(b.dataset.tab));
 $('yearPrev').onclick=()=>{overviewYear--;renderYearOverview()};$('yearNext').onclick=()=>{overviewYear++;renderYearOverview()};
 $('bridgePrev').onclick=()=>{bridgeYear--;renderBridgePlanner()};$('bridgeNext').onclick=()=>{bridgeYear++;renderBridgePlanner()};
