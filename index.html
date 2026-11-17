@@ -44,6 +44,10 @@ textarea{min-height:85px;resize:vertical}.actions{display:flex;flex-wrap:wrap;ga
 .bridge-status{font-size:12px;color:var(--muted);margin-top:8px}
 @media(max-width:560px){.bridge-suggestion{grid-template-columns:1fr}.bridge-suggestion-controls{min-width:0}.bridge-suggestion-controls select{flex:1}}
 
+
+.vacation-modes{margin:18px 0 20px}.mode-heading{font-size:17px;font-weight:900;margin-bottom:4px}.mode-intro{font-size:13px;color:var(--muted);margin:0 0 10px}.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.mode-choice{display:flex;align-items:flex-start;gap:11px;padding:15px 13px;border:2px solid #2674c9;border-radius:14px;background:#e7f1ff;color:#12345a;cursor:pointer;min-height:125px;transition:border-color .15s,background .15s,box-shadow .15s}.mode-choice input{width:22px;height:22px;flex:0 0 22px;margin:2px 0 0;accent-color:#155db0}.mode-choice:has(input:checked){border-color:#104f9c;background:#2674c9;color:#fff;box-shadow:0 0 0 3px rgba(38,116,201,.28)}.mode-copy{display:flex;flex-direction:column;gap:7px;min-width:0}.mode-copy strong{font-size:15px;line-height:1.3;color:inherit}.mode-copy small{font-size:12px;line-height:1.4;color:inherit;opacity:.88}.mode-copy em{font-size:11px;font-style:normal;font-weight:900;letter-spacing:.2px;margin-top:auto;color:inherit}.mode-footnote{font-size:11px;color:var(--muted);margin-top:9px}
+@media(max-width:560px){.mode-grid{grid-template-columns:1fr}.mode-choice{min-height:0;padding:13px}}
+
 .vacation-result{border:1px solid var(--line);border-radius:12px;padding:13px;margin:10px 0;background:var(--panel)}.vacation-result h3{margin:0 0 5px;font-size:15px}.vacation-result .actions{margin-top:9px}.mode-active{outline:2px solid var(--accent);font-weight:900}.hidden{display:none!important}.bottomnav{position:fixed;bottom:0;left:0;right:0;background:var(--panel);border-top:1px solid var(--line);display:flex;justify-content:flex-start;gap:5px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));z-index:5;overflow-x:auto;overscroll-behavior-x:contain}
 .bottomnav button{flex:0 0 auto;min-width:64px;max-width:none;padding:9px 7px;font-size:11px;white-space:nowrap}
 dialog{border:1px solid var(--line);border-radius:18px;background:var(--panel);color:var(--text);width:min(92vw,480px);padding:20px;box-shadow:0 20px 80px #0005}
@@ -105,10 +109,21 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
    <p class="hint">Plane zusammenhängende Freizeit passend zu deinem ausgewählten Schichtplan. Die App zählt nur Tage, an denen laut Schichtplan tatsächlich Dienst wäre.</p>
    <div class="grid2">
     <div class="field"><label>Planungsjahr</label><select id="vacYear"><option>2026</option><option>2027</option><option>2028</option><option>2029</option><option>2030</option></select></div>
+   </div>
+   <div class="vacation-modes">
+    <div class="mode-heading">Wo soll deine freie Zeit liegen?</div>
+    <p class="mode-intro">Wähle vor der Suche aus, welche Zeiträume bevorzugt werden sollen.</p>
+    <div class="mode-grid">
+     <label class="mode-choice"><input type="radio" name="vacAreaFilter" value="outside"><span class="mode-copy"><strong>Außerhalb der Schulferien</strong><small>Suche bevorzugt zusammenhängende freie Zeit außerhalb der niedersächsischen Schulferien.</small><em>Außerhalb bevorzugen</em></span></label>
+     <label class="mode-choice"><input type="radio" name="vacAreaFilter" value="inside"><span class="mode-copy"><strong>Innerhalb der Schulferien</strong><small>Suche bevorzugt zusammenhängende freie Zeit innerhalb der Schulferien.</small><em>Ferienzeit bevorzugen</em></span></label>
+     <label class="mode-choice"><input type="radio" name="vacAreaFilter" value="both" checked><span class="mode-copy"><strong>Beides</strong><small>Durchsuche das ganze Jahr ohne Bevorzugung – auch Zeiträume, die Feriengrenzen überschreiten.</small><em>Gesamtes Jahr durchsuchen</em></span></label>
+    </div>
+    <p class="mode-footnote">Bei Zeiträumen an Feriengrenzen sind bis zu 3 zusätzliche Tage davor und bis zu 3 Tage danach möglich. Die Verlängerung ist freiwillig – 0, 1, 2 oder 3 Tage je Seite werden berücksichtigt.</p>
+   </div>
     <div class="field"><label>Gewünschte Dauer</label><select id="vacWeeks"><option value="1">1 Woche (7 Tage)</option><option value="2" selected>2 Wochen (14 Tage)</option><option value="3">3 Wochen (21 Tage)</option><option value="4">4 Wochen (28 Tage)</option><option value="5">5 Wochen (35 Tage)</option><option value="6">6 Wochen (42 Tage)</option><option value="custom">Eigene Dauer</option></select></div>
    </div>
    <div class="field hidden" id="vacCustomWrap"><label>Eigene Dauer in Tagen</label><input id="vacCustomDays" type="number" min="1" max="60" value="14"></div>
-   <div class="field"><label>Wie möchtest du die Schulferien berücksichtigen?</label><div class="grid2"><button type="button" id="vacPrefer" class="primary">Ferien vorrangig</button><button type="button" id="vacAvoid">Ferien vermeiden</button></div><input type="hidden" id="vacMode" value="prefer"></div>
+   <div class="notice" style="margin:14px 0"><strong>Hinweis zu den Feriengrenzen:</strong> Ein vorgeschlagener Freizeitblock kann bei Bedarf bis zu 3 Kalendertage vor dem Beginn der Schulferien und/oder bis zu 3 Kalendertage nach dem Ende der Schulferien reichen. Diese zusätzlichen Tage sind eine Möglichkeit, aber kein Muss: Die Suche prüft auch passende Zeiträume ganz ohne Verlängerung sowie mit 1, 2 oder 3 zusätzlichen Tagen – vor und nach den Ferien unabhängig voneinander. Dein ausgewählter Schichtplan A, B, C oder D entscheidet, welche Tage tatsächlich freigestellt werden müssen.</div>
    <h3 class="title" style="font-size:16px;margin-top:16px">So sucht die App</h3>
    <div class="notice">Die App sucht zuerst passende zusammenhängende Zeiträume und sortiert sie danach, wie wenige geplante Arbeitstage du dafür freistellen musst. Erst wenn du einen Vorschlag auswählst, teilst du diese Arbeitstage auf Urlaub, AZK und LZK auf. Bereits freie Schichttage werden mitgerechnet.</div>
    <div class="actions"><button class="primary" id="vacFind">Beste Zeiträume suchen</button></div>
@@ -432,30 +447,77 @@ const schoolBreaks=[
 function schoolBreakName(date){return schoolBreaks.find(x=>date>=x[1]&&date<=x[2])?.[0]||''}
 function vacationPlanner(){
  const year=Number($('vacYear').value),weeks=$('vacWeeks').value,days=weeks==='custom'?Number($('vacCustomDays').value):Number(weeks)*7;
- const mode=$('vacMode').value,root=$('vacResults'),allocation=$('vacAllocation');root.innerHTML='';allocation.innerHTML='';
+ const areaFilter=document.querySelector('input[name="vacAreaFilter"]:checked')?.value||'both';
+ const root=$('vacResults'),allocation=$('vacAllocation');root.innerHTML='';allocation.innerHTML='';
  if(!Number.isInteger(days)||days<1||days>60){root.innerHTML='<p class="notice">Bitte eine Dauer zwischen 1 und 60 Tagen eingeben.</p>';return}
- const start=new Date(year,0,1),end=new Date(year,11,31),candidates=[];
- for(let d=new Date(start);d<=end;d=plus(d,1)){
-  const a=iso(d),b=iso(plus(d,days-1));if(parseDate(b)>end)continue;
-  const dates=daysBetween(a,b);if(dates.some(x=>state.periods.some(p=>x>=p.start&&x<=p.end)))continue;
-  const work=dates.filter(x=>shiftForForPlan(x,activePlan).code!=='X');
-  const breakDays=dates.filter(x=>schoolBreakName(x)).length;
+ const yearStart=iso(new Date(year,0,1)),yearEnd=iso(new Date(year,11,31));
+ const breaks=schoolBreaks.filter(b=>b[2]>=yearStart&&b[1]<=yearEnd);
+ const candidates=[];
+ // Das gesamte Planungsjahr durchsuchen – nicht nur die unmittelbaren Feriengrenzen.
+ for(let d=parseDate(yearStart);d<=parseDate(yearEnd);d=plus(d,1)){
+  const a=iso(d),b=iso(plus(d,days-1));
+  const dates=daysBetween(a,b);
+  if(dates.some(x=>state.periods.some(p=>x>=p.start&&x<=p.end)))continue;
+  const shifts=dates.map(x=>({date:x,...shiftForForPlan(x,activePlan)}));
+  const work=shifts.filter(x=>x.code!=='X');
+  const breakDates=dates.filter(x=>schoolBreakName(x));
+  const breakDays=breakDates.length;
   const holidayDays=dates.filter(x=>holidayNameOn(x)).length;
   const freeDays=days-work.length;
-  const breakNames=[...new Set(dates.map(schoolBreakName).filter(Boolean))];
-  const score=mode==='prefer'?breakDays:-breakDays;
-  candidates.push({start:a,end:b,dates,work,breakDays,freeDays,score,breakNames,holidayDays});
+  const matchingBreaks=breaks.filter(br=>br[2]>=a&&br[1]<=b);
+  const breakNames=[...new Set(matchingBreaks.map(x=>x[0]))];
+  let boundaryBefore=0,boundaryAfter=0;
+  if(matchingBreaks.length){
+   const first=matchingBreaks.reduce((v,x)=>x[1]<v?x[1]:v,matchingBreaks[0][1]);
+   const last=matchingBreaks.reduce((v,x)=>x[2]>v?x[2]:v,matchingBreaks[0][2]);
+   boundaryBefore=a<first?Math.round((parseDate(first)-parseDate(a))/86400000):0;
+   boundaryAfter=b>last?Math.round((parseDate(b)-parseDate(last))/86400000):0;
+  }
+  let category='Außerhalb der Schulferien';
+  if(matchingBreaks.length){
+   const allInside=breakDays===dates.length;
+   if(allInside)category='Mitten in den Schulferien';
+   else if(a<first&&b>last)category='Über die Ferien hinweg';
+   else if(a<first)category=boundaryBefore<=3?'Bis zu 3 Tage vor Ferienbeginn':'Vor den Ferien begonnen';
+   else if(b>last)category=boundaryAfter<=3?'Bis zu 3 Tage nach Ferienende':'Über das Ferienende hinaus';
+   else category='Teilweise innerhalb der Schulferien';
+  }
+  const shiftCounts={F:work.filter(x=>x.code==='F').length,S:work.filter(x=>x.code==='S').length,N:work.filter(x=>x.code==='N').length};
+  const outsideDays=dates.length-breakDays;
+  candidates.push({start:a,end:b,dates,work,breakDays,outsideDays,freeDays,breakNames,holidayDays,category,shiftCounts});
  }
- candidates.sort((a,b)=>a.work.length-b.work.length||(mode==='prefer'?b.breakDays-a.breakDays:a.breakDays-b.breakDays)||b.holidayDays-a.holidayDays||a.start.localeCompare(b.start));
- const chosen=[];for(const c of candidates){if(chosen.every(x=>c.end<x.start||c.start>x.end)){chosen.push(c);if(chosen.length===8)break}}
- if(!chosen.length){root.innerHTML='<p class="notice">Für dieses Jahr wurde kein passender Zeitraum gefunden. Prüfe deine Dauer oder wähle ein anderes Jahr.</p>';return}
- const heading=document.createElement('h3');heading.className='title';heading.style.fontSize='17px';heading.style.marginTop='20px';heading.textContent='Beste Zeiträume · Plan '+activePlan;root.append(heading);
+ // Bei den beiden Schwerpunkt-Modi müssen mehr Kalendertage auf der gewählten Seite liegen.
+ // Im Modus Beides bleibt die bisherige Gesamtsuche über das ganze Jahr erhalten.
+ const matchingCandidates=candidates.filter(c=>{
+  if(areaFilter==='both')return true;
+  // An Feriengrenzen darf die Suche optional höchstens drei Tage auf jede Seite erweitern.
+  // Zeiträume vollständig innerhalb oder vollständig außerhalb der Ferien bleiben uneingeschränkt.
+  const touchesBreak=c.breakDays>0;
+  const first=c.breakNames.length?breaks.filter(br=>c.breakNames.includes(br[0])&&br[2]>=c.start&&br[1]<=c.end).reduce((v,x)=>x[1]<v?x[1]:v,'9999-12-31'):null;
+  const last=c.breakNames.length?breaks.filter(br=>c.breakNames.includes(br[0])&&br[2]>=c.start&&br[1]<=c.end).reduce((v,x)=>x[2]>v?x[2]:v,'0000-01-01'):null;
+  const before=touchesBreak&&first&&c.start<first?Math.round((parseDate(first)-parseDate(c.start))/86400000):0;
+  const after=touchesBreak&&last&&c.end>last?Math.round((parseDate(c.end)-parseDate(last))/86400000):0;
+  if(touchesBreak&&(before>3||after>3))return false;
+  return areaFilter==='inside'?c.breakDays>c.outsideDays:c.outsideDays>c.breakDays;
+ });
+ matchingCandidates.sort((a,b)=>a.work.length-b.work.length||b.freeDays-a.freeDays||(areaFilter==='inside'?b.breakDays-a.breakDays:areaFilter==='outside'?b.outsideDays-a.outsideDays:b.breakDays-a.breakDays)||b.holidayDays-a.holidayDays||a.start.localeCompare(b.start));
+ // Unterschiedliche, nicht überlappende Vorschläge aus dem ganzen Jahr zeigen.
+ const chosen=[];
+ for(const c of matchingCandidates){if(chosen.every(x=>c.end<x.start||c.start>x.end)){chosen.push(c);if(chosen.length===12)break}}
+ if(!chosen.length){const wanted=areaFilter==='inside'?'überwiegend innerhalb':areaFilter==='outside'?'überwiegend außerhalb':'innerhalb und außerhalb';root.innerHTML='<p class="notice">Für '+year+' wurden keine passenden freien Zeiträume '+wanted+' der Schulferien gefunden. Wähle eine andere Dauer oder die Suche „Beides“.</p>';return}
+ const filterLabel=areaFilter==='inside'?'innerhalb der Schulferien bevorzugt':areaFilter==='outside'?'außerhalb der Schulferien bevorzugt':'gesamtes Jahr – innerhalb und außerhalb der Schulferien';
+ const heading=document.createElement('h3');heading.className='title';heading.style.fontSize='17px';heading.style.marginTop='20px';heading.textContent='Passende Zeiträume für Schichtplan '+activePlan+' – '+filterLabel;root.append(heading);
  chosen.forEach((c,i)=>{
-  const card=document.createElement('div');card.className='vacation-result';const h=document.createElement('h3');h.textContent=(i+1)+'. '+fmt(parseDate(c.start))+' bis '+fmt(parseDate(c.end));card.append(h);
+  const card=document.createElement('div');card.className='vacation-result';
+  const h=document.createElement('h3');h.textContent=(i+1)+'. '+fmt(parseDate(c.start))+' bis '+fmt(parseDate(c.end));card.append(h);
+  const category=document.createElement('p');category.className='small';category.style.fontWeight='800';category.textContent=c.category;card.append(category);
   const p=document.createElement('p');p.className='hint';p.textContent=c.dates.length+' Kalendertage · '+c.freeDays+' ohnehin freie Schichttage · '+c.work.length+' geplante Arbeitstage';card.append(p);
-  const detail=document.createElement('p');detail.className='small';detail.textContent=(c.breakNames.length?c.breakNames.join(', '):'Keine Schulferien im Zeitraum')+' · '+c.holidayDays+' gesetzliche Feiertage';card.append(detail);
+  const detail=document.createElement('p');detail.className='small';detail.textContent=(c.breakNames.length?c.breakNames.join(', '):'Keine Schulferien im Zeitraum')+' · '+c.breakDays+' Ferientage · '+c.outsideDays+' Tage außerhalb der Ferien · '+c.holidayDays+' gesetzliche Feiertage';card.append(detail);
+  const shifts=document.createElement('p');shifts.className='small';shifts.textContent='Benötigte Dienste: '+c.shiftCounts.F+' Früh · '+c.shiftCounts.S+' Spät · '+c.shiftCounts.N+' Nacht';card.append(shifts);
   const btn=document.createElement('button');btn.className='primary';btn.textContent='Diesen Zeitraum auswählen';btn.onclick=()=>showVacationAllocation(c,i+1);card.append(btn);root.append(card);
  });
+ const best=chosen[0];
+ const note=document.createElement('div');note.className='notice';note.style.marginTop='18px';note.innerHTML='<strong>Günstigster Vorschlag nach benötigten Arbeitstagen:</strong> '+fmt(parseDate(best.start))+' bis '+fmt(parseDate(best.end))+' · '+best.work.length+' Arbeitstage freizustellen · '+best.freeDays+' ohnehin freie Schichttage · '+best.category+'.';root.prepend(note);
 }
 function showVacationAllocation(c,number){
  const root=$('vacAllocation');root.innerHTML='';
@@ -478,11 +540,9 @@ function applyVacationSuggestion(c,assign){
  state.periods.sort((a,b)=>a.start.localeCompare(b.start));save();render();alert('Die geplanten Urlaub-/AZK-/LZK-Tage wurden übernommen.');
 }
 $('vacWeeks').onchange=()=>{$('vacCustomWrap').classList.toggle('hidden',$('vacWeeks').value!=='custom')};
-$('vacPrefer').onclick=()=>{ $('vacMode').value='prefer';$('vacPrefer').classList.add('mode-active');$('vacAvoid').classList.remove('mode-active')};
-$('vacAvoid').onclick=()=>{ $('vacMode').value='avoid';$('vacAvoid').classList.add('mode-active');$('vacPrefer').classList.remove('mode-active')};
 $('vacFind').onclick=vacationPlanner;
 let bridgeYear=new Date().getFullYear();
-function tab(name){document.querySelectorAll('main section').forEach(s=>s.classList.toggle('hidden',s.id!==name));document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));if(name==='day')render();if(name==='year')renderYearOverview();if(name==='bridge')renderBridgePlanner();if(name==='vacation'){$('vacYear').value=String(new Date().getFullYear());$('vacPrefer').classList.add('mode-active')}}
+function tab(name){document.querySelectorAll('main section').forEach(s=>s.classList.toggle('hidden',s.id!==name));document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));if(name==='day')render();if(name==='year')renderYearOverview();if(name==='bridge')renderBridgePlanner();if(name==='vacation'){$('vacYear').value=String(new Date().getFullYear())}}
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>tab(b.dataset.tab));
 $('yearPrev').onclick=()=>{overviewYear--;renderYearOverview()};$('yearNext').onclick=()=>{overviewYear++;renderYearOverview()};
 $('bridgePrev').onclick=()=>{bridgeYear--;renderBridgePlanner()};$('bridgeNext').onclick=()=>{bridgeYear++;renderBridgePlanner()};
