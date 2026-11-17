@@ -200,11 +200,12 @@ function render(){
  document.documentElement.dataset.theme=state.theme;
  updateMonthControls(true);
  const list=$('monthDayList');list.innerHTML='';
- // Drei zusammenhängende Monate anzeigen: Vormonat, gewählter Monat und Folgemonat.
- // Dadurch kann man über Monatsgrenzen hinweg scrollen, ohne dass die Liste neu aufgebaut wird.
+ // Start mit drei Monaten. Beim Scrollen werden davor und danach fortlaufend
+ // weitere Monate ergänzt; die vorhandenen Tageszeilen bleiben dabei erhalten.
  const first=new Date(month.getFullYear(),month.getMonth()-1,1);
  const last=new Date(month.getFullYear(),month.getMonth()+2,0);
  for(let d=new Date(first);d<=last;d=plus(d,1))list.append(makeDayRow(d));
+ list.dataset.start=iso(first);list.dataset.end=iso(last);
  const activeDayRow=list.querySelector('.day-row.active');
  if(activeDayRow){const targetTop=activeDayRow.offsetTop-list.offsetTop-(list.clientHeight-activeDayRow.offsetHeight)/2;list.scrollTop=Math.max(0,Math.min(targetTop,list.scrollHeight-list.clientHeight))}
  const sh=shiftFor(selected);$('selectedTitle').textContent=fmt(parseDate(selected));$('selectedShift').textContent=sh.name+(shiftHours[sh.code]?' · '+shiftHours[sh.code]:'');$('selectedEvents').textContent=eventsOn(selected).map(e=>e.title).join(' · ')||'Keine persönlichen Termine';
@@ -217,13 +218,42 @@ function render(){
  document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editEvent(b.dataset.edit));
  document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{state.events=state.events.filter(e=>e.id!==b.dataset.del);save();render();if(!$('year').classList.contains('hidden'))renderYearOverview()});
 }
-// Beim Scrollen wird der Monat anhand des oben sichtbaren Tages aktualisiert.
-// Die Tagesliste selbst wird dabei NICHT neu aufgebaut: kein Springen oder Zurückwandern.
+// Endloses Scrollen: Bei Annäherung an den oberen oder unteren Rand wird
+// jeweils ein weiterer Monat eingefügt. Bereits angezeigte Tage werden nie
+// entfernt oder neu aufgebaut, daher springt die Liste nicht zurück.
+let extendingDayList=false;
+function extendDayList(direction){
+ const list=$('monthDayList');
+ if(extendingDayList||!list.children.length)return;
+ extendingDayList=true;
+ const oldHeight=list.scrollHeight,oldTop=list.scrollTop;
+ if(direction==='down'){
+  const end=parseDate(list.dataset.end);
+  const nextStart=new Date(end.getFullYear(),end.getMonth()+1,1);
+  const nextEnd=new Date(nextStart.getFullYear(),nextStart.getMonth()+1,0);
+  const fragment=document.createDocumentFragment();
+  for(let d=new Date(nextStart);d<=nextEnd;d=plus(d,1))fragment.append(makeDayRow(d));
+  list.append(fragment);list.dataset.end=iso(nextEnd);
+ }else{
+  const start=parseDate(list.dataset.start);
+  const prevStart=new Date(start.getFullYear(),start.getMonth()-1,1);
+  const prevEnd=new Date(start.getFullYear(),start.getMonth(),0);
+  const fragment=document.createDocumentFragment();
+  for(let d=new Date(prevStart);d<=prevEnd;d=plus(d,1))fragment.append(makeDayRow(d));
+  list.insertBefore(fragment,list.firstChild);list.dataset.start=iso(prevStart);
+  // Gleiche sichtbare Tagesposition beibehalten, obwohl oben Zeilen hinzukamen.
+  list.scrollTop=oldTop+(list.scrollHeight-oldHeight);
+ }
+ extendingDayList=false;
+}
 $('monthDayList').addEventListener('scroll',()=>{
  const list=$('monthDayList');
+ if(list.scrollTop<220)extendDayList('up');
+ else if(list.scrollHeight-list.scrollTop-list.clientHeight<220)extendDayList('down');
  const probe=list.getBoundingClientRect().top+list.clientHeight/2;
- const rows=[...list.querySelectorAll('.day-row')];
- let visible=rows.find(r=>r.getBoundingClientRect().bottom>probe);
+ const rows=list.querySelectorAll('.day-row');
+ let visible=null;
+ for(const row of rows){if(row.getBoundingClientRect().bottom>probe){visible=row;break}}
  if(!visible)return;
  const d=parseDate(visible.dataset.date),nextMonth=new Date(d.getFullYear(),d.getMonth(),1);
  if(nextMonth.getFullYear()!==month.getFullYear()||nextMonth.getMonth()!==month.getMonth()){
