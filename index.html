@@ -32,6 +32,7 @@ input,select,textarea{width:100%;padding:11px;border:1px solid var(--line);borde
 textarea{min-height:85px;resize:vertical}.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .item{padding:11px 0;border-bottom:1px solid var(--line)}.item:last-child{border:0}.pill{display:inline-block;padding:3px 8px;border-radius:99px;background:var(--soft);color:var(--blue);font-size:11px;font-weight:800}
 .notice{padding:12px;border-radius:12px;background:var(--soft);color:var(--text);font-size:13px;margin:10px 0}
+.year-totals{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.year-stat{border:1px solid var(--line);border-left:6px solid var(--stat-color,#777);border-radius:12px;padding:12px;background:var(--soft);min-width:0}.year-stat strong{display:block;font-size:26px;line-height:1.15;font-weight:900}.year-stat span{display:block;font-size:13px;font-weight:800;margin-top:4px}.year-stat small{display:block;color:var(--muted);font-size:11px;margin-top:3px}.year-months{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.year-month{border:1px solid var(--line);border-radius:12px;padding:11px;min-width:0}.year-month h4{margin:0 0 8px;font-size:15px}.year-month .ym-line{display:flex;justify-content:space-between;gap:8px;font-size:12px;padding:3px 0;border-bottom:1px solid var(--line)}.year-month .ym-line:last-child{border:0}.year-month b{font-variant-numeric:tabular-nums}.year-stat.urlaub{--stat-color:#238b45}.year-stat.krank{--stat-color:#c62828}.year-stat.azk{--stat-color:#e58a22}.year-stat.lzk{--stat-color:#2874b9}.year-stat.frei{--stat-color:#68717d}.year-stat.opa{--stat-color:#7654a5}
 .hidden{display:none!important}.bottomnav{position:fixed;bottom:0;left:0;right:0;background:var(--panel);border-top:1px solid var(--line);display:flex;justify-content:center;gap:5px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));z-index:5}
 .bottomnav button{flex:1;max-width:180px;padding:9px 4px;font-size:12px}
 dialog{border:1px solid var(--line);border-radius:18px;background:var(--panel);color:var(--text);width:min(92vw,480px);padding:20px;box-shadow:0 20px 80px #0005}
@@ -46,7 +47,7 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
   <label class="small" style="display:flex;align-items:center;gap:6px">Plan <select id="planSelect" style="width:auto;padding:8px"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></label><button id="todayBtn" class="primary">Heute</button><button id="themeBtn">☾ Darstellung</button><button id="shareBtn" class="primary">Teilen / Export</button><button id="backupBtn">Datensicherung</button>
  </div>
  <nav class="tabs">
-  <button class="active" data-tab="calendar">Kalender</button><button data-tab="day">Tagesdetails</button><button data-tab="settings">Einstellungen</button>
+  <button class="active" data-tab="calendar">Kalender</button><button data-tab="day">Tagesdetails</button><button data-tab="year">Jahresübersicht</button><button data-tab="settings">Einstellungen</button>
  </nav>
  <section id="calendar">
   <div class="card">
@@ -67,6 +68,16 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
    <div class="title" style="font-size:16px;margin-top:22px">Persönliche Termine und Notizen</div>
    <div id="eventList"></div>
    <div class="actions"><button class="primary" id="addEvent">+ Termin / Notiz</button></div>
+  </div>
+ </section>
+ <section id="year" class="hidden">
+  <div class="card">
+   <div class="monthhead"><button id="yearPrev" aria-label="Vorheriges Jahr">‹</button><strong id="yearLabel">Jahresübersicht</strong><button id="yearNext" aria-label="Nächstes Jahr">›</button></div>
+   <p class="hint">Auswertung für den oben ausgewählten Schichtplan. Urlaub, AZK und LZK werden zusätzlich nach tatsächlich geplanten Arbeitstagen gezählt.</p>
+   <div id="yearTotals" class="year-totals"></div>
+   <h3 class="title" style="font-size:17px;margin-top:22px">Monatsübersicht</h3>
+   <div id="yearMonths" class="year-months"></div>
+   <p class="hint" style="margin-top:14px">„Frei“ zeigt die laut Schichtplan freien Tage. Bei Urlaub, Krank, AZK und LZK werden Kalendertage und geplante Arbeitstage getrennt ausgewiesen.</p>
   </div>
  </section>
  <section id="settings" class="hidden">
@@ -101,7 +112,7 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
   <div class="card"><h2 class="title">Über die App</h2><p class="muted small">Nordland – Schichtplan · Erstellt für Manfred Heveling. Persönliche Daten bleiben lokal auf diesem Gerät, bis du sie ausdrücklich exportierst oder teilst.</p><p class="muted small">© 2026 Manfred Heveling · Alle Rechte vorbehalten</p></div>
  </section>
 </main>
-<nav class="bottomnav"><button data-tab="calendar" class="active">▦ Kalender</button><button data-tab="day">☷ Termine</button><button data-tab="settings">⚙ Einstellungen</button></nav>
+<nav class="bottomnav"><button data-tab="calendar" class="active">▦ Kalender</button><button data-tab="day">☷ Termine</button><button data-tab="year">▤ Jahr</button><button data-tab="settings">⚙ Einstellungen</button></nav>
 
 <dialog id="eventDialog">
  <h2 class="title">Termin oder Notiz</h2>
@@ -143,7 +154,7 @@ let state={...defaultState,...JSON.parse(localStorage.getItem('nordlandState')||
 if(!sessionStorage.getItem('nordlandThemeChosen')) state.theme='dark';
 state.anchors={...defaultState.anchors,...(state.anchors||{}),...(state.anchor?{A:state.anchor}:{})};
 let activePlan=state.activePlan||'A';
-let selected=todayISO(), month=new Date(new Date().getFullYear(),new Date().getMonth(),1); let pendingImport=null, editingId=null, rangeStart=null, rangeEnd=null, dragSelecting=false, suppressDayClick=false;
+let selected=todayISO(), month=new Date(new Date().getFullYear(),new Date().getMonth(),1), overviewYear=new Date().getFullYear(); let pendingImport=null, editingId=null, rangeStart=null, rangeEnd=null, dragSelecting=false, suppressDayClick=false;
 function save(){localStorage.setItem('nordlandState',JSON.stringify(state))}
 const shiftHours={F:'05:30–13:30',S:'13:30–21:30',N:'21:30–05:30'};
 function shiftFor(dateStr){
@@ -178,10 +189,10 @@ function render(){
  $('eventList').innerHTML=eventsOn(selected).length?eventsOn(selected).map(e=>`<div class="item"><div class="row"><strong>${escapeHtml(e.title)}</strong><span class="pill">${e.time||'ohne Uhrzeit'}</span></div>${e.note?`<div class="muted small">${escapeHtml(e.note)}</div>`:''}<div class="row small muted"><span>${e.reminder?('Erinnerung: '+(e.reminderOne||'')+' '+(e.reminderOneTime||'')+(e.reminderTwo&&e.reminderTwo!=='off'?' · '+e.reminderTwo+' '+(e.reminderTwoTime||'') :'')):'Keine Erinnerung'}</span><span><button data-edit="${e.id}">Bearbeiten</button> <button data-del="${e.id}">Löschen</button></span></div></div>`).join(''):'<p class="muted">Für diesen Tag sind keine Termine eingetragen.</p>';
  $('periodStart').value=rangeStart||selected;$('periodEnd').value=rangeEnd||'';
  $('periodList').innerHTML=state.periods.length?'<h3 class="title" style="font-size:15px;margin-top:16px">Gespeicherte Zeiträume</h3>'+state.periods.slice().sort((a,b)=>a.start.localeCompare(b.start)).map(p=>`<div class="item row"><span><strong>${fmt(parseDate(p.start))}</strong> bis <strong>${fmt(parseDate(p.end))}</strong><br><span class="pill">${p.type}</span></span><button data-period-del="${p.id}">Löschen</button></div>`).join(''):'<p class="hint">Noch keine Urlaubs-, AZK- oder LZK-Zeiträume gespeichert.</p>';
- document.querySelectorAll('[data-period-del]').forEach(b=>b.onclick=()=>{state.periods=state.periods.filter(p=>p.id!==b.dataset.periodDel);save();render()});
+ document.querySelectorAll('[data-period-del]').forEach(b=>b.onclick=()=>{state.periods=state.periods.filter(p=>p.id!==b.dataset.periodDel);save();render();if(!$('year').classList.contains('hidden'))renderYearOverview()});
  ['A','B','C','D'].forEach(k=>{const el=$('anchor'+k);if(el)el.value=state.anchors[k]||''});$('planSelect').value=activePlan;$('pinInput').value='';$('reminderToggle').checked=!!state.reminders;
  document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editEvent(b.dataset.edit));
- document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{state.events=state.events.filter(e=>e.id!==b.dataset.del);save();render()});
+ document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{state.events=state.events.filter(e=>e.id!==b.dataset.del);save();render();if(!$('year').classList.contains('hidden'))renderYearOverview()});
 }
 // Monatswechsel am Rand: nur in der tatsächlichen Scrollrichtung auslösen.
 let monthScrollBusy=false,previousDayScrollTop=0;
@@ -209,21 +220,48 @@ $('monthDayList').addEventListener('wheel',e=>{
 document.addEventListener('pointermove',e=>{if(!dragSelecting)return;const row=document.elementFromPoint(e.clientX,e.clientY)?.closest('#monthDayList .day-row');if(row?.dataset.date){rangeEnd=row.dataset.date;$('periodEnd').value=rangeEnd;document.querySelectorAll('#monthDayList .day-row').forEach(x=>x.classList.toggle('in-range',x.dataset.date>=rangeStart&&x.dataset.date<=rangeEnd||x.dataset.date>=rangeEnd&&x.dataset.date<=rangeStart));}});
 document.addEventListener('pointerup',()=>{if(!dragSelecting)return;dragSelecting=false;suppressDayClick=true;if(rangeStart&&rangeEnd&&rangeEnd<rangeStart)[rangeStart,rangeEnd]=[rangeEnd,rangeStart];$('periodStart').value=rangeStart;$('periodEnd').value=rangeEnd;tab('day');render()});
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function tab(name){document.querySelectorAll('main section').forEach(s=>s.classList.toggle('hidden',s.id!==name));document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));if(name==='day')render()}
+function yearStatsForMonth(year, monthIndex){
+ const start=new Date(year,monthIndex,1), end=new Date(year,monthIndex+1,0);
+ const stats={Urlaub:{calendar:0,work:0},Krank:{calendar:0,work:0},AZK:{calendar:0,work:0},LZK:{calendar:0,work:0},'Opa-Tage':{calendar:0,work:0},Termine:0,Frei:0};
+ for(let d=new Date(start);d<=end;d=plus(d,1)){
+  const date=iso(d), sh=shiftFor(date), work=sh.code!=='X';
+  if(sh.code==='X')stats.Frei++;
+  const types=new Set(periodsOn(date).map(p=>p.type));
+  stats.Termine+=eventsOn(date).length;
+  for(const type of ['Urlaub','Krank','AZK','LZK','Opa-Tage']) if(types.has(type)){stats[type].calendar++;if(work)stats[type].work++;}
+ }
+ return stats;
+}
+function renderYearOverview(){
+ $('yearLabel').textContent='Jahresübersicht '+overviewYear+' · Plan '+activePlan;
+ const totals={Urlaub:{calendar:0,work:0},Krank:{calendar:0,work:0},AZK:{calendar:0,work:0},LZK:{calendar:0,work:0},'Opa-Tage':{calendar:0,work:0},Termine:0,Frei:0};
+ const months=[];
+ for(let m=0;m<12;m++){
+  const st=yearStatsForMonth(overviewYear,m);months.push(st);
+  for(const k of ['Urlaub','Krank','AZK','LZK','Opa-Tage']){totals[k].calendar+=st[k].calendar;totals[k].work+=st[k].work;}
+  totals.Frei+=st.Frei;totals.Termine+=st.Termine;
+ }
+ const cards=[['Termine',totals.Termine,'eingetragene Termine','persönliche Kalendertermine','termine'],['Urlaub',totals.Urlaub.work,'Arbeitstage verbraucht',totals.Urlaub.calendar+' Kalendertage','urlaub'],['Krank',totals.Krank.calendar,'Kalendertage',totals.Krank.work+' davon geplante Arbeitstage','krank'],['AZK',totals.AZK.work,'geplante Arbeitstage',totals.AZK.calendar+' Kalendertage','azk'],['LZK',totals.LZK.work,'geplante Arbeitstage',totals.LZK.calendar+' Kalendertage','lzk'],['Frei',totals.Frei,'freie Schichtplantage','laut Schichtplan','frei'],['Opa-Tage',totals['Opa-Tage'].calendar,'eingetragene Tage',totals['Opa-Tage'].work+' davon geplante Arbeitstage','opa']];
+ $('yearTotals').innerHTML=cards.map(([name,num,label,sub,cls])=>`<div class="year-stat ${cls}"><strong>${num}</strong><span>${name}</span><small>${label} · ${sub}</small></div>`).join('');
+ const names=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+ $('yearMonths').innerHTML=months.map((st,i)=>`<div class="year-month"><h4>${names[i]}</h4><div class="ym-line"><span>Urlaub</span><b>${st.Urlaub.work} AT</b></div><div class="ym-line"><span>Krank</span><b>${st.Krank.calendar} Tage</b></div><div class="ym-line"><span>AZK</span><b>${st.AZK.work} AT</b></div><div class="ym-line"><span>LZK</span><b>${st.LZK.work} AT</b></div><div class="ym-line"><span>Frei</span><b>${st.Frei} Tage</b></div><div class="ym-line"><span>Opa-Tage</span><b>${st['Opa-Tage'].calendar} Tage</b></div><div class="ym-line"><span>Termine</span><b>${st.Termine}</b></div></div>`).join('');
+}
+function tab(name){document.querySelectorAll('main section').forEach(s=>s.classList.toggle('hidden',s.id!==name));document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));if(name==='day')render();if(name==='year')renderYearOverview()}
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>tab(b.dataset.tab));
+$('yearPrev').onclick=()=>{overviewYear--;renderYearOverview()};$('yearNext').onclick=()=>{overviewYear++;renderYearOverview()};
 $('todayBtn').onclick=()=>{selected=todayISO();month=new Date(parseDate(selected).getFullYear(),parseDate(selected).getMonth(),1);rangeStart=rangeEnd=null;tab('calendar');render();};
 $('prevMonth').onclick=()=>{month=new Date(month.getFullYear(),month.getMonth()-1,1);selected=iso(new Date(month.getFullYear(),month.getMonth(),1));render()};
 $('nextMonth').onclick=()=>{month=new Date(month.getFullYear(),month.getMonth()+1,1);selected=iso(new Date(month.getFullYear(),month.getMonth(),1));render()};
 $('openDay').onclick=()=>tab('day');$('dayDate').onchange=e=>{selected=e.target.value;render()};
 $('themeBtn').onclick=()=>{state.theme=state.theme==='dark'?'light':'dark';sessionStorage.setItem('nordlandThemeChosen','1');save();render()};
-$('planSelect').onchange=e=>{activePlan=e.target.value;state.activePlan=activePlan;save();render()};
-$('saveSettings').onclick=()=>{let vals={};for(const k of ['A','B','C','D']){vals[k]=$('anchor'+k).value;if(!vals[k]||parseDate(vals[k]).getDay()!==1){alert('Bitte für Plan '+k+' einen gültigen Montag auswählen.');return}}state.anchors=vals;state.activePlan=activePlan;save();render();alert('Alle vier Schichtpläne wurden gespeichert.')};
+$('planSelect').onchange=e=>{activePlan=e.target.value;state.activePlan=activePlan;save();render();if(!$('year').classList.contains('hidden'))renderYearOverview()};
+$('saveSettings').onclick=()=>{let vals={};for(const k of ['A','B','C','D']){vals[k]=$('anchor'+k).value;if(!vals[k]||parseDate(vals[k]).getDay()!==1){alert('Bitte für Plan '+k+' einen gültigen Montag auswählen.');return}}state.anchors=vals;state.activePlan=activePlan;save();render();if(!$('year').classList.contains('hidden'))renderYearOverview();alert('Alle vier Schichtpläne wurden gespeichert.')};
 $('addEvent').onclick=()=>openEvent();
 function openEvent(e){editingId=e?.id||null;$('eventDate').value=e?.date||selected;$('eventTitle').value=e?.title||'';$('eventTime').value=e?.time||'';$('eventNote').value=e?.note||'';$('reminderOne').value=e?.reminderOne??(e?.reminder?'1d':'off');$('reminderOneTime').value=e?.reminderOneTime||'09:00';$('reminderTwo').value=e?.reminderTwo??'off';$('reminderTwoTime').value=e?.reminderTwoTime||'07:00';$('eventDialog').showModal()}
 function editEvent(id){openEvent(state.events.find(e=>e.id===id))}
 $('cancelEvent').onclick=()=>$('eventDialog').close();
-$('saveEvent').onclick=()=>{let title=$('eventTitle').value.trim();if(!title){alert('Bitte einen Titel eingeben.');return}let e={id:editingId||String(Date.now()),date:$('eventDate').value,title,time:$('eventTime').value,note:$('eventNote').value,reminderOne:$('reminderOne').value,reminderOneTime:$('reminderOneTime').value,reminderTwo:$('reminderTwo').value,reminderTwoTime:$('reminderTwoTime').value,reminder:$('reminderOne').value!=='off'||$('reminderTwo').value!=='off'};if(editingId)state.events=state.events.map(x=>x.id===editingId?e:x);else state.events.push(e);state.events.sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));selected=e.date;save();$('eventDialog').close();render()};
-$('savePeriod').onclick=()=>{let a=$('periodStart').value,b=$('periodEnd').value,t=$('periodType').value;if(!a||!b){alert('Bitte Von- und Bis-Datum auswählen.');return}if(b<a){alert('Das Bis-Datum darf nicht vor dem Von-Datum liegen.');return}let overlap=state.periods.filter(p=>a<=p.end&&b>=p.start);if(overlap.length&&!confirm('Der Zeitraum überschneidet sich mit einem bestehenden Eintrag. Soll der neue Eintrag trotzdem gespeichert werden?'))return;state.periods.push({id:String(Date.now()),start:a,end:b,type:t});state.periods.sort((x,y)=>x.start.localeCompare(y.start));rangeStart=rangeEnd=null;save();render();alert('Zeitraum wurde gespeichert.')};
+$('saveEvent').onclick=()=>{let title=$('eventTitle').value.trim();if(!title){alert('Bitte einen Titel eingeben.');return}let e={id:editingId||String(Date.now()),date:$('eventDate').value,title,time:$('eventTime').value,note:$('eventNote').value,reminderOne:$('reminderOne').value,reminderOneTime:$('reminderOneTime').value,reminderTwo:$('reminderTwo').value,reminderTwoTime:$('reminderTwoTime').value,reminder:$('reminderOne').value!=='off'||$('reminderTwo').value!=='off'};if(editingId)state.events=state.events.map(x=>x.id===editingId?e:x);else state.events.push(e);state.events.sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));selected=e.date;save();$('eventDialog').close();render();if(!$('year').classList.contains('hidden'))renderYearOverview()};
+$('savePeriod').onclick=()=>{let a=$('periodStart').value,b=$('periodEnd').value,t=$('periodType').value;if(!a||!b){alert('Bitte Von- und Bis-Datum auswählen.');return}if(b<a){alert('Das Bis-Datum darf nicht vor dem Von-Datum liegen.');return}let overlap=state.periods.filter(p=>a<=p.end&&b>=p.start);if(overlap.length&&!confirm('Der Zeitraum überschneidet sich mit einem bestehenden Eintrag. Soll der neue Eintrag trotzdem gespeichert werden?'))return;state.periods.push({id:String(Date.now()),start:a,end:b,type:t});state.periods.sort((x,y)=>x.start.localeCompare(y.start));rangeStart=rangeEnd=null;save();render();if(!$('year').classList.contains('hidden'))renderYearOverview();alert('Zeitraum wurde gespeichert.')};
 $('cancelPeriod').onclick=()=>{rangeStart=rangeEnd=null;$('periodStart').value=selected;$('periodEnd').value='';render()};
 $('periodStart').onchange=e=>{rangeStart=e.target.value;rangeEnd=null;render()};$('periodEnd').onchange=e=>{rangeEnd=e.target.value;if(rangeStart&&rangeEnd&&rangeEnd<rangeStart){[rangeStart,rangeEnd]=[rangeEnd,rangeStart]}render()};
 $('savePin').onclick=()=>{let p=$('pinInput').value;if(p&& !/^\d{4}$/.test(p)){alert('Der PIN muss genau 4 Ziffern haben.');return}state.pin=p;save();alert(p?'PIN auf diesem Gerät aktiviert.':'PIN-Schutz ausgeschaltet.');};
@@ -238,7 +276,7 @@ function shiftForForPlan(dateStr,plan){const old=activePlan;activePlan=plan;cons
 $('importBtn').onclick=()=>$('importFile').click();
 $('importFile').onchange=async e=>{let f=e.target.files[0];if(!f)return;try{pendingImport=JSON.parse(await f.text());if(pendingImport.app!=='Nordland-Schichtplan')throw Error('Diese Datei gehört nicht zur Nordland-App.');$('importDialog').showModal()}catch(err){alert('Import nicht möglich: '+err.message)}e.target.value=''};
 $('cancelImport').onclick=()=>$('importDialog').close();
-$('confirmImport').onclick=()=>{if(!pendingImport)return;let mode=document.querySelector('input[name=importMode]:checked').value;if(pendingImport.anchors&&typeof pendingImport.anchors==='object')state.anchors={...state.anchors,...pendingImport.anchors};else if(pendingImport.anchor)state.anchors.A=pendingImport.anchor;if(Array.isArray(pendingImport.events)){if(mode==='replace')state.events=pendingImport.events;else{let ids=new Set(state.events.map(e=>e.id));state.events.push(...pendingImport.events.filter(e=>!ids.has(e.id)))}}if(Array.isArray(pendingImport.periods)){if(mode==='replace')state.periods=pendingImport.periods;else{let ids=new Set(state.periods.map(p=>p.id));state.periods.push(...pendingImport.periods.filter(p=>!ids.has(p.id)))}}if(typeof pendingImport.reminders==='boolean')state.reminders=pendingImport.reminders;save();pendingImport=null;$('importDialog').close();render();alert('Daten wurden importiert.')};
+$('confirmImport').onclick=()=>{if(!pendingImport)return;let mode=document.querySelector('input[name=importMode]:checked').value;if(pendingImport.anchors&&typeof pendingImport.anchors==='object')state.anchors={...state.anchors,...pendingImport.anchors};else if(pendingImport.anchor)state.anchors.A=pendingImport.anchor;if(Array.isArray(pendingImport.events)){if(mode==='replace')state.events=pendingImport.events;else{let ids=new Set(state.events.map(e=>e.id));state.events.push(...pendingImport.events.filter(e=>!ids.has(e.id)))}}if(Array.isArray(pendingImport.periods)){if(mode==='replace')state.periods=pendingImport.periods;else{let ids=new Set(state.periods.map(p=>p.id));state.periods.push(...pendingImport.periods.filter(p=>!ids.has(p.id)))}}if(typeof pendingImport.reminders==='boolean')state.reminders=pendingImport.reminders;save();pendingImport=null;$('importDialog').close();render();if(!$('year').classList.contains('hidden'))renderYearOverview();alert('Daten wurden importiert.')};
 $('shareBtn').onclick=()=>$('shareDialog').showModal();$('cancelShare').onclick=()=>$('shareDialog').close();
 $('doShare').onclick=async()=>{let include=document.querySelector('input[name=shareMode]:checked').value==='all';let payload=exportPayload(include);$('shareDialog').close();let file=new File([JSON.stringify(payload,null,2)],'nordland-schichtplan.json',{type:'application/json'});try{if(navigator.canShare?.({files:[file]})){await navigator.share({title:'Nordland-Schichtplan',text:include?'Schichtplan mit persönlichen Terminen':'Schichtplan ohne persönliche Termine',files:[file]})}else if(navigator.share){await navigator.share({title:'Nordland-Schichtplan',text:JSON.stringify(payload)})}else{download(payload,'nordland-schichtplan.json');alert('Datei erstellt. Du kannst sie jetzt z. B. über WhatsApp versenden.')}}catch(err){if(err.name!=='AbortError')alert('Teilen nicht möglich. Bitte Datendatei exportieren und manuell versenden.')}};
 function reminderCheck(){if(!state.reminders||!('Notification'in window)||Notification.permission!=='granted')return;let now=new Date();const offsets={ '1d':86400000,'2d':172800000,'3h':10800000,'2h':7200000,'1h':3600000,'30m':1800000,'ontime':0};state.events.forEach(e=>{if(!e.reminder)return;[['one',e.reminderOne,e.reminderOneTime],['two',e.reminderTwo,e.reminderTwoTime]].forEach(([slot,kind,clock])=>{if(!kind||kind==='off')return;let eventDate=parseDate(e.date);if(e.time){let [hh,mm]=e.time.split(':').map(Number);eventDate.setHours(hh,mm,0,0)}else eventDate.setHours(9,0,0,0);let target;if(kind==='ontime'){target=parseDate(e.date);let [hh,mm]=(clock||'07:00').split(':').map(Number);target.setHours(hh,mm,0,0)}else{target=new Date(eventDate.getTime()-offsets[kind]);let [hh,mm]=(clock||'09:00').split(':').map(Number);target.setHours(hh,mm,0,0)}let delta=now-target;if(delta>=0&&delta<60000){let key='notified_'+e.id+'_'+slot+'_'+e.date;if(!localStorage.getItem(key)){new Notification('Erinnerung: '+e.title,{body:'Termin '+fmt(parseDate(e.date))+(e.time?' um '+e.time+' Uhr':'')});localStorage.setItem(key,'1')}}})})}
