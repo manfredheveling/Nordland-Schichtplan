@@ -11,7 +11,7 @@
 :root{--bg:#f2f5f9;--panel:#fff;--text:#172334;--muted:#66758a;--line:#dce3ec;--blue:#173b63;--accent:#2874b9;--soft:#eaf2fb;--shadow:0 8px 24px #173b6312}
 [data-theme=dark]{--bg:#111923;--panel:#1b2735;--text:#edf3fa;--muted:#a9b7c8;--line:#344355;--blue:#8db9e8;--accent:#69a9e7;--soft:#263b52;--shadow:0 8px 24px #0003}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-header{background:#173b63;color:white;padding:18px max(18px,calc((100vw - 980px)/2));display:flex;align-items:center;justify-content:space-between;gap:12px}
+header{background:#173b63;color:white;padding:18px max(18px,calc((100vw - 980px)/2));display:flex;align-items:center;justify-content:space-between;gap:12px}.header-owner{text-align:right}.header-owner .copyright{display:block;font-size:10px;opacity:.82;margin-top:3px}
 .brand{font-weight:800;font-size:20px;letter-spacing:.2px}.brand small{display:block;font-size:11px;font-weight:500;opacity:.8;letter-spacing:1.3px}
 main{max-width:980px;margin:0 auto;padding:18px 14px 90px}.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
 button,.btn{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:11px;padding:10px 13px;font:inherit;font-weight:650;cursor:pointer}
@@ -41,7 +41,7 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
 </style>
 </head>
 <body>
-<header><div class="brand">NORDLAND <small>SCHICHTPLAN</small></div><div class="small">Manfred Heveling</div></header>
+<header><div class="brand">NORDLAND <small>SCHICHTPLAN</small></div><div class="header-owner"><div class="small">Manfred Heveling</div><small class="copyright">© 2026 Manfred Heveling · Alle Rechte vorbehalten</small></div></header>
 <main>
  <div class="toolbar">
   <label class="small" style="display:flex;align-items:center;gap:6px">Plan <select id="planSelect" style="width:auto;padding:8px"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></label><button id="todayBtn" class="primary">Heute</button><button id="themeBtn">☾ Darstellung</button><button id="shareBtn" class="primary">Teilen / Export</button><button id="backupBtn">Datensicherung</button>
@@ -51,8 +51,8 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
  </nav>
  <section id="calendar">
   <div class="card">
-   <div class="monthhead"><button id="prevMonth">‹</button><strong id="monthLabel"></strong><button id="nextMonth">›</button></div>
-   <div class="calendar-layout"><div class="month-side"><h3 class="title" style="font-size:16px">Monat auswählen</h3><div class="month-picker" id="monthPicker"></div></div><div class="days-side"><h3 class="title" style="font-size:16px">Tagesübersicht</h3><p class="hint">Lange drücken (2 Sekunden) und über die Tage ziehen, um einen Zeitraum zu markieren.</p><div id="monthDayList" class="day-list"></div></div></div>
+   <div class="monthhead"><button id="prevMonth" aria-label="Vorheriger Monat">‹</button><div style="display:flex;align-items:center;justify-content:center;gap:10px;min-width:0"><strong id="monthLabel"></strong><button id="dayTodayBtn" class="primary" type="button" style="padding:7px 12px;font-size:12px;white-space:nowrap">Heute</button></div><button id="nextMonth" aria-label="Nächster Monat">›</button></div>
+   <div class="calendar-layout"><div class="month-side"><h3 class="title" style="font-size:16px">Monat auswählen</h3><div class="month-picker" id="monthPicker"></div></div><div class="days-side"><h3 class="title" style="font-size:16px;margin:0 0 4px">Tagesübersicht</h3><p class="hint">Lange drücken (2 Sekunden) und über die Tage ziehen, um einen Zeitraum zu markieren.</p><div id="monthDayList" class="day-list"></div></div></div>
   </div>
   <div class="card"><div class="row"><div><div class="title" id="selectedTitle">Ausgewählter Tag</div><div class="sub shift-summary" id="selectedShift"></div></div><button id="openDay">Details</button></div><div id="selectedEvents" class="muted small"></div></div>
  </section>
@@ -294,6 +294,7 @@ function tab(name){document.querySelectorAll('main section').forEach(s=>s.classL
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>tab(b.dataset.tab));
 $('yearPrev').onclick=()=>{overviewYear--;renderYearOverview()};$('yearNext').onclick=()=>{overviewYear++;renderYearOverview()};
 $('todayBtn').onclick=()=>{selected=todayISO();month=new Date(parseDate(selected).getFullYear(),parseDate(selected).getMonth(),1);rangeStart=rangeEnd=null;tab('calendar');render();};
+$('dayTodayBtn').onclick=()=>{selected=todayISO();month=new Date(parseDate(selected).getFullYear(),parseDate(selected).getMonth(),1);rangeStart=rangeEnd=null;render();const todayRow=$('monthDayList').querySelector(`[data-date="${selected}"]`);if(todayRow)todayRow.scrollIntoView({block:'center',behavior:'smooth'});};
 $('prevMonth').onclick=()=>{month=new Date(month.getFullYear(),month.getMonth()-1,1);selected=iso(new Date(month.getFullYear(),month.getMonth(),1));render()};
 $('nextMonth').onclick=()=>{month=new Date(month.getFullYear(),month.getMonth()+1,1);selected=iso(new Date(month.getFullYear(),month.getMonth(),1));render()};
 $('openDay').onclick=()=>tab('day');$('dayDate').onchange=e=>{selected=e.target.value;render()};
