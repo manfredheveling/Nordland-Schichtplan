@@ -281,7 +281,34 @@ function reminderCheck(){if(!state.reminders||!('Notification'in window)||Notifi
 setInterval(reminderCheck,30000);
 if(state.pin&&!sessionStorage.getItem('nordlandUnlocked')){$('pinDialog').showModal()}
 $('unlockBtn').onclick=()=>{if($('unlockPin').value===state.pin){sessionStorage.setItem('nordlandUnlocked','1');$('pinDialog').close()}else alert('PIN ist nicht korrekt.')};
-if('serviceWorker'in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+// Automatische App-Aktualisierung: prüft bei jedem Öffnen und beim Zurückkehren zur App.
+// Es werden ausschließlich Programm-Caches erneuert; localStorage mit Kalenderdaten bleibt unangetastet.
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  let updateReloading = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!updateReloading) { updateReloading = true; location.reload(); }
+  });
+  navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' }).then(reg => {
+    const checkForAppUpdate = () => reg.update().catch(() => {});
+    checkForAppUpdate();
+    window.addEventListener('focus', checkForAppUpdate);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') checkForAppUpdate();
+    });
+    reg.addEventListener('updatefound', () => {
+      const installing = reg.installing;
+      if (!installing) return;
+      installing.addEventListener('statechange', () => {
+        if (installing.state === 'installed' && navigator.serviceWorker.controller && reg.waiting) {
+          reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+        }
+      });
+    });
+    if (reg.waiting && navigator.serviceWorker.controller) {
+      reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+    }
+  }).catch(() => {});
+}
 render();const initialTodayRow=document.querySelector('.day-row.today');if(initialTodayRow)initialTodayRow.scrollIntoView({block:'center'});reminderCheck();
 </script>
 </body></html>
