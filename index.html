@@ -33,8 +33,75 @@ textarea{min-height:85px;resize:vertical}.actions{display:flex;flex-wrap:wrap;ga
 .item{padding:11px 0;border-bottom:1px solid var(--line)}.item:last-child{border:0}.pill{display:inline-block;padding:3px 8px;border-radius:99px;background:var(--soft);color:var(--blue);font-size:11px;font-weight:800}
 .notice{padding:12px;border-radius:12px;background:var(--soft);color:var(--text);font-size:13px;margin:10px 0}
 .year-totals{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.year-stat{border:1px solid var(--line);border-left:6px solid var(--stat-color,#777);border-radius:12px;padding:12px;background:var(--soft);min-width:0}.year-stat strong{display:block;font-size:26px;line-height:1.15;font-weight:900}.year-stat span{display:block;font-size:13px;font-weight:800;margin-top:4px}.year-stat small{display:block;color:var(--muted);font-size:11px;margin-top:3px}.year-months{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.year-month{border:1px solid var(--line);border-radius:12px;padding:11px;min-width:0}.year-month h4{margin:0 0 8px;font-size:15px}.year-month .ym-line{display:flex;justify-content:space-between;gap:8px;font-size:12px;padding:3px 0;border-bottom:1px solid var(--line)}.year-month .ym-line:last-child{border:0}.year-month b{font-variant-numeric:tabular-nums}.year-stat.urlaub{--stat-color:#238b45}.year-stat.krank{--stat-color:#c62828}.year-stat.azk{--stat-color:#e58a22}.year-stat.lzk{--stat-color:#2874b9}.year-stat.frei{--stat-color:#68717d}.year-stat.opa{--stat-color:#7654a5}
+
+.holiday-label{background:#efcc72!important;color:#3e2b00!important}.bridge-holiday{border:1px solid var(--line);border-radius:13px;padding:13px;margin:10px 0;background:var(--panel)}
+.bridge-holiday-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.bridge-holiday h3{font-size:15px;margin:0 0 3px}.bridge-suggestions{display:grid;gap:8px;margin-top:10px}
+.bridge-suggestion{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;padding:10px;border-radius:10px;background:var(--soft)}
+.bridge-suggestion strong{display:block;font-size:13px}.bridge-suggestion .hint{margin-top:2px}
+.bridge-suggestion-controls{display:flex;align-items:center;gap:6px;min-width:190px}
+.bridge-suggestion-controls select{padding:8px;font-size:12px;min-width:86px}.bridge-suggestion-controls button{padding:8px 10px;font-size:12px;white-space:nowrap}
+.bridge-status{font-size:12px;color:var(--muted);margin-top:8px}
+@media(max-width:560px){.bridge-suggestion{grid-template-columns:1fr}.bridge-suggestion-controls{min-width:0}.bridge-suggestion-controls select{flex:1}}
+
+.bridge-intro{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.bridge-holiday-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:13px 0 17px}
+.bridge-holiday-choice{display:block;width:100%;text-align:left;padding:11px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.bridge-holiday-choice.active{border:2px solid var(--accent);background:var(--soft);padding:10px}
+.bridge-holiday-choice strong{display:block;font-size:13px}.bridge-holiday-choice small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
+.bridge-status-pill{display:inline-block;margin-top:6px;padding:3px 7px;border-radius:20px;background:var(--soft);font-size:10px;font-weight:800}
+.bridge-selected{border:1px solid var(--line);border-radius:14px;padding:13px;background:var(--panel);margin-top:12px}
+.bridge-week-grid{display:grid;grid-template-columns:repeat(9,minmax(72px,1fr));gap:6px;overflow-x:auto;padding:2px 1px 9px;scrollbar-width:thin}
+.bridge-day{min-width:0;padding:8px 5px;border:1px solid var(--line);border-radius:11px;background:var(--panel);text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px}
+.bridge-day .bd-week{font-size:10px;color:var(--muted);font-weight:800}.bridge-day .bd-date{font-size:16px;font-weight:900}
+.bridge-day .bd-shift{display:block;width:100%;padding:6px 2px;border-radius:7px;font-size:11px;font-weight:900}
+.bridge-day .bd-note{font-size:9px;color:var(--muted);line-height:1.2;min-height:22px}
+.bridge-day.work{cursor:pointer}.bridge-day.work:hover{border-color:var(--accent)}.bridge-day.chosen{outline:2px solid var(--accent);background:var(--soft)}
+.bridge-day.bridge-candidate{border:2px solid #c62828;box-shadow:0 0 0 1px #c62828}.bridge-day.bridge-candidate .bd-shift{background:#c62828!important;color:#fff!important}.bridge-day.bridge-candidate .bd-note{color:#b71c1c;font-weight:950}.bridge-day.bridge-candidate.chosen{outline:2px solid #c62828;background:#fff0f0}
+[data-theme=dark] .bridge-day.bridge-candidate.chosen{background:#4a2228}.bridge-day.bridge-candidate .bd-note{min-height:22px}
+.bridge-day.holiday{border-color:#d5a52f;box-shadow:inset 0 0 0 1px #d5a52f}.bridge-day.holiday .bd-note{color:#9a6b00;font-weight:900}
+.bridge-day.free .bd-shift{background:#dcefe1;color:#216337}.bridge-day.chosen .bd-shift{background:var(--accent);color:white}
+[data-theme=dark] .bridge-day.free .bd-shift{background:#245b36;color:#d5ffe0}
+.bridge-selection-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}
+.bridge-summary-cell{padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--soft);min-width:0}.bridge-summary-cell strong{display:block;font-size:21px;font-weight:900}.bridge-summary-cell span{font-size:10px;color:var(--muted);font-weight:700}
+.bridge-pick-list{display:grid;gap:8px;margin-top:10px}.bridge-pick{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 10px;border:1px solid var(--line);border-radius:10px}.bridge-pick small{display:block;color:var(--muted);font-size:11px}.bridge-pick button{padding:7px 9px;font-size:11px;white-space:nowrap}
+.bridge-empty{padding:12px;border:1px dashed var(--line);border-radius:10px;color:var(--muted);font-size:12px}
+.bridge-legend{display:flex;flex-wrap:wrap;gap:7px;margin:9px 0 4px}.bridge-legend span{display:inline-block;padding:5px 8px;border-radius:7px;font-size:10px;font-weight:850}.bridge-key-red{background:#c62828;color:#fff}.bridge-key-green{background:#dcefe1;color:#216337}.bridge-key-holiday{background:#efcc72;color:#3e2b00}
+
+.bridge-results{display:grid;gap:14px;margin-top:14px}
+.bridge-result-card{border:1px solid var(--line);border-radius:14px;padding:13px;background:var(--panel)}
+.bridge-result-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.bridge-result-head h3{margin:0;font-size:16px}
+.bridge-result-meta{font-size:12px;color:var(--muted);margin-top:3px}
+.bridge-result-best{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:8px;background:#c62828;color:#fff;font-size:10px;font-weight:900;white-space:nowrap}
+.bridge-result-days{display:grid;grid-template-columns:repeat(9,minmax(72px,1fr));gap:6px;overflow-x:auto;padding:8px 1px 10px;scrollbar-width:thin}
+.bridge-result-day{min-width:0;padding:8px 5px;border:1px solid var(--line);border-radius:10px;background:var(--panel);text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px}
+.bridge-result-day .bd-week{font-size:10px;color:var(--muted);font-weight:800}.bridge-result-day .bd-date{font-size:15px;font-weight:900}
+.bridge-result-day .bd-shift{display:block;width:100%;padding:6px 2px;border-radius:7px;font-size:11px;font-weight:900}
+.bridge-result-day.free .bd-shift{background:#dcefe1;color:#216337}.bridge-result-day.work .bd-shift{background:var(--soft);color:var(--text)}
+.bridge-result-day.holiday{border-color:#d5a52f;box-shadow:inset 0 0 0 1px #d5a52f}
+.bridge-result-day.bridge-candidate{border:2px solid #c62828;background:#fff5f5;box-shadow:0 0 0 1px #c62828}
+.bridge-result-day.bridge-candidate .bd-shift{background:#c62828;color:#fff}
+.bridge-day-tag{display:block;width:100%;padding:4px 2px;border-radius:5px;background:#c62828;color:#fff;font-size:9px;font-weight:950;line-height:1.1}
+.bridge-required-day{border-color:#c58a28;background:#fffaf0}
+.bridge-required-tag{display:block;width:100%;padding:4px 2px;border-radius:5px;background:#c58a28;color:#fff;font-size:9px;font-weight:900;line-height:1.1}
+.bridge-holiday-tag{display:block;width:100%;padding:4px 2px;border-radius:5px;background:#efcc72;color:#3e2b00;font-size:9px;font-weight:900;line-height:1.1}
+[data-theme=dark] .bridge-required-day{background:#382f20;border-color:#9c7025}
+.bridge-result-day .bd-note{font-size:9px;line-height:1.2;min-height:15px;color:var(--muted);font-weight:800}
+.bridge-option-list{display:grid;gap:8px;margin-top:6px}
+.bridge-option{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px;border:1px solid var(--line);border-radius:11px;background:var(--soft)}
+.bridge-option-main{min-width:0}.bridge-option-main strong{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:13px}
+.bridge-option-main small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
+.bridge-option-actions{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.bridge-option-actions select{width:auto;min-width:86px;padding:8px;font-size:12px}
+.bridge-option-actions button{padding:8px 10px;font-size:12px;white-space:nowrap}
+.bridge-none{padding:15px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);font-size:13px}
+@media(max-width:620px){.bridge-option{align-items:stretch;flex-direction:column}.bridge-option-actions{width:100%}.bridge-option-actions select{flex:1}.bridge-option-actions button{flex:1}.bridge-result-days{grid-template-columns:repeat(9,minmax(66px,1fr))}}
+[data-theme=dark] .bridge-result-day.bridge-candidate{background:#4a2228}
+@media(max-width:560px){.bridge-holiday-grid{grid-template-columns:1fr 1fr}.bridge-selection-summary{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}.bridge-summary-cell{padding:8px 6px}.bridge-summary-cell strong{font-size:18px}.bridge-summary-cell span{font-size:9px}.bridge-pick{align-items:flex-start;flex-direction:column}.bridge-pick button{width:100%}}
+
 .hidden{display:none!important}.bottomnav{position:fixed;bottom:0;left:0;right:0;background:var(--panel);border-top:1px solid var(--line);display:flex;justify-content:center;gap:5px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));z-index:5}
-.bottomnav button{flex:1;max-width:180px;padding:9px 4px;font-size:12px}
+.bottomnav button{flex:1;max-width:180px;padding:9px 4px;font-size:12px}.bottomnav button[data-tab="bridge"]{font-size:10px;white-space:normal;line-height:1.1;overflow-wrap:anywhere}
 dialog{border:1px solid var(--line);border-radius:18px;background:var(--panel);color:var(--text);width:min(92vw,480px);padding:20px;box-shadow:0 20px 80px #0005}
 dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
 @media(max-width:560px){main{padding:12px 10px 90px}.card{padding:13px}.day{min-height:76px;padding:4px}.day.selected{padding:3px}.shift{font-size:12px;padding:5px 3px}.grid2{grid-template-columns:1fr}.brand{font-size:18px}}
@@ -47,7 +114,7 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
   <label class="small" style="display:flex;align-items:center;gap:6px">Plan <select id="planSelect" style="width:auto;padding:8px"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></label><button id="todayBtn" class="primary">Heute</button><button id="themeBtn">☾ Darstellung</button><button id="shareBtn" class="primary">Teilen / Export</button><button id="backupBtn">Datensicherung</button>
  </div>
  <nav class="tabs">
-  <button class="active" data-tab="calendar">Kalender</button><button data-tab="day">Tagesdetails</button><button data-tab="year">Jahresübersicht</button><button data-tab="settings">Einstellungen</button>
+  <button class="active" data-tab="calendar">Kalender</button><button data-tab="day">Tagesdetails</button><button data-tab="year">Jahresübersicht</button><button data-tab="bridge">Brückentagberechner</button><button data-tab="settings">Einstellungen</button>
  </nav>
  <section id="calendar">
   <div class="card">
@@ -78,6 +145,16 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
    <h3 class="title" style="font-size:17px;margin-top:22px">Monatsübersicht</h3>
    <div id="yearMonths" class="year-months"></div>
    <p class="hint" style="margin-top:14px">„Frei“ zeigt die laut Schichtplan freien Tage. Bei Urlaub, Krank, AZK und LZK werden Kalendertage und geplante Arbeitstage getrennt ausgewiesen.</p>
+  </div>
+ </section>
+ <section id="bridge" class="hidden">
+  <div class="card">
+   <div class="bridge-intro">
+    <div><h2 class="title" style="margin-bottom:4px">Brückentage</h2><p class="hint">Wähle das Planungsjahr. Danach siehst du direkt nur Feiertagszeiträume, bei denen dein Schichtplan einen echten Brückentag ermöglicht.</p></div>
+    <div class="monthhead" style="gap:8px;margin:0"><button id="bridgePrev" aria-label="Vorheriges Jahr">‹</button><strong id="bridgeYearLabel">2026</strong><button id="bridgeNext" aria-label="Nächstes Jahr">›</button></div>
+   </div>
+   <div class="notice">Schichtplan <strong id="bridgePlanBadge">A</strong> · Die rot markierten Arbeitstage sind die möglichen <strong>BRÜCKENTAGE</strong>. Feiertage ohne passenden Brückentag werden nicht als Zeitraum angezeigt. Du kannst einen Vorschlag als Urlaub, AZK oder LZK in deinen Kalender übernehmen. Es wird nichts automatisch eingetragen.</div>
+   <div id="bridgeSelectedDetail" class="bridge-results"></div>
   </div>
  </section>
  <section id="settings" class="hidden">
@@ -112,7 +189,7 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
   <div class="card"><h2 class="title">Über die App</h2><p class="muted small">Nordland – Schichtplan · Erstellt für Manfred Heveling. Persönliche Daten bleiben lokal auf diesem Gerät, bis du sie ausdrücklich exportierst oder teilst.</p><p class="muted small">© 2026 Manfred Heveling · Alle Rechte vorbehalten</p></div>
  </section>
 </main>
-<nav class="bottomnav"><button data-tab="calendar" class="active">▦ Kalender</button><button data-tab="day">☷ Termine</button><button data-tab="year">▤ Jahr</button><button data-tab="settings">⚙ Einstellungen</button></nav>
+<nav class="bottomnav"><button data-tab="calendar" class="active">▦ Kalender</button><button data-tab="day">☷ Termine</button><button data-tab="year">▤ Jahr</button><button data-tab="bridge" aria-label="Brückentagberechner">↔ Brückentagberechner</button><button data-tab="settings">⚙ Einstellungen</button></nav>
 
 <dialog id="eventDialog">
  <h2 class="title">Termin oder Notiz</h2>
@@ -189,7 +266,7 @@ function makeDayRow(d){
  const s=iso(d),sh=shiftFor(s),ev=eventsOn(s),b=document.createElement('button');
  b.dataset.date=s;
  b.className='day-row'+(s===todayISO()?' today-row':'')+(s===selected?' active':'')+(rangeStart===s?' range-start':'')+(rangeEnd===s?' range-end':'')+(rangeStart&&rangeEnd&&s>rangeStart&&s<rangeEnd?' in-range':'');
- b.innerHTML=`<span class="weekday-date">${d.toLocaleDateString('de-DE',{weekday:'short',day:'2-digit'})}</span><span><strong class="shift ${sh.code}">${sh.name}</strong>${periodsOn(s).map(p=>`<span class="special-label ${categoryClass(p.type)}">${escapeHtml(p.type)}</span>`).join('')}<br><span class="day-info">${shiftHours[sh.code]||'—'}${ev.length?' · '+ev.length+' Termin(e)':''}</span></span><span class="day-info">›</span>`;
+ b.innerHTML=`<span class="weekday-date">${d.toLocaleDateString('de-DE',{weekday:'short',day:'2-digit'})}</span><span><strong class="shift ${sh.code}">${sh.name}</strong>${holidayNameOn(s)?`<span class="special-label holiday-label">${escapeHtml(holidayNameOn(s))}</span>`:''}${periodsOn(s).map(p=>`<span class="special-label ${categoryClass(p.type)}">${escapeHtml(p.type)}</span>`).join('')}<br><span class="day-info">${shiftHours[sh.code]||'—'}${ev.length?' · '+ev.length+' Termin(e)':''}</span></span><span class="day-info">›</span>`;
  let holdTimer=null,held=false;
  b.onpointerdown=()=>{held=false;holdTimer=setTimeout(()=>{held=true;dragSelecting=true;rangeStart=s;rangeEnd=s;selected=s;b.classList.add('active');$('periodStart').value=s;$('periodEnd').value=s;},2000)};
  b.onpointerleave=()=>clearTimeout(holdTimer);b.onpointercancel=()=>{clearTimeout(holdTimer);dragSelecting=false};
@@ -290,17 +367,162 @@ function renderYearOverview(){
  const names=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
  $('yearMonths').innerHTML=months.map((st,i)=>`<div class="year-month"><h4>${names[i]}</h4><div class="ym-line"><span>Urlaub</span><b>${st.Urlaub.work} AT</b></div><div class="ym-line"><span>Krank</span><b>${st.Krank.calendar} Tage</b></div><div class="ym-line"><span>AZK</span><b>${st.AZK.work} AT</b></div><div class="ym-line"><span>LZK</span><b>${st.LZK.work} AT</b></div><div class="ym-line"><span>Frei</span><b>${st.Frei} Tage</b></div><div class="ym-line"><span>Opa-Tage</span><b>${st['Opa-Tage'].calendar} Tage</b></div><div class="ym-line"><span>Termine</span><b>${st.Termine}</b></div></div>`).join('');
 }
-function tab(name){document.querySelectorAll('main section').forEach(s=>s.classList.toggle('hidden',s.id!==name));document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));if(name==='day')render();if(name==='year')renderYearOverview()}
+// Gesetzliche Feiertage in Niedersachsen nach § 2 NFeiertagsG.
+// Bewegliche Feiertage werden aus dem Osterdatum des jeweiligen Jahres berechnet.
+function easterSunday(year){
+ const a=year%19,b=Math.floor(year/100),c=year%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451);
+ const monthNo=Math.floor((h+l-7*m+114)/31),dayNo=((h+l-7*m+114)%31)+1;
+ return new Date(year,monthNo-1,dayNo);
+}
+function holidaysForYear(year){
+ const easter=easterSunday(year);
+ return [
+  {date:year+'-01-01',name:'Neujahr'},
+  {date:iso(plus(easter,-2)),name:'Karfreitag'},
+  {date:iso(plus(easter,1)),name:'Ostermontag'},
+  {date:year+'-05-01',name:'Tag der Arbeit'},
+  {date:iso(plus(easter,39)),name:'Christi Himmelfahrt'},
+  {date:iso(plus(easter,50)),name:'Pfingstmontag'},
+  {date:year+'-10-03',name:'Tag der Deutschen Einheit'},
+  {date:year+'-10-31',name:'Reformationstag'},
+  {date:year+'-12-25',name:'1. Weihnachtstag'},
+  {date:year+'-12-26',name:'2. Weihnachtstag'}
+ ].sort((a,b)=>a.date.localeCompare(b.date));
+}
+const holidayLookupCache={};
+function holidayNameOn(date){const year=parseDate(date).getFullYear();if(!holidayLookupCache[year])holidayLookupCache[year]=new Map(holidaysForYear(year).map(h=>[h.date,h.name]));return holidayLookupCache[year].get(date)||''}
+function isShiftFree(date,plan){return shiftForForPlan(date,plan).code==='X'}
+function existingPeriodType(date){return state.periods.find(p=>date>=p.start&&date<=p.end)?.type||''}
+function bridgeSpanForSelection(holidayDate,selectedDays,plan){
+ const off=date=>shiftForForPlan(date,plan).code==='X'||selectedDays.has(date)||!!existingPeriodType(date);
+ if(!off(holidayDate))return null;
+ let start=parseDate(holidayDate),end=parseDate(holidayDate);
+ for(let i=0;i<14;i++){const prev=iso(plus(start,-1));if(!off(prev))break;start=plus(start,-1)}
+ for(let i=0;i<14;i++){const next=iso(plus(end,1));if(!off(next))break;end=plus(end,1)}
+ return {start:iso(start),end:iso(end),total:Math.round((end-start)/86400000)+1};
+}
+function bridgeWindowDates(holidayDate){const out=[];for(let i=-4;i<=4;i++)out.push(iso(plus(parseDate(holidayDate),i)));return out}
+function bridgeOptionsForHoliday(h,plan){
+ const dates=bridgeWindowDates(h.date);
+ // Grundfreizeit: Feiertag als frei behandeln, wenn er laut Plan frei ist,
+ // bereits im Kalender freigehalten wurde oder als einzelner Diensttag geplant wird.
+ const baseSelection=new Set();
+ if(shiftForForPlan(h.date,plan).code!=='X'&&!existingPeriodType(h.date))baseSelection.add(h.date);
+ const baseline=bridgeSpanForSelection(h.date,baseSelection,plan);
+ const baselineDays=baseline?baseline.total:0;
+ const options=[];
+ for(const date of dates){
+  // Der eigentliche Brückentag muss ein zusätzlicher Diensttag neben dem Feiertag sein.
+  if(date===h.date)continue;
+  const candidateShift=shiftForForPlan(date,plan);
+  if(candidateShift.code==='X'||existingPeriodType(date))continue;
+  // Alle geplanten Arbeitstage zwischen Feiertag und Brückentag müssen frei genommen werden,
+  // damit der Zeitraum lückenlos zusammenhängt. Bereits eingetragene freie Tage kosten nichts Neues.
+  const from=parseDate(date<h.date?date:h.date),to=parseDate(date>h.date?date:h.date);
+  const requiredDays=[];
+  for(let cursor=new Date(from);cursor<=to;cursor=plus(cursor,1)){
+   const day=iso(cursor);
+   if(shiftForForPlan(day,plan).code!=='X'&&!existingPeriodType(day))requiredDays.push(day);
+  }
+  if(!requiredDays.includes(date))continue;
+  const span=bridgeSpanForSelection(h.date,new Set(requiredDays),plan);
+  if(!span||date<span.start||date>span.end)continue;
+  const gain=span.total-baselineDays;
+  if(gain>0&&span.total>=2){
+   options.push({date,shift:candidateShift.name,code:candidateShift.code,span,gain,requiredDays,usedDays:requiredDays.length});
+  }
+ }
+ // Zuerst möglichst wenig verbrauchen, danach möglichst viele freie Tage gewinnen.
+ options.sort((a,b)=>a.usedDays-b.usedDays||b.gain-a.gain||b.span.total-a.span.total||a.date.localeCompare(b.date));
+ return options;
+}
+function shortDate(date){return parseDate(date).toLocaleDateString('de-DE',{weekday:'short',day:'2-digit',month:'2-digit'});}
+function renderBridgePlanner(){
+ $('bridgeYearLabel').textContent='Jahr '+bridgeYear;
+ $('bridgePlanBadge').textContent=activePlan;
+ const root=$('bridgeSelectedDetail');root.innerHTML='';
+ const holidays=holidaysForYear(bridgeYear);
+ const results=holidays.map(h=>({holiday:h,options:bridgeOptionsForHoliday(h,activePlan)})).filter(x=>x.options.length>0);
+ if(!results.length){
+  const empty=document.createElement('div');empty.className='bridge-none';
+  empty.textContent='Für Plan '+activePlan+' gibt es im Jahr '+bridgeYear+' keine Feiertagszeiträume, bei denen ein einzelner zusätzlicher Arbeitstag einen zusammenhängenden freien Zeitraum sinnvoll verlängert. Deshalb werden hier keine Brückentage angezeigt.';
+  root.append(empty);return;
+ }
+ const count=document.createElement('div');count.className='bridge-result-meta';
+ count.textContent=results.length+' passende Feiertagszeiträume für Plan '+activePlan+' · Rot markierte Tage sind die möglichen Brückentage.';
+ root.append(count);
+ const legend=document.createElement('div');legend.className='bridge-legend';
+ legend.innerHTML='<span class="bridge-key-red">Rot – Brückentag</span><span class="bridge-key-green">Grün – laut Schichtplan frei</span><span class="bridge-key-holiday">Gold – Feiertag</span>';
+ root.append(legend);
+ const workNames={F:'Früh',S:'Spät',N:'Nacht',X:'Frei'};
+ results.forEach(({holiday,options})=>{
+  const card=document.createElement('article');card.className='bridge-result-card';
+  const head=document.createElement('div');head.className='bridge-result-head';
+  const heading=document.createElement('div');
+  const h3=document.createElement('h3');h3.textContent=holiday.name;heading.append(h3);
+  const meta=document.createElement('div');meta.className='bridge-result-meta';meta.textContent=shortDate(holiday.date)+' · Schichtplan '+activePlan;heading.append(meta);
+  const badge=document.createElement('span');badge.className='bridge-result-best';badge.textContent='BRÜCKENTAGE MÖGLICH';
+  head.append(heading,badge);card.append(head);
+  const timeline=document.createElement('div');timeline.className='bridge-result-days';
+  const windowDates=bridgeWindowDates(holiday.date);
+  const candidateDates=new Set(options.map(o=>o.date));
+  const requiredDates=new Set(options.flatMap(o=>o.requiredDays));
+  windowDates.forEach(date=>{
+   const d=parseDate(date),sh=shiftForForPlan(date,activePlan),isHoliday=date===holiday.date,isCandidate=candidateDates.has(date),isRequired=requiredDates.has(date);
+   const day=document.createElement('div');day.className='bridge-result-day '+(sh.code==='X'?'free':'work')+(isHoliday?' holiday':'')+(isCandidate?' bridge-candidate':'')+(isRequired&&!isCandidate?' bridge-required-day':'');
+   const week=document.createElement('span');week.className='bd-week';week.textContent=d.toLocaleDateString('de-DE',{weekday:'short'});
+   const dateLabel=document.createElement('span');dateLabel.className='bd-date';dateLabel.textContent=d.toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit'});
+   const shift=document.createElement('span');shift.className='bd-shift';shift.textContent=workNames[sh.code]||sh.name;
+   day.append(week,dateLabel,shift);
+   if(isCandidate){const tag=document.createElement('span');tag.className='bridge-day-tag';tag.textContent='BRÜCKENTAG';day.append(tag)}
+   else if(isHoliday){const tag=document.createElement('span');tag.className='bridge-holiday-tag';tag.textContent='FEIERTAG';day.append(tag);if(isRequired){const extra=document.createElement('span');extra.className='bridge-required-tag';extra.textContent='EINZUSETZEN';day.append(extra)}}
+   else if(isRequired){const tag=document.createElement('span');tag.className='bridge-required-tag';tag.textContent='EINZUSETZEN';day.append(tag)}
+   else{const note=document.createElement('span');note.className='bd-note';note.textContent=' ';day.append(note)}
+   day.title=isCandidate?'Möglicher Brückentag – '+sh.name:(isHoliday?'Gesetzlicher Feiertag: '+holiday.name:(isRequired?'Diensttag, der für den freien Zeitraum eingeplant werden muss':sh.name));
+   timeline.append(day);
+  });
+  card.append(timeline);
+  const optionsTitle=document.createElement('div');optionsTitle.className='bridge-result-meta';optionsTitle.style.fontWeight='800';optionsTitle.style.margin='2px 0 7px';optionsTitle.textContent='Mögliche Brückentage – mit möglichst wenig Verbrauch sortiert';card.append(optionsTitle);
+  const optionList=document.createElement('div');optionList.className='bridge-option-list';
+  options.forEach((o,index)=>{
+   const row=document.createElement('div');row.className='bridge-option';
+   const info=document.createElement('div');info.className='bridge-option-main';
+   const strong=document.createElement('strong');
+   const tag=document.createElement('span');tag.className='bridge-result-best';tag.textContent=index===0?'Bester Brückentag':'Brückentag';
+   strong.append(tag,document.createTextNode(shortDate(o.date)+' · '+o.shift));
+   const small=document.createElement('small');
+   small.textContent=o.usedDays+' '+(o.usedDays===1?'Arbeitstag':'Arbeitstage')+' einplanen: '+o.requiredDays.map(shortDate).join(', ')+' → '+o.span.total+' Tage am Stück ('+shortDate(o.span.start)+' bis '+shortDate(o.span.end)+')';
+   info.append(strong,small);
+   const controls=document.createElement('div');controls.className='bridge-option-actions';
+   const type=document.createElement('select');type.setAttribute('aria-label','Eintragungsart für '+shortDate(o.date));
+   ['Urlaub','AZK','LZK'].forEach(value=>{const opt=document.createElement('option');opt.value=value;opt.textContent=value;type.append(opt)});
+   const save=document.createElement('button');save.className='primary';save.textContent='Übernehmen';
+   save.onclick=()=>applyBridgeSelection(o.requiredDays,type.value);
+   controls.append(type,save);row.append(info,controls);optionList.append(row);
+  });
+  card.append(optionList);root.append(card);
+ });
+}
+function applyBridgeSelection(dates,type){
+ if(!dates.length)return;
+ const readable=dates.map(d=>parseDate(d).toLocaleDateString('de-DE')).join(', ');
+ if(!confirm('Diese '+dates.length+' Tag(e) als '+type+' in deinen Kalender übernehmen?\n'+readable))return;
+ dates.forEach(date=>state.periods.push({id:'bridge-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),start:date,end:date,type}));
+ state.periods.sort((a,b)=>a.start.localeCompare(b.start));save();render();renderBridgePlanner();alert(type+' wurde für '+dates.length+' Tag(e) eingetragen.');
+}
+let bridgeYear=new Date().getFullYear();
+function tab(name){document.querySelectorAll('main section').forEach(s=>s.classList.toggle('hidden',s.id!==name));document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));if(name==='day')render();if(name==='year')renderYearOverview();if(name==='bridge')renderBridgePlanner()}
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>tab(b.dataset.tab));
 $('yearPrev').onclick=()=>{overviewYear--;renderYearOverview()};$('yearNext').onclick=()=>{overviewYear++;renderYearOverview()};
+$('bridgePrev').onclick=()=>{bridgeYear--;renderBridgePlanner()};$('bridgeNext').onclick=()=>{bridgeYear++;renderBridgePlanner()};
 $('todayBtn').onclick=()=>{selected=todayISO();month=new Date(parseDate(selected).getFullYear(),parseDate(selected).getMonth(),1);rangeStart=rangeEnd=null;tab('calendar');render();};
 $('dayTodayBtn').onclick=()=>{selected=todayISO();month=new Date(parseDate(selected).getFullYear(),parseDate(selected).getMonth(),1);rangeStart=rangeEnd=null;render();const todayRow=$('monthDayList').querySelector(`[data-date="${selected}"]`);if(todayRow)todayRow.scrollIntoView({block:'center',behavior:'smooth'});};
 $('prevMonth').onclick=()=>{month=new Date(month.getFullYear(),month.getMonth()-1,1);selected=iso(new Date(month.getFullYear(),month.getMonth(),1));render()};
 $('nextMonth').onclick=()=>{month=new Date(month.getFullYear(),month.getMonth()+1,1);selected=iso(new Date(month.getFullYear(),month.getMonth(),1));render()};
 $('openDay').onclick=()=>tab('day');$('dayDate').onchange=e=>{selected=e.target.value;render()};
 $('themeBtn').onclick=()=>{state.theme=state.theme==='dark'?'light':'dark';sessionStorage.setItem('nordlandThemeChosen','1');save();render()};
-$('planSelect').onchange=e=>{activePlan=e.target.value;state.activePlan=activePlan;save();render();if(!$('year').classList.contains('hidden'))renderYearOverview()};
-$('saveSettings').onclick=()=>{let vals={};for(const k of ['A','B','C','D']){vals[k]=$('anchor'+k).value;if(!vals[k]||parseDate(vals[k]).getDay()!==1){alert('Bitte für Plan '+k+' einen gültigen Montag auswählen.');return}}state.anchors=vals;state.activePlan=activePlan;save();render();if(!$('year').classList.contains('hidden'))renderYearOverview();alert('Alle vier Schichtpläne wurden gespeichert.')};
+$('planSelect').onchange=e=>{activePlan=e.target.value;state.activePlan=activePlan;save();render();if(!$('year').classList.contains('hidden'))renderYearOverview();if(!$('bridge').classList.contains('hidden'))renderBridgePlanner()};
+$('saveSettings').onclick=()=>{let vals={};for(const k of ['A','B','C','D']){vals[k]=$('anchor'+k).value;if(!vals[k]||parseDate(vals[k]).getDay()!==1){alert('Bitte für Plan '+k+' einen gültigen Montag auswählen.');return}}state.anchors=vals;state.activePlan=activePlan;save();render();if(!$('year').classList.contains('hidden'))renderYearOverview();if(!$('bridge').classList.contains('hidden'))renderBridgePlanner();alert('Alle vier Schichtpläne wurden gespeichert.')};
 $('addEvent').onclick=()=>openEvent();
 function openEvent(e){editingId=e?.id||null;$('eventDate').value=e?.date||selected;$('eventTitle').value=e?.title||'';$('eventTime').value=e?.time||'';$('eventNote').value=e?.note||'';$('reminderOne').value=e?.reminderOne??(e?.reminder?'1d':'off');$('reminderOneTime').value=e?.reminderOneTime||'09:00';$('reminderTwo').value=e?.reminderTwo??'off';$('reminderTwoTime').value=e?.reminderTwoTime||'07:00';$('eventDialog').showModal()}
 function editEvent(id){openEvent(state.events.find(e=>e.id===id))}
