@@ -44,64 +44,8 @@ textarea{min-height:85px;resize:vertical}.actions{display:flex;flex-wrap:wrap;ga
 .bridge-status{font-size:12px;color:var(--muted);margin-top:8px}
 @media(max-width:560px){.bridge-suggestion{grid-template-columns:1fr}.bridge-suggestion-controls{min-width:0}.bridge-suggestion-controls select{flex:1}}
 
-.bridge-intro{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.bridge-holiday-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:13px 0 17px}
-.bridge-holiday-choice{display:block;width:100%;text-align:left;padding:11px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
-.bridge-holiday-choice.active{border:2px solid var(--accent);background:var(--soft);padding:10px}
-.bridge-holiday-choice strong{display:block;font-size:13px}.bridge-holiday-choice small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
-.bridge-status-pill{display:inline-block;margin-top:6px;padding:3px 7px;border-radius:20px;background:var(--soft);font-size:10px;font-weight:800}
-.bridge-selected{border:1px solid var(--line);border-radius:14px;padding:13px;background:var(--panel);margin-top:12px}
-.bridge-week-grid{display:grid;grid-template-columns:repeat(9,minmax(72px,1fr));gap:6px;overflow-x:auto;padding:2px 1px 9px;scrollbar-width:thin}
-.bridge-day{min-width:0;padding:8px 5px;border:1px solid var(--line);border-radius:11px;background:var(--panel);text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px}
-.bridge-day .bd-week{font-size:10px;color:var(--muted);font-weight:800}.bridge-day .bd-date{font-size:16px;font-weight:900}
-.bridge-day .bd-shift{display:block;width:100%;padding:6px 2px;border-radius:7px;font-size:11px;font-weight:900}
-.bridge-day .bd-note{font-size:9px;color:var(--muted);line-height:1.2;min-height:22px}
-.bridge-day.work{cursor:pointer}.bridge-day.work:hover{border-color:var(--accent)}.bridge-day.chosen{outline:2px solid var(--accent);background:var(--soft)}
-.bridge-day.bridge-candidate{border:2px solid #c62828;box-shadow:0 0 0 1px #c62828}.bridge-day.bridge-candidate .bd-shift{background:#c62828!important;color:#fff!important}.bridge-day.bridge-candidate .bd-note{color:#b71c1c;font-weight:950}.bridge-day.bridge-candidate.chosen{outline:2px solid #c62828;background:#fff0f0}
-[data-theme=dark] .bridge-day.bridge-candidate.chosen{background:#4a2228}.bridge-day.bridge-candidate .bd-note{min-height:22px}
-.bridge-day.holiday{border-color:#d5a52f;box-shadow:inset 0 0 0 1px #d5a52f}.bridge-day.holiday .bd-note{color:#9a6b00;font-weight:900}
-.bridge-day.free .bd-shift{background:#dcefe1;color:#216337}.bridge-day.chosen .bd-shift{background:var(--accent);color:white}
-[data-theme=dark] .bridge-day.free .bd-shift{background:#245b36;color:#d5ffe0}
-.bridge-selection-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}
-.bridge-summary-cell{padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--soft);min-width:0}.bridge-summary-cell strong{display:block;font-size:21px;font-weight:900}.bridge-summary-cell span{font-size:10px;color:var(--muted);font-weight:700}
-.bridge-pick-list{display:grid;gap:8px;margin-top:10px}.bridge-pick{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 10px;border:1px solid var(--line);border-radius:10px}.bridge-pick small{display:block;color:var(--muted);font-size:11px}.bridge-pick button{padding:7px 9px;font-size:11px;white-space:nowrap}
-.bridge-empty{padding:12px;border:1px dashed var(--line);border-radius:10px;color:var(--muted);font-size:12px}
-.bridge-legend{display:flex;flex-wrap:wrap;gap:7px;margin:9px 0 4px}.bridge-legend span{display:inline-block;padding:5px 8px;border-radius:7px;font-size:10px;font-weight:850}.bridge-key-red{background:#c62828;color:#fff}.bridge-key-green{background:#dcefe1;color:#216337}.bridge-key-holiday{background:#efcc72;color:#3e2b00}
-
-.bridge-results{display:grid;gap:14px;margin-top:14px}
-.bridge-result-card{border:1px solid var(--line);border-radius:14px;padding:13px;background:var(--panel)}
-.bridge-result-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.bridge-result-head h3{margin:0;font-size:16px}
-.bridge-result-meta{font-size:12px;color:var(--muted);margin-top:3px}
-.bridge-result-best{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:8px;background:#c62828;color:#fff;font-size:10px;font-weight:900;white-space:nowrap}
-.bridge-result-days{display:grid;grid-template-columns:repeat(9,minmax(72px,1fr));gap:6px;overflow-x:auto;padding:8px 1px 10px;scrollbar-width:thin}
-.bridge-result-day{min-width:0;padding:8px 5px;border:1px solid var(--line);border-radius:10px;background:var(--panel);text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px}
-.bridge-result-day .bd-week{font-size:10px;color:var(--muted);font-weight:800}.bridge-result-day .bd-date{font-size:15px;font-weight:900}
-.bridge-result-day .bd-shift{display:block;width:100%;padding:6px 2px;border-radius:7px;font-size:11px;font-weight:900}
-.bridge-result-day.free .bd-shift{background:#dcefe1;color:#216337}.bridge-result-day.work .bd-shift{background:var(--soft);color:var(--text)}
-.bridge-result-day.holiday{border-color:#d5a52f;box-shadow:inset 0 0 0 1px #d5a52f}
-.bridge-result-day.bridge-candidate{border:2px solid #c62828;background:#fff5f5;box-shadow:0 0 0 1px #c62828}
-.bridge-result-day.bridge-candidate .bd-shift{background:#c62828;color:#fff}
-.bridge-day-tag{display:block;width:100%;padding:4px 2px;border-radius:5px;background:#c62828;color:#fff;font-size:9px;font-weight:950;line-height:1.1}
-.bridge-required-day{border-color:#c58a28;background:#fffaf0}
-.bridge-required-tag{display:block;width:100%;padding:4px 2px;border-radius:5px;background:#c58a28;color:#fff;font-size:9px;font-weight:900;line-height:1.1}
-.bridge-holiday-tag{display:block;width:100%;padding:4px 2px;border-radius:5px;background:#efcc72;color:#3e2b00;font-size:9px;font-weight:900;line-height:1.1}
-[data-theme=dark] .bridge-required-day{background:#382f20;border-color:#9c7025}
-.bridge-result-day .bd-note{font-size:9px;line-height:1.2;min-height:15px;color:var(--muted);font-weight:800}
-.bridge-option-list{display:grid;gap:8px;margin-top:6px}
-.bridge-option{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px;border:1px solid var(--line);border-radius:11px;background:var(--soft)}
-.bridge-option-main{min-width:0}.bridge-option-main strong{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:13px}
-.bridge-option-main small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
-.bridge-option-actions{display:flex;align-items:center;gap:6px;flex-shrink:0}
-.bridge-option-actions select{width:auto;min-width:86px;padding:8px;font-size:12px}
-.bridge-option-actions button{padding:8px 10px;font-size:12px;white-space:nowrap}
-.bridge-none{padding:15px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);font-size:13px}
-@media(max-width:620px){.bridge-option{align-items:stretch;flex-direction:column}.bridge-option-actions{width:100%}.bridge-option-actions select{flex:1}.bridge-option-actions button{flex:1}.bridge-result-days{grid-template-columns:repeat(9,minmax(66px,1fr))}}
-[data-theme=dark] .bridge-result-day.bridge-candidate{background:#4a2228}
-@media(max-width:560px){.bridge-holiday-grid{grid-template-columns:1fr 1fr}.bridge-selection-summary{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}.bridge-summary-cell{padding:8px 6px}.bridge-summary-cell strong{font-size:18px}.bridge-summary-cell span{font-size:9px}.bridge-pick{align-items:flex-start;flex-direction:column}.bridge-pick button{width:100%}}
-
-.hidden{display:none!important}.bottomnav{position:fixed;bottom:0;left:0;right:0;background:var(--panel);border-top:1px solid var(--line);display:flex;justify-content:center;gap:5px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));z-index:5}
-.bottomnav button{flex:1;max-width:180px;padding:9px 4px;font-size:12px}.bottomnav button[data-tab="bridge"]{font-size:10px;white-space:normal;line-height:1.1;overflow-wrap:anywhere}
+.vacation-result{border:1px solid var(--line);border-radius:12px;padding:13px;margin:10px 0;background:var(--panel)}.vacation-result h3{margin:0 0 5px;font-size:15px}.vacation-result .actions{margin-top:9px}.mode-active{outline:2px solid var(--accent);font-weight:900}.hidden{display:none!important}.bottomnav{position:fixed;bottom:0;left:0;right:0;background:var(--panel);border-top:1px solid var(--line);display:flex;justify-content:flex-start;gap:5px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));z-index:5;overflow-x:auto;overscroll-behavior-x:contain}
+.bottomnav button{flex:0 0 auto;min-width:64px;max-width:none;padding:9px 7px;font-size:11px;white-space:nowrap}
 dialog{border:1px solid var(--line);border-radius:18px;background:var(--panel);color:var(--text);width:min(92vw,480px);padding:20px;box-shadow:0 20px 80px #0005}
 dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
 @media(max-width:560px){main{padding:12px 10px 90px}.card{padding:13px}.day{min-height:76px;padding:4px}.day.selected{padding:3px}.shift{font-size:12px;padding:5px 3px}.grid2{grid-template-columns:1fr}.brand{font-size:18px}}
@@ -114,7 +58,7 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
   <label class="small" style="display:flex;align-items:center;gap:6px">Plan <select id="planSelect" style="width:auto;padding:8px"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></label><button id="todayBtn" class="primary">Heute</button><button id="themeBtn">☾ Darstellung</button><button id="shareBtn" class="primary">Teilen / Export</button><button id="backupBtn">Datensicherung</button>
  </div>
  <nav class="tabs">
-  <button class="active" data-tab="calendar">Kalender</button><button data-tab="day">Tagesdetails</button><button data-tab="year">Jahresübersicht</button><button data-tab="bridge">Brückentagberechner</button><button data-tab="settings">Einstellungen</button>
+  <button class="active" data-tab="calendar">Kalender</button><button data-tab="day">Tagesdetails</button><button data-tab="year">Jahresübersicht</button><button data-tab="bridge">Brückentage im Vier-Schicht-Betrieb</button><button data-tab="vacation">Ferienplaner</button><button data-tab="settings">Einstellungen</button>
  </nav>
  <section id="calendar">
   <div class="card">
@@ -149,12 +93,27 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
  </section>
  <section id="bridge" class="hidden">
   <div class="card">
-   <div class="bridge-intro">
-    <div><h2 class="title" style="margin-bottom:4px">Brückentage</h2><p class="hint">Wähle das Planungsjahr. Danach siehst du direkt nur Feiertagszeiträume, bei denen dein Schichtplan einen echten Brückentag ermöglicht.</p></div>
-    <div class="monthhead" style="gap:8px;margin:0"><button id="bridgePrev" aria-label="Vorheriges Jahr">‹</button><strong id="bridgeYearLabel">2026</strong><button id="bridgeNext" aria-label="Nächstes Jahr">›</button></div>
+   <div class="monthhead"><button id="bridgePrev" aria-label="Vorheriges Jahr">‹</button><strong id="bridgeYearLabel">Brückentage im Vier-Schicht-Betrieb 2026</strong><button id="bridgeNext" aria-label="Nächstes Jahr">›</button></div>
+   <p class="hint">Die Vorschläge werden für den oben ausgewählten Schichtplan berechnet. Angezeigt werden gesetzliche Feiertage in Niedersachsen und passende angrenzende Arbeitstage, wenn dein Schichtplan am Feiertag selbst frei vorsieht.</p>
+   <div class="notice">Wichtig im Vier-Schicht-Betrieb: Ein gesetzlicher Feiertag bedeutet nicht automatisch, dass du persönlich dienstfrei hast. Die App berücksichtigt deshalb deinen Schichtplan A, B, C oder D. Prüfe Feiertagsdienste und mögliche Ausgleichsregelungen zusätzlich mit deinem betrieblichen Dienstplan.</div>
+   <div id="bridgeResults"></div>
+  </div>
+ </section>
+ <section id="vacation" class="hidden">
+  <div class="card">
+   <h2 class="title">Ferien- und Urlaubsplaner</h2>
+   <p class="hint">Plane zusammenhängende Freizeit passend zu deinem ausgewählten Schichtplan. Die App zählt nur Tage, an denen laut Schichtplan tatsächlich Dienst wäre.</p>
+   <div class="grid2">
+    <div class="field"><label>Planungsjahr</label><select id="vacYear"><option>2026</option><option>2027</option><option>2028</option><option>2029</option><option>2030</option></select></div>
+    <div class="field"><label>Gewünschte Dauer</label><select id="vacWeeks"><option value="1">1 Woche (7 Tage)</option><option value="2" selected>2 Wochen (14 Tage)</option><option value="3">3 Wochen (21 Tage)</option><option value="4">4 Wochen (28 Tage)</option><option value="5">5 Wochen (35 Tage)</option><option value="6">6 Wochen (42 Tage)</option><option value="custom">Eigene Dauer</option></select></div>
    </div>
-   <div class="notice">Schichtplan <strong id="bridgePlanBadge">A</strong> · Die rot markierten Arbeitstage sind die möglichen <strong>BRÜCKENTAGE</strong>. Feiertage ohne passenden Brückentag werden nicht als Zeitraum angezeigt. Du kannst einen Vorschlag als Urlaub, AZK oder LZK in deinen Kalender übernehmen. Es wird nichts automatisch eingetragen.</div>
-   <div id="bridgeSelectedDetail" class="bridge-results"></div>
+   <div class="field hidden" id="vacCustomWrap"><label>Eigene Dauer in Tagen</label><input id="vacCustomDays" type="number" min="1" max="60" value="14"></div>
+   <div class="field"><label>Wie möchtest du die Schulferien berücksichtigen?</label><div class="grid2"><button type="button" id="vacPrefer" class="primary">Ferien vorrangig</button><button type="button" id="vacAvoid">Ferien vermeiden</button></div><input type="hidden" id="vacMode" value="prefer"></div>
+   <h3 class="title" style="font-size:16px;margin-top:16px">So sucht die App</h3>
+   <div class="notice">Die App sucht zuerst passende zusammenhängende Zeiträume und sortiert sie danach, wie wenige geplante Arbeitstage du dafür freistellen musst. Erst wenn du einen Vorschlag auswählst, teilst du diese Arbeitstage auf Urlaub, AZK und LZK auf. Bereits freie Schichttage werden mitgerechnet.</div>
+   <div class="actions"><button class="primary" id="vacFind">Beste Zeiträume suchen</button></div>
+   <div id="vacResults" aria-live="polite"></div>
+   <div id="vacAllocation" aria-live="polite"></div>
   </div>
  </section>
  <section id="settings" class="hidden">
@@ -189,7 +148,7 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
   <div class="card"><h2 class="title">Über die App</h2><p class="muted small">Nordland – Schichtplan · Erstellt für Manfred Heveling. Persönliche Daten bleiben lokal auf diesem Gerät, bis du sie ausdrücklich exportierst oder teilst.</p><p class="muted small">© 2026 Manfred Heveling · Alle Rechte vorbehalten</p></div>
  </section>
 </main>
-<nav class="bottomnav"><button data-tab="calendar" class="active">▦ Kalender</button><button data-tab="day">☷ Termine</button><button data-tab="year">▤ Jahr</button><button data-tab="bridge" aria-label="Brückentagberechner">↔ Brückentagberechner</button><button data-tab="settings">⚙ Einstellungen</button></nav>
+<nav class="bottomnav"><button data-tab="calendar" class="active">▦ Kalender</button><button data-tab="day">☷ Termine</button><button data-tab="year">▤ Jahr</button><button data-tab="bridge">↔ Brücke</button><button data-tab="vacation">☀ Ferienplaner</button><button data-tab="settings">⚙ Einstellungen</button></nav>
 
 <dialog id="eventDialog">
  <h2 class="title">Termin oder Notiz</h2>
@@ -393,125 +352,137 @@ const holidayLookupCache={};
 function holidayNameOn(date){const year=parseDate(date).getFullYear();if(!holidayLookupCache[year])holidayLookupCache[year]=new Map(holidaysForYear(year).map(h=>[h.date,h.name]));return holidayLookupCache[year].get(date)||''}
 function isShiftFree(date,plan){return shiftForForPlan(date,plan).code==='X'}
 function existingPeriodType(date){return state.periods.find(p=>date>=p.start&&date<=p.end)?.type||''}
-function bridgeSpanForSelection(holidayDate,selectedDays,plan){
- const off=date=>shiftForForPlan(date,plan).code==='X'||selectedDays.has(date)||!!existingPeriodType(date);
- if(!off(holidayDate))return null;
- let start=parseDate(holidayDate),end=parseDate(holidayDate);
- for(let i=0;i<14;i++){const prev=iso(plus(start,-1));if(!off(prev))break;start=plus(start,-1)}
- for(let i=0;i<14;i++){const next=iso(plus(end,1));if(!off(next))break;end=plus(end,1)}
- return {start:iso(start),end:iso(end),total:Math.round((end-start)/86400000)+1};
-}
-function bridgeWindowDates(holidayDate){const out=[];for(let i=-4;i<=4;i++)out.push(iso(plus(parseDate(holidayDate),i)));return out}
-function bridgeOptionsForHoliday(h,plan){
- const dates=bridgeWindowDates(h.date);
- // Grundfreizeit: Feiertag als frei behandeln, wenn er laut Plan frei ist,
- // bereits im Kalender freigehalten wurde oder als einzelner Diensttag geplant wird.
- const baseSelection=new Set();
- if(shiftForForPlan(h.date,plan).code!=='X'&&!existingPeriodType(h.date))baseSelection.add(h.date);
- const baseline=bridgeSpanForSelection(h.date,baseSelection,plan);
- const baselineDays=baseline?baseline.total:0;
- const options=[];
- for(const date of dates){
-  // Der eigentliche Brückentag muss ein zusätzlicher Diensttag neben dem Feiertag sein.
-  if(date===h.date)continue;
-  const candidateShift=shiftForForPlan(date,plan);
-  if(candidateShift.code==='X'||existingPeriodType(date))continue;
-  // Alle geplanten Arbeitstage zwischen Feiertag und Brückentag müssen frei genommen werden,
-  // damit der Zeitraum lückenlos zusammenhängt. Bereits eingetragene freie Tage kosten nichts Neues.
-  const from=parseDate(date<h.date?date:h.date),to=parseDate(date>h.date?date:h.date);
-  const requiredDays=[];
-  for(let cursor=new Date(from);cursor<=to;cursor=plus(cursor,1)){
-   const day=iso(cursor);
-   if(shiftForForPlan(day,plan).code!=='X'&&!existingPeriodType(day))requiredDays.push(day);
-  }
-  if(!requiredDays.includes(date))continue;
-  const span=bridgeSpanForSelection(h.date,new Set(requiredDays),plan);
-  if(!span||date<span.start||date>span.end)continue;
-  const gain=span.total-baselineDays;
-  if(gain>0&&span.total>=2){
-   options.push({date,shift:candidateShift.name,code:candidateShift.code,span,gain,requiredDays,usedDays:requiredDays.length});
-  }
+function bridgeSuggestionsForHoliday(holiday,holidayDates,year,plan){
+ // Nur dann als Brücke werten, wenn der Feiertag laut gewähltem Plan ohnehin frei ist.
+ if(!isShiftFree(holiday.date,plan))return [];
+ const suggestions=[];
+ for(let offset=-3;offset<=3;offset++){
+  if(offset===0)continue;
+  const candidate=iso(plus(parseDate(holiday.date),offset));
+  const shift=shiftForForPlan(candidate,plan);
+  if(shift.code==='X'||existingPeriodType(candidate))continue;
+  // Der vorgeschlagene Tag muss direkt an einen bereits freien Tag anschließen.
+  const before=iso(plus(parseDate(candidate),-1)),after=iso(plus(parseDate(candidate),1));
+  if(!isShiftFree(before,plan)&&!isShiftFree(after,plan))continue;
+  // Gesamten zusammenhängenden Freizeitblock nach Freinahme dieses Tages ermitteln.
+  let start=parseDate(candidate),end=parseDate(candidate);
+  for(let i=0;i<10;i++){const prev=iso(plus(start,-1));if(!isShiftFree(prev,plan))break;start=plus(start,-1)}
+  for(let i=0;i<10;i++){const next=iso(plus(end,1));if(!isShiftFree(next,plan))break;end=plus(end,1)}
+  // Kandidat ist frei; prüfen, ob der Feiertag im so verbundenen Block liegt.
+  if(holiday.date<iso(start)||holiday.date>iso(end))continue;
+  let total=Math.round((end-start)/86400000)+1;
+  // Im Zeitraum liegt ein gesetzlicher Feiertag; dieser ist Teil des Blocks, sofern laut Schichtplan frei.
+  suggestions.push({date:candidate,shift:shift.name,total,offset:Math.abs(offset)});
  }
- // Zuerst möglichst wenig verbrauchen, danach möglichst viele freie Tage gewinnen.
- options.sort((a,b)=>a.usedDays-b.usedDays||b.gain-a.gain||b.span.total-a.span.total||a.date.localeCompare(b.date));
- return options;
+ return suggestions.sort((a,b)=>b.total-a.total||a.offset-b.offset||a.date.localeCompare(b.date));
 }
-function shortDate(date){return parseDate(date).toLocaleDateString('de-DE',{weekday:'short',day:'2-digit',month:'2-digit'});}
 function renderBridgePlanner(){
- $('bridgeYearLabel').textContent='Jahr '+bridgeYear;
- $('bridgePlanBadge').textContent=activePlan;
- const root=$('bridgeSelectedDetail');root.innerHTML='';
- const holidays=holidaysForYear(bridgeYear);
- const results=holidays.map(h=>({holiday:h,options:bridgeOptionsForHoliday(h,activePlan)})).filter(x=>x.options.length>0);
- if(!results.length){
-  const empty=document.createElement('div');empty.className='bridge-none';
-  empty.textContent='Für Plan '+activePlan+' gibt es im Jahr '+bridgeYear+' keine Feiertagszeiträume, bei denen ein einzelner zusätzlicher Arbeitstag einen zusammenhängenden freien Zeitraum sinnvoll verlängert. Deshalb werden hier keine Brückentage angezeigt.';
-  root.append(empty);return;
- }
- const count=document.createElement('div');count.className='bridge-result-meta';
- count.textContent=results.length+' passende Feiertagszeiträume für Plan '+activePlan+' · Rot markierte Tage sind die möglichen Brückentage.';
- root.append(count);
- const legend=document.createElement('div');legend.className='bridge-legend';
- legend.innerHTML='<span class="bridge-key-red">Rot – Brückentag</span><span class="bridge-key-green">Grün – laut Schichtplan frei</span><span class="bridge-key-holiday">Gold – Feiertag</span>';
- root.append(legend);
- const workNames={F:'Früh',S:'Spät',N:'Nacht',X:'Frei'};
- results.forEach(({holiday,options})=>{
-  const card=document.createElement('article');card.className='bridge-result-card';
-  const head=document.createElement('div');head.className='bridge-result-head';
-  const heading=document.createElement('div');
-  const h3=document.createElement('h3');h3.textContent=holiday.name;heading.append(h3);
-  const meta=document.createElement('div');meta.className='bridge-result-meta';meta.textContent=shortDate(holiday.date)+' · Schichtplan '+activePlan;heading.append(meta);
-  const badge=document.createElement('span');badge.className='bridge-result-best';badge.textContent='BRÜCKENTAGE MÖGLICH';
-  head.append(heading,badge);card.append(head);
-  const timeline=document.createElement('div');timeline.className='bridge-result-days';
-  const windowDates=bridgeWindowDates(holiday.date);
-  const candidateDates=new Set(options.map(o=>o.date));
-  const requiredDates=new Set(options.flatMap(o=>o.requiredDays));
-  windowDates.forEach(date=>{
-   const d=parseDate(date),sh=shiftForForPlan(date,activePlan),isHoliday=date===holiday.date,isCandidate=candidateDates.has(date),isRequired=requiredDates.has(date);
-   const day=document.createElement('div');day.className='bridge-result-day '+(sh.code==='X'?'free':'work')+(isHoliday?' holiday':'')+(isCandidate?' bridge-candidate':'')+(isRequired&&!isCandidate?' bridge-required-day':'');
-   const week=document.createElement('span');week.className='bd-week';week.textContent=d.toLocaleDateString('de-DE',{weekday:'short'});
-   const dateLabel=document.createElement('span');dateLabel.className='bd-date';dateLabel.textContent=d.toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit'});
-   const shift=document.createElement('span');shift.className='bd-shift';shift.textContent=workNames[sh.code]||sh.name;
-   day.append(week,dateLabel,shift);
-   if(isCandidate){const tag=document.createElement('span');tag.className='bridge-day-tag';tag.textContent='BRÜCKENTAG';day.append(tag)}
-   else if(isHoliday){const tag=document.createElement('span');tag.className='bridge-holiday-tag';tag.textContent='FEIERTAG';day.append(tag);if(isRequired){const extra=document.createElement('span');extra.className='bridge-required-tag';extra.textContent='EINZUSETZEN';day.append(extra)}}
-   else if(isRequired){const tag=document.createElement('span');tag.className='bridge-required-tag';tag.textContent='EINZUSETZEN';day.append(tag)}
-   else{const note=document.createElement('span');note.className='bd-note';note.textContent=' ';day.append(note)}
-   day.title=isCandidate?'Möglicher Brückentag – '+sh.name:(isHoliday?'Gesetzlicher Feiertag: '+holiday.name:(isRequired?'Diensttag, der für den freien Zeitraum eingeplant werden muss':sh.name));
-   timeline.append(day);
-  });
-  card.append(timeline);
-  const optionsTitle=document.createElement('div');optionsTitle.className='bridge-result-meta';optionsTitle.style.fontWeight='800';optionsTitle.style.margin='2px 0 7px';optionsTitle.textContent='Mögliche Brückentage – mit möglichst wenig Verbrauch sortiert';card.append(optionsTitle);
-  const optionList=document.createElement('div');optionList.className='bridge-option-list';
-  options.forEach((o,index)=>{
-   const row=document.createElement('div');row.className='bridge-option';
-   const info=document.createElement('div');info.className='bridge-option-main';
-   const strong=document.createElement('strong');
-   const tag=document.createElement('span');tag.className='bridge-result-best';tag.textContent=index===0?'Bester Brückentag':'Brückentag';
-   strong.append(tag,document.createTextNode(shortDate(o.date)+' · '+o.shift));
-   const small=document.createElement('small');
-   small.textContent=o.usedDays+' '+(o.usedDays===1?'Arbeitstag':'Arbeitstage')+' einplanen: '+o.requiredDays.map(shortDate).join(', ')+' → '+o.span.total+' Tage am Stück ('+shortDate(o.span.start)+' bis '+shortDate(o.span.end)+')';
-   info.append(strong,small);
-   const controls=document.createElement('div');controls.className='bridge-option-actions';
-   const type=document.createElement('select');type.setAttribute('aria-label','Eintragungsart für '+shortDate(o.date));
-   ['Urlaub','AZK','LZK'].forEach(value=>{const opt=document.createElement('option');opt.value=value;opt.textContent=value;type.append(opt)});
-   const save=document.createElement('button');save.className='primary';save.textContent='Übernehmen';
-   save.onclick=()=>applyBridgeSelection(o.requiredDays,type.value);
-   controls.append(type,save);row.append(info,controls);optionList.append(row);
-  });
-  card.append(optionList);root.append(card);
+ $('bridgeYearLabel').textContent='Brückentage im Vier-Schicht-Betrieb '+bridgeYear+' · Plan '+activePlan;
+ const root=$('bridgeResults');root.innerHTML='';
+ const holidays=holidaysForYear(bridgeYear),holidaySet=new Set(holidays.map(h=>h.date));
+ holidays.forEach(h=>{
+  const d=parseDate(h.date),sh=shiftForForPlan(h.date,activePlan),card=document.createElement('div');
+  card.className='bridge-holiday';
+  const header=document.createElement('div');header.className='bridge-holiday-head';
+  const title=document.createElement('div');
+  const h3=document.createElement('h3');h3.textContent=h.name;title.append(h3);
+  const meta=document.createElement('div');meta.className='hint';meta.textContent=fmt(d)+' · '+(sh.code==='X'?'laut Plan frei':sh.name+' laut Plan');title.append(meta);
+  const badge=document.createElement('span');badge.className='pill';badge.textContent=sh.code==='X'?'Feiertag + Frei':'Feiertag · Dienst laut Plan';
+  header.append(title,badge);card.append(header);
+  const suggestions=bridgeSuggestionsForHoliday(h,holidaySet,bridgeYear,activePlan);
+  if(sh.code!=='X'){
+   const note=document.createElement('p');note.className='bridge-status';note.textContent='Für diesen Feiertag gibt es keinen automatischen Brückentagsvorschlag, weil dein ausgewählter Schichtplan hier Dienst vorsieht.';card.append(note);
+  }else if(!suggestions.length){
+   const note=document.createElement('p');note.className='bridge-status';note.textContent='Keine passenden zusätzlichen Arbeitstage direkt neben dem freien Feiertagszeitraum gefunden.';card.append(note);
+  }else{
+   const list=document.createElement('div');list.className='bridge-suggestions';
+   suggestions.forEach(sug=>{
+    const row=document.createElement('div');row.className='bridge-suggestion';
+    const info=document.createElement('div');
+    const strong=document.createElement('strong');strong.textContent=fmt(parseDate(sug.date))+' · '+sug.shift;info.append(strong);
+    const hint=document.createElement('div');hint.className='hint';hint.textContent='Mit diesem Tag: '+sug.total+' zusammenhängende freie Kalendertage (rechnerischer Vorschlag)';info.append(hint);
+    const controls=document.createElement('div');controls.className='bridge-suggestion-controls';
+    const select=document.createElement('select');select.setAttribute('aria-label','Eintragsart für '+sug.date);
+    ['Urlaub','AZK','LZK'].forEach(t=>{const op=document.createElement('option');op.value=t;op.textContent=t;select.append(op)});
+    const btn=document.createElement('button');btn.className='primary';btn.textContent='Übernehmen';btn.dataset.bridgeDate=sug.date;btn.dataset.bridgeType='';
+    btn.onclick=()=>applyBridgeDay(sug.date,select.value);
+    controls.append(select,btn);row.append(info,controls);list.append(row);
+   });
+   card.append(list);
+  }
+  root.append(card);
  });
 }
-function applyBridgeSelection(dates,type){
- if(!dates.length)return;
- const readable=dates.map(d=>parseDate(d).toLocaleDateString('de-DE')).join(', ');
- if(!confirm('Diese '+dates.length+' Tag(e) als '+type+' in deinen Kalender übernehmen?\n'+readable))return;
- dates.forEach(date=>state.periods.push({id:'bridge-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),start:date,end:date,type}));
- state.periods.sort((a,b)=>a.start.localeCompare(b.start));save();render();renderBridgePlanner();alert(type+' wurde für '+dates.length+' Tag(e) eingetragen.');
+function applyBridgeDay(date,type){
+ const existing=existingPeriodType(date);
+ if(existing&&!confirm(date+' ist bereits als '+existing+' eingetragen. Soll der Eintrag trotzdem zusätzlich gespeichert werden?'))return;
+ if(!confirm('Den '+fmt(parseDate(date))+' als '+type+' in deinen Kalender übernehmen?'))return;
+ state.periods.push({id:'bridge-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),start:date,end:date,type});
+ state.periods.sort((a,b)=>a.start.localeCompare(b.start));save();render();renderBridgePlanner();
+ alert(type+' wurde am '+fmt(parseDate(date))+' eingetragen.');
 }
+// Amtliche Schulferien Niedersachsen laut Kultusministerium (Ferienordnung 2024/25 bis 2029/30).
+const schoolBreaks=[
+ ['Sommerferien 2026','2026-07-02','2026-08-12'],['Herbstferien 2026','2026-10-12','2026-10-24'],['Weihnachtsferien 2026/27','2026-12-23','2027-01-09'],
+ ['Halbjahresferien 2027','2027-02-01','2027-02-02'],['Osterferien 2027','2027-03-22','2027-04-03'],['Sommerferien 2027','2027-07-08','2027-08-18'],['Herbstferien 2027','2027-10-16','2027-10-30'],['Weihnachtsferien 2027/28','2027-12-23','2028-01-08'],
+ ['Halbjahresferien 2028','2028-01-31','2028-02-01'],['Osterferien 2028','2028-04-10','2028-04-22'],['Sommerferien 2028','2028-07-20','2028-08-30'],['Herbstferien 2028','2028-10-02','2028-10-02'],['Herbstferien 2028','2028-10-23','2028-11-04'],['Weihnachtsferien 2028/29','2028-12-27','2029-01-06'],
+ ['Halbjahresferien 2029','2029-02-01','2029-02-02'],['Osterferien 2029','2029-03-19','2029-04-03'],['Sommerferien 2029','2029-07-19','2029-08-29'],['Herbstferien 2029','2029-10-04','2029-10-05'],['Herbstferien 2029','2029-10-22','2029-11-02'],['Weihnachtsferien 2029/30','2029-12-21','2030-01-05'],
+ ['Halbjahresferien 2030','2030-01-31','2030-02-01'],['Osterferien 2030','2030-04-08','2030-04-23'],['Sommerferien 2030','2030-07-11','2030-08-21']
+];
+function schoolBreakName(date){return schoolBreaks.find(x=>date>=x[1]&&date<=x[2])?.[0]||''}
+function vacationPlanner(){
+ const year=Number($('vacYear').value),weeks=$('vacWeeks').value,days=weeks==='custom'?Number($('vacCustomDays').value):Number(weeks)*7;
+ const mode=$('vacMode').value,root=$('vacResults'),allocation=$('vacAllocation');root.innerHTML='';allocation.innerHTML='';
+ if(!Number.isInteger(days)||days<1||days>60){root.innerHTML='<p class="notice">Bitte eine Dauer zwischen 1 und 60 Tagen eingeben.</p>';return}
+ const start=new Date(year,0,1),end=new Date(year,11,31),candidates=[];
+ for(let d=new Date(start);d<=end;d=plus(d,1)){
+  const a=iso(d),b=iso(plus(d,days-1));if(parseDate(b)>end)continue;
+  const dates=daysBetween(a,b);if(dates.some(x=>state.periods.some(p=>x>=p.start&&x<=p.end)))continue;
+  const work=dates.filter(x=>shiftForForPlan(x,activePlan).code!=='X');
+  const breakDays=dates.filter(x=>schoolBreakName(x)).length;
+  const holidayDays=dates.filter(x=>holidayNameOn(x)).length;
+  const freeDays=days-work.length;
+  const breakNames=[...new Set(dates.map(schoolBreakName).filter(Boolean))];
+  const score=mode==='prefer'?breakDays:-breakDays;
+  candidates.push({start:a,end:b,dates,work,breakDays,freeDays,score,breakNames,holidayDays});
+ }
+ candidates.sort((a,b)=>a.work.length-b.work.length||(mode==='prefer'?b.breakDays-a.breakDays:a.breakDays-b.breakDays)||b.holidayDays-a.holidayDays||a.start.localeCompare(b.start));
+ const chosen=[];for(const c of candidates){if(chosen.every(x=>c.end<x.start||c.start>x.end)){chosen.push(c);if(chosen.length===8)break}}
+ if(!chosen.length){root.innerHTML='<p class="notice">Für dieses Jahr wurde kein passender Zeitraum gefunden. Prüfe deine Dauer oder wähle ein anderes Jahr.</p>';return}
+ const heading=document.createElement('h3');heading.className='title';heading.style.fontSize='17px';heading.style.marginTop='20px';heading.textContent='Beste Zeiträume · Plan '+activePlan;root.append(heading);
+ chosen.forEach((c,i)=>{
+  const card=document.createElement('div');card.className='vacation-result';const h=document.createElement('h3');h.textContent=(i+1)+'. '+fmt(parseDate(c.start))+' bis '+fmt(parseDate(c.end));card.append(h);
+  const p=document.createElement('p');p.className='hint';p.textContent=c.dates.length+' Kalendertage · '+c.freeDays+' ohnehin freie Schichttage · '+c.work.length+' geplante Arbeitstage';card.append(p);
+  const detail=document.createElement('p');detail.className='small';detail.textContent=(c.breakNames.length?c.breakNames.join(', '):'Keine Schulferien im Zeitraum')+' · '+c.holidayDays+' gesetzliche Feiertage';card.append(detail);
+  const btn=document.createElement('button');btn.className='primary';btn.textContent='Diesen Zeitraum auswählen';btn.onclick=()=>showVacationAllocation(c,i+1);card.append(btn);root.append(card);
+ });
+}
+function showVacationAllocation(c,number){
+ const root=$('vacAllocation');root.innerHTML='';
+ const card=document.createElement('div');card.className='card';
+ const title=document.createElement('h3');title.className='title';title.textContent='Deine Aufteilung für Vorschlag '+number;card.append(title);
+ const info=document.createElement('p');info.className='hint';info.textContent='Für diesen Zeitraum müssen '+c.work.length+' geplante Arbeitstage abgedeckt werden. Verteile diese Tage selbst auf Urlaub, AZK und LZK.';card.append(info);
+ const grid=document.createElement('div');grid.className='grid2';
+ const fields={};[['Urlaub','Urlaub'],['AZK','AZK'],['LZK','LZK']].forEach(([key,label])=>{const wrap=document.createElement('div');wrap.className='field';const lab=document.createElement('label');lab.textContent=label+'-Tage';const input=document.createElement('input');input.type='number';input.min='0';input.max=String(c.work.length);input.value=key==='Urlaub'?String(c.work.length):'0';input.id='alloc'+key;wrap.append(lab,input);grid.append(wrap);fields[key]=input});card.append(grid);
+ const status=document.createElement('div');status.className='notice';status.style.marginTop='12px';card.append(status);
+ const update=()=>{const total=Number(fields.Urlaub.value||0)+Number(fields.AZK.value||0)+Number(fields.LZK.value||0);status.textContent=total===c.work.length?'Passt genau: '+total+' von '+c.work.length+' benötigten Arbeitstagen sind verteilt.':'Noch '+(c.work.length-total>0?c.work.length-total+' Tage zu verteilen.':(total-c.work.length)+' Tage zu viel eingeplant.');};
+ Object.values(fields).forEach(x=>x.addEventListener('input',update));update();
+ const btn=document.createElement('button');btn.className='primary';btn.textContent='Aufteilung prüfen und Zeitraum übernehmen';btn.onclick=()=>{const counts={Urlaub:Number(fields.Urlaub.value||0),AZK:Number(fields.AZK.value||0),LZK:Number(fields.LZK.value||0)};const total=counts.Urlaub+counts.AZK+counts.LZK;if(Object.values(counts).some(n=>!Number.isInteger(n)||n<0)||total!==c.work.length){alert('Bitte verteile genau '+c.work.length+' Arbeitstage auf Urlaub, AZK und LZK.');return;}let remaining={...counts},assign=[];for(const date of c.work){const type=['Urlaub','AZK','LZK'].find(t=>remaining[t]>0);if(!type)break;remaining[type]--;assign.push({date,type});}applyVacationSuggestion(c,assign);};card.append(btn);
+ const hint=document.createElement('p');hint.className='hint';hint.textContent='Beispiel: Bei 14 benötigten Arbeitstagen könntest du 5 Urlaub + 4 AZK + 5 LZK eintragen. Die Reihenfolge wird auf die Arbeitstage im Zeitraum verteilt.';card.append(hint);
+ root.append(card);root.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function applyVacationSuggestion(c,assign){
+ if(!confirm('Diesen Zeitraum in deinen Kalender übernehmen? Es werden nur geplante Arbeitstage mit Urlaub/AZK/LZK markiert.'))return;
+ let groups=[];for(const item of assign){let last=groups[groups.length-1];if(last&&last.type===item.type&&iso(plus(parseDate(last.end),1))===item.date)last.end=item.date;else groups.push({type:item.type,start:item.date,end:item.date})}
+ groups.forEach((g,i)=>state.periods.push({id:'vac-'+Date.now()+'-'+i+'-'+Math.random().toString(36).slice(2,6),...g}));
+ state.periods.sort((a,b)=>a.start.localeCompare(b.start));save();render();alert('Die geplanten Urlaub-/AZK-/LZK-Tage wurden übernommen.');
+}
+$('vacWeeks').onchange=()=>{$('vacCustomWrap').classList.toggle('hidden',$('vacWeeks').value!=='custom')};
+$('vacPrefer').onclick=()=>{ $('vacMode').value='prefer';$('vacPrefer').classList.add('mode-active');$('vacAvoid').classList.remove('mode-active')};
+$('vacAvoid').onclick=()=>{ $('vacMode').value='avoid';$('vacAvoid').classList.add('mode-active');$('vacPrefer').classList.remove('mode-active')};
+$('vacFind').onclick=vacationPlanner;
 let bridgeYear=new Date().getFullYear();
-function tab(name){document.querySelectorAll('main section').forEach(s=>s.classList.toggle('hidden',s.id!==name));document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));if(name==='day')render();if(name==='year')renderYearOverview();if(name==='bridge')renderBridgePlanner()}
+function tab(name){document.querySelectorAll('main section').forEach(s=>s.classList.toggle('hidden',s.id!==name));document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));if(name==='day')render();if(name==='year')renderYearOverview();if(name==='bridge')renderBridgePlanner();if(name==='vacation'){$('vacYear').value=String(new Date().getFullYear());$('vacPrefer').classList.add('mode-active')}}
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>tab(b.dataset.tab));
 $('yearPrev').onclick=()=>{overviewYear--;renderYearOverview()};$('yearNext').onclick=()=>{overviewYear++;renderYearOverview()};
 $('bridgePrev').onclick=()=>{bridgeYear--;renderBridgePlanner()};$('bridgeNext').onclick=()=>{bridgeYear++;renderBridgePlanner()};
