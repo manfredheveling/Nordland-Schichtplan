@@ -62,7 +62,7 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
  <section id="calendar">
   <div class="card">
    <div class="monthhead"><button id="prevMonth" aria-label="Vorheriger Monat">‹</button><strong id="monthLabel"></strong><div style="display:flex;gap:6px;align-items:center"><button id="todayBtn" class="primary">Heute</button><button id="nextMonth" aria-label="Nächster Monat">›</button></div></div>
-   <div class="calendar-layout"><div class="month-side"><h3 class="title" style="font-size:16px">Monat auswählen</h3><div class="month-picker" id="monthPicker"></div></div><div class="days-side"><h3 class="title" style="font-size:16px">Tagesübersicht</h3><p class="hint">Lange drücken (2 Sekunden) und über die Tage ziehen, um einen Zeitraum zu markieren. Am Ende der Tagesliste geht es automatisch im nächsten Monat weiter.</p><div id="monthDayList" class="day-list"></div></div></div>
+   <div class="calendar-layout"><div class="month-side"><h3 class="title" style="font-size:16px">Monat auswählen</h3><div class="month-picker" id="monthPicker"></div></div><div class="days-side"><h3 class="title" style="font-size:16px">Tagesübersicht</h3><p class="hint">Lange drücken (2 Sekunden) und über die Tage ziehen, um einen Zeitraum zu markieren. Am Ende geht es zum nächsten, am Anfang zurück zum vorherigen Monat.</p><div id="monthDayList" class="day-list"></div></div></div>
   </div>
   <div class="card"><div class="row"><div><div class="title" id="selectedTitle">Ausgewählter Tag</div><div class="sub" id="selectedShift"></div></div><button id="openDay">Details</button></div><div id="selectedEvents" class="muted small"></div></div>
  </section>
@@ -213,18 +213,30 @@ function render(){
  document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editEvent(b.dataset.edit));
  document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{state.events=state.events.filter(e=>e.id!==b.dataset.del);save();render()});
 }
-// Beim Erreichen des Listenendes automatisch zum Folgemonat wechseln
+// Am Listenende zum Folgemonat, am Listenanfang zum Vormonat wechseln
 let autoMonthAdvanceLock=false;
 $('monthDayList').addEventListener('scroll',()=>{
  const list=$('monthDayList');
  if(autoMonthAdvanceLock || $('calendar').classList.contains('hidden')) return;
- if(list.scrollTop + list.clientHeight >= list.scrollHeight - 24){
+ const atTop=list.scrollTop <= 18;
+ const atBottom=list.scrollTop + list.clientHeight >= list.scrollHeight - 24;
+ if(atBottom){
   autoMonthAdvanceLock=true;
   month=new Date(month.getFullYear(),month.getMonth()+1,1);
   selected=iso(new Date(month.getFullYear(),month.getMonth(),1));
   rangeStart=rangeEnd=null;
   render();
   $('monthDayList').scrollTop=0;
+  setTimeout(()=>{autoMonthAdvanceLock=false},700);
+ } else if(atTop){
+  autoMonthAdvanceLock=true;
+  month=new Date(month.getFullYear(),month.getMonth()-1,1);
+  const lastDay=new Date(month.getFullYear(),month.getMonth()+1,0).getDate();
+  selected=iso(new Date(month.getFullYear(),month.getMonth(),lastDay));
+  rangeStart=rangeEnd=null;
+  render();
+  const previousList=$('monthDayList');
+  previousList.scrollTop=previousList.scrollHeight;
   setTimeout(()=>{autoMonthAdvanceLock=false},700);
  }
 },{passive:true});
