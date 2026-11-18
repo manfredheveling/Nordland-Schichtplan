@@ -333,31 +333,13 @@ function updateReminderNav(){
  count.textContent=String(unread);btn.classList.toggle('has-unread',unread>0);
  btn.setAttribute('aria-label',unread?`${unread} ungelesene wichtige Erinnerungen`:'Wichtige Erinnerungen');
 }
-async function requestBrowserNotificationPermission(showResult=false){
- if(!('Notification' in window)){if(showResult)alert('Dieser Browser unterstützt keine Browser-Benachrichtigungen.');return 'unsupported'}
- if(Notification.permission==='granted'){renderReminders();return 'granted'}
- if(Notification.permission==='denied'){renderReminders();return 'denied'}
- try{const result=await Notification.requestPermission();renderReminders();return result}catch(err){renderReminders();return 'default'}
-}
-// Chrome verlangt eine bewusste Nutzeraktion. Deshalb wird beim ersten Tippen
-// in der App automatisch die Browser-Abfrage ausgelöst (kein heimliches Freischalten).
-let notificationPromptAttempted=false;
-document.addEventListener('pointerdown',()=>{
- if(notificationPromptAttempted)return;
- notificationPromptAttempted=true;
- if('Notification' in window && Notification.permission==='default'){
-  requestBrowserNotificationPermission(false).then(result=>{if(result==='granted'){birthdayReminderCheck();reminderCheck();}});
- }
-},{once:true,capture:true});
-
 function renderReminders(){
  const items=collectReminderItems(), unread=items.filter(x=>!state.reminderRead[x.id]&&reminderIsDueSoon(x)).length;
  $('reminderSummary').textContent=unread?`${unread} neue/ungelesene wichtige Meldungen in Kürze · ${items.length} Einträge insgesamt in den nächsten 30 Tagen`:`Keine unmittelbar anstehenden ungelesenen Meldungen · ${items.length} Einträge in den nächsten 30 Tagen`;
  const permission=$('reminderPermission');
  if(!('Notification'in window))permission.textContent='Dieser Browser unterstützt keine Browser-Benachrichtigungen. Die Erinnerungsübersicht in der App funktioniert trotzdem.';
  else if(Notification.permission==='granted')permission.textContent='Browser-Benachrichtigungen sind erlaubt. Geburtstage werden zusätzlich am Vortag und am Geburtstag um 08:00 Uhr gemeldet, sofern die App bzw. der Browser die Prüfung ausführen kann.';
- else if(Notification.permission==='denied')permission.textContent='Chrome hat Browser-Benachrichtigungen blockiert. Bitte erlaube sie in Chrome unter Einstellungen → Website-Einstellungen → Benachrichtigungen. Die App kann diese Sperre nicht selbst aufheben.';
- else permission.textContent='Beim ersten Tippen in die App fragt Chrome automatisch nach der Erlaubnis. Tippe dann auf „Zulassen“. Die App kann die Freigabe nicht selbst erteilen.';
+ else permission.textContent='Browser-Benachrichtigungen sind noch nicht erlaubt. Du kannst sie in den Einstellungen des Browsers freigeben. Die Übersicht in der App bleibt unabhängig davon verfügbar.';
  if(!items.length){$('reminderList').innerHTML='<p class="muted">In den nächsten 30 Tagen sind keine wichtigen Einträge vorhanden.</p>';updateReminderNav();return}
  $('reminderList').innerHTML=items.map(x=>{const read=!!state.reminderRead[x.id];return `<div class="item" style="padding:13px 0"><div class="row" style="align-items:flex-start"><div style="min-width:0;flex:1"><div class="row" style="justify-content:flex-start;flex-wrap:wrap;gap:6px"><span class="pill">${escapeHtml(x.type)}</span><span class="pill">${parseDate(x.date).toLocaleDateString('de-DE',{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'})}${x.time?' · '+escapeHtml(x.time)+' Uhr':''}</span>${read?'':'<span class="pill" style="background:#ffcc80;color:#7f2704">NEU – UNGELESEN</span>'}</div><strong style="display:block;margin-top:5px">${escapeHtml(x.title)}</strong><div class="muted small">${escapeHtml(x.detail)}</div></div><button data-reminder-read="${escapeHtml(x.id)}" ${read?'disabled':''}>${read?'Gelesen':'Ansehen / gelesen'}</button></div></div>`}).join('');
  document.querySelectorAll('[data-reminder-read]').forEach(btn=>btn.onclick=()=>{const id=btn.dataset.reminderRead;state.reminderRead[id]=true;save();renderReminders();updateReminderNav()});
@@ -699,7 +681,7 @@ $('cancelPeriod').onclick=()=>{rangeStart=rangeEnd=null;$('periodStart').value=s
 $('periodStart').onchange=e=>{rangeStart=e.target.value;rangeEnd=null;render()};$('periodEnd').onchange=e=>{rangeEnd=e.target.value;if(rangeStart&&rangeEnd&&rangeEnd<rangeStart){[rangeStart,rangeEnd]=[rangeEnd,rangeStart]}render()};
 $('savePin').onclick=()=>{let p=$('pinInput').value;if(p&& !/^\d{4}$/.test(p)){alert('Der PIN muss genau 4 Ziffern haben.');return}state.pin=p;save();alert(p?'PIN auf diesem Gerät aktiviert.':'PIN-Schutz ausgeschaltet.');};
 $('refreshReminders').onclick=()=>renderReminders();
-$('enableNotifications').onclick=async()=>{const p=await requestBrowserNotificationPermission(true);if(p==='granted')alert('Benachrichtigungen sind jetzt erlaubt.');else if(p==='denied')alert('Chrome hat die Benachrichtigungen bereits abgelehnt. Bitte erlaube sie in den Website-Einstellungen von Chrome.');birthdayReminderCheck();renderReminders()};
+$('enableNotifications').onclick=async()=>{if(!('Notification'in window)){alert('Dieser Browser unterstützt keine Benachrichtigungen.');return}let p=await Notification.requestPermission();alert(p==='granted'?'Benachrichtigungen erlaubt. Geburtstage werden zusätzlich am Vortag und am Geburtstag um 08:00 Uhr gemeldet.':'Benachrichtigungen nicht erlaubt. Die Erinnerungsübersicht in der App bleibt verfügbar.');birthdayReminderCheck();renderReminders()};
 $('reminderToggle').onchange=e=>{state.reminders=e.target.checked;save()};
 function exportPayload(include){return {app:'Nordland-Schichtplan',version:2,exportedAt:new Date().toISOString(),anchors:state.anchors,activePlan,theme:state.theme,events:include?state.events:undefined,periods:include?state.periods:undefined,birthdays:include?state.birthdays:undefined,reminders:include?state.reminders:undefined}}
 function download(obj,name){let blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();URL.revokeObjectURL(url)}
@@ -749,26 +731,17 @@ $('doShare').onclick=async()=>{
  const payload=selectedSharePayload();
  const names={shift:'Schichteinteilung',Urlaub:'Urlaubstage',AZK:'AZK',LZK:'LZK',Krank:'Kranktage',Termine:'Termine',birthdays:'Geburtstage','Opa-Tage':'Opa-Tage'};
  const summary=chosen.map(x=>names[x]).join(', ');
- const file=new File([JSON.stringify(payload,null,2)],'Nordland-Daten-'+new Date().toISOString().slice(0,10)+'.json',{type:'application/json'});
  $('doShare').disabled=true;
  try{
   const link=await encodeShareLink(payload);
-  const message='Nordland-Schichtplan – für dich freigegeben: '+summary+'.\n\nTippe auf diesen Link und bestätige einmal „Daten jetzt übernehmen“:\n'+link+'\n\nEs werden nur die oben genannten Daten ergänzt. Deine eigenen Einträge bleiben erhalten.';
+  const message='Nordland-Schichtplan – für dich freigegeben: '+summary+'.\n\nTippe auf diesen Übernahme-Link und bestätige einmal „Daten jetzt übernehmen“:\n'+link+'\n\nEs werden nur die oben genannten Daten ergänzt. Deine eigenen Einträge bleiben erhalten.';
   $('shareDialog').close();
-  if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
-   await navigator.share({title:'Nordland-Schichtplan – Datenauswahl',text:message,files:[file]});
-  }else{
-   download(payload,file.name);
-   const wa='https://wa.me/?text='+encodeURIComponent(message);
-   alert('Die Datendatei wurde gespeichert. WhatsApp öffnet sich mit dem fertigen Text und Übernahmelink. Hänge dort bitte zusätzlich die gespeicherte Datei an, falls du sie mitschicken möchtest.');
-   location.href=wa;
-  }
+  // WhatsApp direkt mit Nachricht und Link öffnen. Keine Android-Dateifreigabe,
+  // da diese auf manchen Geräten den Nachrichtentext samt Link unterschlägt.
+  const wa='https://wa.me/?text='+encodeURIComponent(message);
+  location.href=wa;
  }catch(err){
-  if(err.name==='AbortError')return;
-  download(payload,file.name);
-  const fallback='Nordland-Schichtplan – für dich freigegeben: '+summary+'. Die Datendatei wurde gespeichert. Bitte als Dokument anhängen.';
-  location.href='https://wa.me/?text='+encodeURIComponent(fallback);
-  alert('Der direkte Dateiversand war nicht möglich. Die Datei wurde gespeichert; WhatsApp öffnet sich mit dem Beschreibungstext.');
+  alert('Der Übernahme-Link konnte nicht erstellt werden: '+(err&&err.message?err.message:'Unbekannter Fehler'));
  }finally{$('doShare').disabled=false;}
 };
 function reminderCheck(){if(!state.reminders||!('Notification'in window)||Notification.permission!=='granted')return;let now=new Date();const offsets={ '1d':86400000,'2d':172800000,'3h':10800000,'2h':7200000,'1h':3600000,'30m':1800000,'ontime':0};state.events.forEach(e=>{if(!e.reminder)return;[['one',e.reminderOne,e.reminderOneTime],['two',e.reminderTwo,e.reminderTwoTime]].forEach(([slot,kind,clock])=>{if(!kind||kind==='off')return;let eventDate=parseDate(e.date);if(e.time){let [hh,mm]=e.time.split(':').map(Number);eventDate.setHours(hh,mm,0,0)}else eventDate.setHours(9,0,0,0);let target;if(kind==='ontime'){target=parseDate(e.date);let [hh,mm]=(clock||'07:00').split(':').map(Number);target.setHours(hh,mm,0,0)}else{target=new Date(eventDate.getTime()-offsets[kind]);let [hh,mm]=(clock||'09:00').split(':').map(Number);target.setHours(hh,mm,0,0)}let delta=now-target;if(delta>=0&&delta<60000){let key='notified_'+e.id+'_'+slot+'_'+e.date;if(!localStorage.getItem(key)){new Notification('Erinnerung: '+e.title,{body:'Termin '+fmt(parseDate(e.date))+(e.time?' um '+e.time+' Uhr':'')});localStorage.setItem(key,'1')}}})})}
