@@ -16,7 +16,13 @@ header{background:#173b63;color:white;padding:18px max(18px,calc((100vw - 980px)
 main{max-width:980px;margin:0 auto;padding:18px 14px 90px}.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
 button,.btn{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:11px;padding:10px 13px;font:inherit;font-weight:650;cursor:pointer}
 button.primary{background:var(--accent);border-color:var(--accent);color:white}button:disabled{opacity:.45;cursor:not-allowed}
-.tabs{display:flex;gap:6px;overflow:auto;margin:0 0 14px;padding-bottom:3px}.tabs button{white-space:nowrap}.tabs button.active{background:var(--blue);color:white;border-color:var(--blue)}
+.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin:8px 0 20px;padding:0}.tabs button{min-height:86px;padding:13px 9px;border:2px solid var(--accent);border-radius:15px;background:var(--soft);color:var(--text);font-size:15px;font-weight:900;line-height:1.25;white-space:normal;box-shadow:0 4px 12px #173b6320}.tabs button.active{background:var(--blue);color:white;border-color:var(--blue);box-shadow:0 5px 15px #173b6330}.tabs button[data-action=share]{background:#173b63;border-color:#173b63;color:#fff}.tabs button:active{transform:scale(.98)}.tabs button.birthday-nav{justify-self:stretch;width:100%}.tabs button.share-nav{grid-column:1/-1;justify-self:stretch;width:100%}.bottom-settings{display:flex;justify-content:flex-end;margin:22px 2px 4px;padding-top:10px;border-top:1px solid var(--line)}.bottom-settings button{min-height:30px;padding:5px 11px;font-size:11px;font-weight:600;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--muted);box-shadow:none}
+.tabs button.reminder-nav{grid-column:1/-1;justify-self:stretch;width:100%;min-height:76px;background:#e65100;border:3px solid #ff9800;color:#fff;font-size:18px;letter-spacing:.4px;box-shadow:0 5px 18px #e6510050}
+.tabs button.reminder-nav.has-unread{animation:reminderPulse 1.25s ease-in-out infinite}
+.tabs button.reminder-nav .reminder-count{display:inline-flex;align-items:center;justify-content:center;min-width:25px;height:25px;padding:0 7px;margin-left:8px;border-radius:99px;background:#fff;color:#c62828;font-size:14px;font-weight:950}
+@keyframes reminderPulse{0%,100%{transform:scale(1);box-shadow:0 5px 16px #e6510050;filter:brightness(1)}50%{transform:scale(1.012);box-shadow:0 0 0 7px #ff980044,0 7px 24px #e6510090;filter:brightness(1.15)}}
+@media(prefers-reduced-motion:reduce){.tabs button.reminder-nav.has-unread{animation:none;outline:4px solid #ff9800}}
+
 .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow);margin-bottom:14px}
 .row{display:flex;align-items:center;justify-content:space-between;gap:12px}.muted{color:var(--muted)}.small{font-size:12px}.title{font-size:20px;font-weight:800;margin:0 0 10px}.sub{font-size:13px;color:var(--muted);margin-top:-5px}
 .monthhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.monthhead strong{font-size:18px}
@@ -34,7 +40,7 @@ textarea{min-height:85px;resize:vertical}.actions{display:flex;flex-wrap:wrap;ga
 .notice{padding:12px;border-radius:12px;background:var(--soft);color:var(--text);font-size:13px;margin:10px 0}
 .year-totals{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.year-stat{border:1px solid var(--line);border-left:6px solid var(--stat-color,#777);border-radius:12px;padding:12px;background:var(--soft);min-width:0}.year-stat strong{display:block;font-size:26px;line-height:1.15;font-weight:900}.year-stat span{display:block;font-size:13px;font-weight:800;margin-top:4px}.year-stat small{display:block;color:var(--muted);font-size:11px;margin-top:3px}.year-months{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.year-month{border:1px solid var(--line);border-radius:12px;padding:11px;min-width:0}.year-month h4{margin:0 0 8px;font-size:15px}.year-month .ym-line{display:flex;justify-content:space-between;gap:8px;font-size:12px;padding:3px 0;border-bottom:1px solid var(--line)}.year-month .ym-line:last-child{border:0}.year-month b{font-variant-numeric:tabular-nums}.year-stat.urlaub{--stat-color:#238b45}.year-stat.krank{--stat-color:#c62828}.year-stat.azk{--stat-color:#e58a22}.year-stat.lzk{--stat-color:#2874b9}.year-stat.frei{--stat-color:#68717d}.year-stat.opa{--stat-color:#7654a5}
 
-.holiday-label{background:#efcc72!important;color:#3e2b00!important}.bridge-holiday{border:1px solid var(--line);border-radius:13px;padding:13px;margin:10px 0;background:var(--panel)}
+.holiday-label{background:#efcc72!important;color:#3e2b00!important}.birthday-label{background:#f59e0b!important;color:#241300!important}.bridge-holiday{border:1px solid var(--line);border-radius:13px;padding:13px;margin:10px 0;background:var(--panel)}
 .bridge-holiday-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
 .bridge-holiday h3{font-size:15px;margin:0 0 3px}.bridge-suggestions{display:grid;gap:8px;margin-top:10px}
 .bridge-suggestion{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;padding:10px;border-radius:10px;background:var(--soft)}
@@ -48,11 +54,10 @@ textarea{min-height:85px;resize:vertical}.actions{display:flex;flex-wrap:wrap;ga
 .vacation-modes{margin:18px 0 20px}.mode-heading{font-size:17px;font-weight:900;margin-bottom:4px}.mode-intro{font-size:13px;color:var(--muted);margin:0 0 10px}.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.mode-choice{display:flex;align-items:flex-start;gap:11px;padding:15px 13px;border:2px solid #2674c9;border-radius:14px;background:#e7f1ff;color:#12345a;cursor:pointer;min-height:125px;transition:border-color .15s,background .15s,box-shadow .15s}.mode-choice input{width:22px;height:22px;flex:0 0 22px;margin:2px 0 0;accent-color:#155db0}.mode-choice:has(input:checked){border-color:#104f9c;background:#2674c9;color:#fff;box-shadow:0 0 0 3px rgba(38,116,201,.28)}.mode-copy{display:flex;flex-direction:column;gap:7px;min-width:0}.mode-copy strong{font-size:15px;line-height:1.3;color:inherit}.mode-copy small{font-size:12px;line-height:1.4;color:inherit;opacity:.88}.mode-copy em{font-size:11px;font-style:normal;font-weight:900;letter-spacing:.2px;margin-top:auto;color:inherit}.mode-footnote{font-size:11px;color:var(--muted);margin-top:9px}
 @media(max-width:560px){.mode-grid{grid-template-columns:1fr}.mode-choice{min-height:0;padding:13px}}
 
-.vacation-result{border:1px solid var(--line);border-radius:12px;padding:13px;margin:10px 0;background:var(--panel)}.vacation-result h3{margin:0 0 5px;font-size:15px}.vacation-result .actions{margin-top:9px}.mode-active{outline:2px solid var(--accent);font-weight:900}.hidden{display:none!important}.bottomnav{position:fixed;bottom:0;left:0;right:0;background:var(--panel);border-top:1px solid var(--line);display:flex;justify-content:flex-start;gap:5px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));z-index:5;overflow-x:auto;overscroll-behavior-x:contain}
-.bottomnav button{flex:0 0 auto;min-width:64px;max-width:none;padding:9px 7px;font-size:11px;white-space:nowrap}
+.vacation-result{border:1px solid var(--line);border-radius:12px;padding:13px;margin:10px 0;background:var(--panel)}.vacation-result h3{margin:0 0 5px;font-size:15px}.vacation-result .actions{margin-top:9px}.mode-active{outline:2px solid var(--accent);font-weight:900}.hidden{display:none!important}
 dialog{border:1px solid var(--line);border-radius:18px;background:var(--panel);color:var(--text);width:min(92vw,480px);padding:20px;box-shadow:0 20px 80px #0005}
 dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
-@media(max-width:560px){main{padding:12px 10px 90px}.card{padding:13px}.day{min-height:76px;padding:4px}.day.selected{padding:3px}.shift{font-size:12px;padding:5px 3px}.grid2{grid-template-columns:1fr}.brand{font-size:18px}}
+@media(max-width:560px){main{padding:12px 10px 28px}.tabs{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:7px 0 16px}.tabs button.birthday-nav{grid-column:auto;width:100%;justify-self:stretch}.tabs button.share-nav{grid-column:1/-1;width:100%}.tabs button{min-height:88px;font-size:14px;padding:11px 7px}.card{padding:13px}.day{min-height:76px;padding:4px}.day.selected{padding:3px}.shift{font-size:12px;padding:5px 3px}.grid2{grid-template-columns:1fr}.brand{font-size:18px}}
 </style>
 </head>
 <body>
@@ -61,8 +66,15 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
  <div class="toolbar">
   <label class="small" style="display:flex;align-items:center;gap:6px">Plan <select id="planSelect" style="width:auto;padding:8px"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></label><button id="todayBtn" class="primary">Heute</button><button id="themeBtn">☾ Darstellung</button><button id="shareBtn" class="primary">Teilen / Export</button><button id="backupBtn">Datensicherung</button>
  </div>
- <nav class="tabs">
-  <button class="active" data-tab="calendar">Kalender</button><button data-tab="day">Tagesdetails</button><button data-tab="year">Jahresübersicht</button><button data-tab="bridge">Brückentage im Vier-Schicht-Betrieb</button><button data-tab="vacation">Ferienplaner</button><button data-tab="settings">Einstellungen</button>
+ <nav class="tabs" aria-label="Hauptbereiche">
+  <button class="active" data-tab="calendar"><span style="display:block;font-size:25px;margin-bottom:5px">▦</span>Schichtkalender</button>
+  <button data-tab="day"><span style="display:block;font-size:25px;margin-bottom:5px">☷</span>Terminübersicht</button>
+  <button data-tab="year"><span style="display:block;font-size:25px;margin-bottom:5px">▤</span>Jahresübersicht</button>
+  <button data-tab="vacation"><span style="display:block;font-size:25px;margin-bottom:5px">☀</span>Ferienplaner</button>
+  <button data-tab="bridge"><span style="display:block;font-size:25px;margin-bottom:5px">↔</span>Brückentagsplaner</button>
+  <button class="birthday-nav" data-tab="birthdays"><span style="display:block;font-size:25px;margin-bottom:5px">🎂</span>Geburtstagskalender</button>
+  <button class="reminder-nav" data-tab="reminders" id="reminderNav"><span style="display:block;font-size:27px;margin-bottom:4px">🔔</span>WICHTIGE ERINNERUNGEN <span id="reminderNavCount" class="reminder-count">0</span><small style="display:block;font-size:11px;font-weight:700;margin-top:3px">Neue Meldungen ansehen</small></button>
+  <button class="share-nav" type="button" data-action="share"><span style="display:block;font-size:25px;margin-bottom:5px">↗</span>Daten teilen</button>
  </nav>
  <section id="calendar">
   <div class="card">
@@ -130,6 +142,30 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
    <div id="vacAllocation" aria-live="polite"></div>
   </div>
  </section>
+ <section id="reminders" class="hidden">
+  <div class="card">
+   <h2 class="title">Wichtige Erinnerungen</h2>
+   <p class="sub">Hier erscheinen Geburtstage, Termine, wichtige Zeiträume, Feiertage und persönliche Einträge. Normale Schichtzeiten und Schichtwechsel werden hier nicht angezeigt. Neue Meldungen bleiben gekennzeichnet, bis du sie einzeln öffnest und als gelesen markierst.</p>
+   <div id="reminderPermission" class="notice">Browser-Benachrichtigungen werden zusätzlich verwendet. Erlaube sie in den Einstellungen deines Browsers, damit Geburtstagsmeldungen auch als Browser-Hinweis erscheinen können.</div>
+   <div class="row" style="margin:12px 0"><strong id="reminderSummary">Erinnerungen werden geladen …</strong><button id="refreshReminders">Aktualisieren</button></div>
+   <div id="reminderList" aria-live="polite"></div>
+  </div>
+ </section>
+ <section id="birthdays" class="hidden">
+  <div class="card">
+   <h2 class="title">Geburtstagskalender</h2>
+   <p class="sub">Geburtstage wiederholen sich jedes Jahr. Gespeichert werden nur Vor- und Nachname sowie Tag und Monat – kein Geburtsjahr und kein Alter.</p>
+   <div class="grid2">
+    <div class="field"><label for="birthdayFirst">Vorname</label><input id="birthdayFirst" maxlength="60" placeholder="Vorname"></div>
+    <div class="field"><label for="birthdayLast">Nachname</label><input id="birthdayLast" maxlength="60" placeholder="Nachname"></div>
+    <div class="field"><label for="birthdayDay">Tag</label><select id="birthdayDay"></select></div>
+    <div class="field"><label for="birthdayMonth">Monat</label><select id="birthdayMonth"></select></div>
+   </div>
+   <div class="actions"><button class="primary" id="saveBirthday">Geburtstag speichern</button><button id="cancelBirthdayEdit" class="hidden">Abbrechen</button></div>
+   <p class="hint">Erinnerung: am Vortag und am Geburtstag jeweils um 08:00 Uhr. Dafür müssen Benachrichtigungen im Browser erlaubt sein. Der 29. Februar wird in normalen Jahren am 28. Februar berücksichtigt.</p>
+  </div>
+  <div class="card"><h3 class="title" style="font-size:17px">Gespeicherte Geburtstage</h3><div id="birthdayList"></div></div>
+ </section>
  <section id="settings" class="hidden">
   <div class="card">
    <h2 class="title">Schichtpläne A bis D</h2>
@@ -161,8 +197,9 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
   </div>
   <div class="card"><h2 class="title">Über die App</h2><p class="muted small">Nordland – Schichtplan · Erstellt für Manfred Heveling. Persönliche Daten bleiben lokal auf diesem Gerät, bis du sie ausdrücklich exportierst oder teilst.</p><p class="muted small">© 2026 Manfred Heveling · Alle Rechte vorbehalten</p></div>
  </section>
+ <div class="bottom-settings"><button type="button" data-tab="settings">⚙ Einstellungen</button></div>
 </main>
-<nav class="bottomnav"><button data-tab="calendar" class="active">▦ Kalender</button><button data-tab="day">☷ Termine</button><button data-tab="year">▤ Jahr</button><button data-tab="bridge">↔ Brücke</button><button data-tab="vacation">☀ Ferienplaner</button><button data-tab="settings">⚙ Einstellungen</button></nav>
+
 
 <dialog id="eventDialog">
  <h2 class="title">Termin oder Notiz</h2>
@@ -177,12 +214,27 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
  <div class="dialog-actions"><button id="cancelEvent">Abbrechen</button><button class="primary" id="saveEvent">Speichern</button></div>
 </dialog>
 <dialog id="shareDialog">
- <h2 class="title">Schichtplan teilen</h2>
- <p>Was soll an Kollegen übermittelt werden?</p>
- <div class="notice">Der Schichtplan ist immer enthalten. Persönliche Daten werden nur mit deiner Zustimmung angefügt.</div>
- <label class="item"><input type="radio" name="shareMode" value="shift" checked style="width:auto"> Nur Schichtplan – ohne persönliche Termine, Notizen und Erinnerungen</label>
- <label class="item"><input type="radio" name="shareMode" value="all" style="width:auto"> Schichtplan inklusive Termine, Notizen und Erinnerungs-Einstellungen</label>
- <div class="dialog-actions"><button id="cancelShare">Abbrechen</button><button class="primary" id="doShare">Weiter</button></div>
+ <h2 class="title">Daten teilen</h2>
+ <p>Wähle genau aus, was dieser Empfänger bekommen soll:</p>
+ <div class="actions" style="margin:8px 0 12px"><button type="button" id="shareSelectAll">Alle auswählen</button><button type="button" id="shareSelectNone">Alle abwählen</button></div>
+ <div id="shareChoices" style="display:grid;gap:7px">
+  <label class="item"><input type="checkbox" data-share="shift" checked style="width:auto"> Schichteinteilung (A/B/C/D)</label>
+  <label class="item"><input type="checkbox" data-share="Urlaub" style="width:auto"> Urlaubstage</label>
+  <label class="item"><input type="checkbox" data-share="AZK" style="width:auto"> AZK</label>
+  <label class="item"><input type="checkbox" data-share="LZK" style="width:auto"> LZK</label>
+  <label class="item"><input type="checkbox" data-share="Krank" style="width:auto"> Kranktage</label>
+  <label class="item"><input type="checkbox" data-share="Termine" style="width:auto"> Termine und Notizen</label>
+  <label class="item"><input type="checkbox" data-share="birthdays" style="width:auto"> Geburtstage</label>
+  <label class="item"><input type="checkbox" data-share="Opa-Tage" style="width:auto"> Opa-Tage</label>
+ </div>
+ <div class="notice" style="margin-top:12px">Es werden nur die angekreuzten Daten geteilt. WhatsApp erhält automatisch einen Nachrichtentext mit den ausgewählten Daten und einen Übernahmelink. Der Empfänger muss in seiner Nordland-App nur noch einmal bestätigen.</div>
+ <div class="dialog-actions"><button id="cancelShare">Abbrechen</button><button class="primary" id="doShare">Mit WhatsApp teilen</button></div>
+</dialog>
+<dialog id="receiveDialog">
+ <h2 class="title">Daten für deinen Schichtkalender</h2>
+ <p id="receiveSummary">Jemand hat Daten mit dir geteilt.</p>
+ <div class="notice">Wenn du bestätigst, werden nur die ausgewählten Daten ergänzt. Deine eigenen Einträge bleiben erhalten; doppelte Einträge werden übersprungen.</div>
+ <div class="dialog-actions"><button id="cancelReceive">Nicht übernehmen</button><button class="primary" id="confirmReceive">Daten jetzt übernehmen</button></div>
 </dialog>
 <dialog id="importDialog">
  <h2 class="title">Daten importieren</h2><p>Wie sollen die importierten persönlichen Termine behandelt werden?</p>
@@ -198,14 +250,16 @@ const parseDate=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1
 const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const plus=(d,n)=>{let x=new Date(d);x.setDate(x.getDate()+n);return x};
 const fmt=d=>d.toLocaleDateString('de-DE',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
-const defaultState={anchors:{A:'2026-10-26',B:'2026-11-16',C:'2026-11-09',D:'2026-11-02'},activePlan:'A',events:[],periods:[],theme:'dark',reminders:false,pin:''};
+const defaultState={anchors:{A:'2026-10-26',B:'2026-11-16',C:'2026-11-09',D:'2026-11-02'},activePlan:'A',events:[],periods:[],birthdays:[],theme:'dark',reminders:false,pin:''};
 let state={...defaultState,...JSON.parse(localStorage.getItem('nordlandState')||'{}')};
 // Die überarbeitete Oberfläche startet bewusst dunkel. Danach bleibt die Wahl des Nutzers gespeichert.
 if(!sessionStorage.getItem('nordlandThemeChosen')) state.theme='dark';
+state.birthdays=Array.isArray(state.birthdays)?state.birthdays:[];
+state.reminderRead=(state.reminderRead&&typeof state.reminderRead==='object')?state.reminderRead:{};
 state.anchors={...defaultState.anchors,...(state.anchors||{}),...(state.anchor?{A:state.anchor}:{})};
 let activePlan=state.activePlan||'A';
 let selected=todayISO(), month=new Date(new Date().getFullYear(),new Date().getMonth(),1), overviewYear=new Date().getFullYear(); let pendingImport=null, editingId=null, rangeStart=null, rangeEnd=null, dragSelecting=false, suppressDayClick=false;
-function save(){localStorage.setItem('nordlandState',JSON.stringify(state))}
+function save(){localStorage.setItem('nordlandState',JSON.stringify(state));if(typeof updateReminderNav==='function')updateReminderNav()}
 const shiftHours={F:'05:30–13:30',S:'13:30–21:30',N:'21:30–05:30'};
 function shiftFor(dateStr){
  const anchor=state.anchors?.[activePlan]||state.anchors?.A;if(!anchor)return {code:'?',name:'Startdatum fehlt'};
@@ -235,11 +289,67 @@ function updateMonthControls(rebuildPicker=false){
  }
  [...picker.children].forEach((b,i)=>{b.classList.toggle('active',i===month.getMonth());b.classList.toggle('current',i===new Date().getMonth()&&month.getFullYear()===new Date().getFullYear())});
 }
+function birthdayDateFor(b,year){let m=Number(b.month),day=Number(b.day);if(m===2&&day===29&&!(year%4===0&&(year%100!==0||year%400===0)))day=28;return new Date(year,m-1,day)}
+function birthdaysOn(dateStr){const d=parseDate(dateStr);return state.birthdays.filter(b=>{const bd=birthdayDateFor(b,d.getFullYear());return bd.getMonth()===d.getMonth()&&bd.getDate()===d.getDate()})}
+function nextBirthday(b){const now=parseDate(todayISO());let d=birthdayDateFor(b,now.getFullYear());if(d<now)d=birthdayDateFor(b,now.getFullYear()+1);return d}
+function renderBirthdays(){
+ const day=$('birthdayDay'),mon=$('birthdayMonth');
+ if(!day.options.length)for(let i=1;i<=31;i++)day.add(new Option(String(i).padStart(2,'0'),String(i)));
+ if(!mon.options.length)['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'].forEach((x,i)=>mon.add(new Option(x,String(i+1))));
+ const list=$('birthdayList');
+ if(!state.birthdays.length){list.innerHTML='<p class="muted">Noch keine Geburtstage eingetragen.</p>';return}
+ list.innerHTML=state.birthdays.slice().sort((a,b)=>nextBirthday(a)-nextBirthday(b)).map(b=>{const d=nextBirthday(b);return `<div class="item"><div class="row"><strong>${escapeHtml(b.first+' '+b.last)}</strong><span class="pill">${String(b.day).padStart(2,'0')}.${String(b.month).padStart(2,'0')} · nächster: ${d.toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'})}</span></div><div class="actions"><button data-birthday-edit="${b.id}">Bearbeiten</button><button data-birthday-del="${b.id}">Löschen</button></div></div>`}).join('');
+ document.querySelectorAll('[data-birthday-edit]').forEach(btn=>btn.onclick=()=>{const b=state.birthdays.find(x=>x.id===btn.dataset.birthdayEdit);if(!b)return;editingBirthdayId=b.id;$('birthdayFirst').value=b.first;$('birthdayLast').value=b.last;$('birthdayDay').value=String(b.day);$('birthdayMonth').value=String(b.month);$('saveBirthday').textContent='Änderungen speichern';$('cancelBirthdayEdit').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'})});
+ document.querySelectorAll('[data-birthday-del]').forEach(btn=>btn.onclick=()=>{if(!confirm('Diesen Geburtstag wirklich löschen?'))return;state.birthdays=state.birthdays.filter(x=>x.id!==btn.dataset.birthdayDel);save();renderBirthdays();render()});
+}
+let editingBirthdayId=null;
+function birthdayReminderCheck(){if(!('Notification'in window)||Notification.permission!=='granted')return;const now=new Date();for(const b of state.birthdays){for(const year of [now.getFullYear(),now.getFullYear()+1]){const day=birthdayDateFor(b,year);for(const [slot,offset] of [['Vortag',-1],['Geburtstag',0]]){const target=plus(day,offset);target.setHours(8,0,0,0);const delta=now-target;if(delta>=0&&delta<600000){const key=`birthday_notice_${b.id}_${year}_${slot}`;if(!localStorage.getItem(key)){new Notification(slot==='Vortag'?'Morgen Geburtstag':'Heute Geburtstag',{body:`${b.first} ${b.last} hat ${slot==='Vortag'?'morgen':'heute'} Geburtstag.`});localStorage.setItem(key,'1')}}}}}}
+function collectReminderItems(){
+ const today=parseDate(todayISO()), end=plus(today,30), items=[];
+ const add=(id,date,time,type,title,detail)=>{if(date<iso(today)||date>iso(end))return;items.push({id,date,time:type==='Geburtstag'?'08:00':(time||''),type,title,detail:detail||''})};
+ for(const b of state.birthdays){
+  for(let year=today.getFullYear();year<=end.getFullYear();year++){
+   const bd=birthdayDateFor(b,year), birthdayISO=iso(bd), before=iso(plus(bd,-1));
+   add(`birthday-${b.id}-${birthdayISO}-before`,before,'08:00','Geburtstag','Morgen Geburtstag: '+b.first+' '+b.last,'Geburtstag ist morgen. Browser-Erinnerung um 08:00 Uhr.');
+   add(`birthday-${b.id}-${birthdayISO}-day`,birthdayISO,'08:00','Geburtstag','Heute Geburtstag: '+b.first+' '+b.last,'Heute ist der Geburtstag. Browser-Erinnerung um 08:00 Uhr.');
+  }
+ }
+ for(const e of state.events){add(`event-${e.id}-${e.date}`,e.date,e.time||'','Termin',e.title,e.note||'Persönlicher Termin');}
+ for(const p of state.periods){
+  add(`period-${p.id||p.start}-${p.start}`,p.start,'','Zeitraum','Beginn: '+p.type,p.start===p.end?'Eintrag für diesen Tag':'Beginn des eingetragenen Zeitraums bis '+fmt(parseDate(p.end)));
+  if(p.end!==p.start)add(`period-end-${p.id||p.start}-${p.end}`,p.end,'','Zeitraum','Letzter Tag: '+p.type,'Der eingetragene Zeitraum endet heute.');
+ }
+ for(let y=today.getFullYear();y<=end.getFullYear();y++)for(const h of holidaysForYear(y))add(`holiday-${h.date}`,h.date,'','Feiertag',h.name,'Gesetzlicher Feiertag in Niedersachsen. Schichtplan bitte beachten.');
+ // Schichtbeginn und normale Schichtzeiten gehören ausschließlich in den Schichtkalender,
+ // nicht in die Übersicht „Wichtige Erinnerungen“.
+ const typeOrder={'Geburtstag':0,'Termin':1,'Zeitraum':2,'Feiertag':3};
+ return items.sort((a,b)=>a.date.localeCompare(b.date)||(a.time||'').localeCompare(b.time||'')||(typeOrder[a.type]??9)-(typeOrder[b.type]??9));
+}
+function reminderIsDueSoon(item){const days=Math.ceil((parseDate(item.date)-parseDate(todayISO()))/86400000);const limit=item.type==='Geburtstag'?1:(item.type==='Feiertag'?3:7);return days>=0&&days<=limit}
+function updateReminderNav(){
+ const items=collectReminderItems(), unread=items.filter(x=>!state.reminderRead[x.id]&&reminderIsDueSoon(x)).length;
+ const btn=$('reminderNav'), count=$('reminderNavCount');
+ if(!btn||!count)return;
+ count.textContent=String(unread);btn.classList.toggle('has-unread',unread>0);
+ btn.setAttribute('aria-label',unread?`${unread} ungelesene wichtige Erinnerungen`:'Wichtige Erinnerungen');
+}
+function renderReminders(){
+ const items=collectReminderItems(), unread=items.filter(x=>!state.reminderRead[x.id]&&reminderIsDueSoon(x)).length;
+ $('reminderSummary').textContent=unread?`${unread} neue/ungelesene wichtige Meldungen in Kürze · ${items.length} Einträge insgesamt in den nächsten 30 Tagen`:`Keine unmittelbar anstehenden ungelesenen Meldungen · ${items.length} Einträge in den nächsten 30 Tagen`;
+ const permission=$('reminderPermission');
+ if(!('Notification'in window))permission.textContent='Dieser Browser unterstützt keine Browser-Benachrichtigungen. Die Erinnerungsübersicht in der App funktioniert trotzdem.';
+ else if(Notification.permission==='granted')permission.textContent='Browser-Benachrichtigungen sind erlaubt. Geburtstage werden zusätzlich am Vortag und am Geburtstag um 08:00 Uhr gemeldet, sofern die App bzw. der Browser die Prüfung ausführen kann.';
+ else permission.textContent='Browser-Benachrichtigungen sind noch nicht erlaubt. Du kannst sie in den Einstellungen des Browsers freigeben. Die Übersicht in der App bleibt unabhängig davon verfügbar.';
+ if(!items.length){$('reminderList').innerHTML='<p class="muted">In den nächsten 30 Tagen sind keine wichtigen Einträge vorhanden.</p>';updateReminderNav();return}
+ $('reminderList').innerHTML=items.map(x=>{const read=!!state.reminderRead[x.id];return `<div class="item" style="padding:13px 0"><div class="row" style="align-items:flex-start"><div style="min-width:0;flex:1"><div class="row" style="justify-content:flex-start;flex-wrap:wrap;gap:6px"><span class="pill">${escapeHtml(x.type)}</span><span class="pill">${parseDate(x.date).toLocaleDateString('de-DE',{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'})}${x.time?' · '+escapeHtml(x.time)+' Uhr':''}</span>${read?'':'<span class="pill" style="background:#ffcc80;color:#7f2704">NEU – UNGELESEN</span>'}</div><strong style="display:block;margin-top:5px">${escapeHtml(x.title)}</strong><div class="muted small">${escapeHtml(x.detail)}</div></div><button data-reminder-read="${escapeHtml(x.id)}" ${read?'disabled':''}>${read?'Gelesen':'Ansehen / gelesen'}</button></div></div>`}).join('');
+ document.querySelectorAll('[data-reminder-read]').forEach(btn=>btn.onclick=()=>{const id=btn.dataset.reminderRead;state.reminderRead[id]=true;save();renderReminders();updateReminderNav()});
+ updateReminderNav();
+}
 function makeDayRow(d){
  const s=iso(d),sh=shiftFor(s),ev=eventsOn(s),b=document.createElement('button');
  b.dataset.date=s;
  b.className='day-row'+(s===todayISO()?' today-row':'')+(s===selected?' active':'')+(rangeStart===s?' range-start':'')+(rangeEnd===s?' range-end':'')+(rangeStart&&rangeEnd&&s>rangeStart&&s<rangeEnd?' in-range':'');
- b.innerHTML=`<span class="weekday-date">${d.toLocaleDateString('de-DE',{weekday:'short',day:'2-digit'})}</span><span><strong class="shift ${sh.code}">${sh.name}</strong>${holidayNameOn(s)?`<span class="special-label holiday-label">${escapeHtml(holidayNameOn(s))}</span>`:''}${periodsOn(s).map(p=>`<span class="special-label ${categoryClass(p.type)}">${escapeHtml(p.type)}</span>`).join('')}<br><span class="day-info">${shiftHours[sh.code]||'—'}${ev.length?' · '+ev.length+' Termin(e)':''}</span></span><span class="day-info">›</span>`;
+ b.innerHTML=`<span class="weekday-date">${d.toLocaleDateString('de-DE',{weekday:'short',day:'2-digit'})}</span><span><strong class="shift ${sh.code}">${sh.name}</strong>${holidayNameOn(s)?`<span class="special-label holiday-label">${escapeHtml(holidayNameOn(s))}</span>`:''}${birthdaysOn(s).map(b=>`<span class="special-label birthday-label">🎂 GEBURTSTAG: ${escapeHtml(b.first+' '+b.last)}</span>`).join('')}${periodsOn(s).map(p=>`<span class="special-label ${categoryClass(p.type)}">${escapeHtml(p.type)}</span>`).join('')}<br><span class="day-info">${shiftHours[sh.code]||'—'}${ev.length?' · '+ev.length+' Termin(e)':''}</span></span><span class="day-info">›</span>`;
  let holdTimer=null,held=false;
  b.onpointerdown=()=>{held=false;holdTimer=setTimeout(()=>{held=true;dragSelecting=true;rangeStart=s;rangeEnd=s;selected=s;b.classList.add('active');$('periodStart').value=s;$('periodEnd').value=s;},2000)};
  b.onpointerleave=()=>clearTimeout(holdTimer);b.onpointercancel=()=>{clearTimeout(holdTimer);dragSelecting=false};
@@ -545,8 +655,10 @@ $('vacYear').onchange=()=>{$('vacResults').innerHTML='';$('vacAllocation').inner
 document.querySelectorAll('input[name="vacAreaFilter"]').forEach(el=>el.addEventListener('change',()=>{$('vacResults').innerHTML='';$('vacAllocation').innerHTML=''}));
 $('vacFind').onclick=()=>{try{vacationPlanner()}catch(error){console.error('Ferienplaner-Suche fehlgeschlagen:',error);$('vacResults').innerHTML='<p class="notice">Bei der Suche ist ein Fehler aufgetreten. Bitte prüfe Planungsjahr und Dauer und versuche es erneut.</p>';$('vacAllocation').innerHTML=''}};
 let bridgeYear=new Date().getFullYear();
-function tab(name){document.querySelectorAll('main section').forEach(s=>s.classList.toggle('hidden',s.id!==name));document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));if(name==='day')render();if(name==='year')renderYearOverview();if(name==='bridge')renderBridgePlanner();if(name==='vacation'){$('vacYear').value=String(Math.max(2026,new Date().getFullYear()));$('vacResults').innerHTML='';$('vacAllocation').innerHTML=''}}
+function scrollReminderAboveCalendar(){const reminder=$('reminderNav');if(!reminder)return;requestAnimationFrame(()=>{const top=reminder.getBoundingClientRect().top+window.scrollY-12;window.scrollTo({top:Math.max(0,top),behavior:'smooth'});});}
+function tab(name){document.querySelectorAll('main section').forEach(s=>s.classList.toggle('hidden',s.id!==name));document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));if(name==='day')render();if(name==='year')renderYearOverview();if(name==='bridge')renderBridgePlanner();if(name==='birthdays')renderBirthdays();if(name==='reminders')renderReminders();if(name==='vacation'){$('vacYear').value=String(Math.max(2026,new Date().getFullYear()));$('vacResults').innerHTML='';$('vacAllocation').innerHTML=''}if(name==='calendar')scrollReminderAboveCalendar()}
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>tab(b.dataset.tab));
+document.querySelector('[data-action=share]').onclick=()=>$('shareDialog').showModal();
 $('yearPrev').onclick=()=>{overviewYear--;renderYearOverview()};$('yearNext').onclick=()=>{overviewYear++;renderYearOverview()};
 $('bridgePrev').onclick=()=>{bridgeYear--;renderBridgePlanner()};$('bridgeNext').onclick=()=>{bridgeYear++;renderBridgePlanner()};
 $('todayBtn').onclick=()=>{selected=todayISO();month=new Date(parseDate(selected).getFullYear(),parseDate(selected).getMonth(),1);rangeStart=rangeEnd=null;tab('calendar');render();};
@@ -562,29 +674,91 @@ function openEvent(e){editingId=e?.id||null;$('eventDate').value=e?.date||select
 function editEvent(id){openEvent(state.events.find(e=>e.id===id))}
 $('cancelEvent').onclick=()=>$('eventDialog').close();
 $('saveEvent').onclick=()=>{let title=$('eventTitle').value.trim();if(!title){alert('Bitte einen Titel eingeben.');return}let e={id:editingId||String(Date.now()),date:$('eventDate').value,title,time:$('eventTime').value,note:$('eventNote').value,reminderOne:$('reminderOne').value,reminderOneTime:$('reminderOneTime').value,reminderTwo:$('reminderTwo').value,reminderTwoTime:$('reminderTwoTime').value,reminder:$('reminderOne').value!=='off'||$('reminderTwo').value!=='off'};if(editingId)state.events=state.events.map(x=>x.id===editingId?e:x);else state.events.push(e);state.events.sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));selected=e.date;save();$('eventDialog').close();render();if(!$('year').classList.contains('hidden'))renderYearOverview()};
+$('saveBirthday').onclick=()=>{const first=$('birthdayFirst').value.trim(),last=$('birthdayLast').value.trim(),day=Number($('birthdayDay').value),month=Number($('birthdayMonth').value);if(!first||!last){alert('Bitte Vorname und Nachname eingeben.');return}if(month===2&&day>29||[4,6,9,11].includes(month)&&day>30){alert('Dieses Datum gibt es nicht.');return}const item={id:editingBirthdayId||('birthday-'+Date.now()),first,last,day,month};if(editingBirthdayId)state.birthdays=state.birthdays.map(b=>b.id===editingBirthdayId?item:b);else state.birthdays.push(item);editingBirthdayId=null;$('birthdayFirst').value='';$('birthdayLast').value='';$('birthdayDay').value='1';$('birthdayMonth').value='1';$('saveBirthday').textContent='Geburtstag speichern';$('cancelBirthdayEdit').classList.add('hidden');save();renderBirthdays();render();alert('Geburtstag wurde gespeichert.')};
+$('cancelBirthdayEdit').onclick=()=>{editingBirthdayId=null;$('birthdayFirst').value='';$('birthdayLast').value='';$('saveBirthday').textContent='Geburtstag speichern';$('cancelBirthdayEdit').classList.add('hidden')};
 $('savePeriod').onclick=()=>{let a=$('periodStart').value,b=$('periodEnd').value,t=$('periodType').value;if(!a||!b){alert('Bitte Von- und Bis-Datum auswählen.');return}if(b<a){alert('Das Bis-Datum darf nicht vor dem Von-Datum liegen.');return}let overlap=state.periods.filter(p=>a<=p.end&&b>=p.start);if(overlap.length&&!confirm('Der Zeitraum überschneidet sich mit einem bestehenden Eintrag. Soll der neue Eintrag trotzdem gespeichert werden?'))return;state.periods.push({id:String(Date.now()),start:a,end:b,type:t});state.periods.sort((x,y)=>x.start.localeCompare(y.start));rangeStart=rangeEnd=null;save();render();if(!$('year').classList.contains('hidden'))renderYearOverview();alert('Zeitraum wurde gespeichert.')};
 $('cancelPeriod').onclick=()=>{rangeStart=rangeEnd=null;$('periodStart').value=selected;$('periodEnd').value='';render()};
 $('periodStart').onchange=e=>{rangeStart=e.target.value;rangeEnd=null;render()};$('periodEnd').onchange=e=>{rangeEnd=e.target.value;if(rangeStart&&rangeEnd&&rangeEnd<rangeStart){[rangeStart,rangeEnd]=[rangeEnd,rangeStart]}render()};
 $('savePin').onclick=()=>{let p=$('pinInput').value;if(p&& !/^\d{4}$/.test(p)){alert('Der PIN muss genau 4 Ziffern haben.');return}state.pin=p;save();alert(p?'PIN auf diesem Gerät aktiviert.':'PIN-Schutz ausgeschaltet.');};
-$('enableNotifications').onclick=async()=>{if(!('Notification'in window)){alert('Dieser Browser unterstützt keine Benachrichtigungen.');return}let p=await Notification.requestPermission();alert(p==='granted'?'Benachrichtigungen erlaubt.':'Benachrichtigungen nicht erlaubt.')};
+$('refreshReminders').onclick=()=>renderReminders();
+$('enableNotifications').onclick=async()=>{if(!('Notification'in window)){alert('Dieser Browser unterstützt keine Benachrichtigungen.');return}let p=await Notification.requestPermission();alert(p==='granted'?'Benachrichtigungen erlaubt. Geburtstage werden zusätzlich am Vortag und am Geburtstag um 08:00 Uhr gemeldet.':'Benachrichtigungen nicht erlaubt. Die Erinnerungsübersicht in der App bleibt verfügbar.');birthdayReminderCheck();renderReminders()};
 $('reminderToggle').onchange=e=>{state.reminders=e.target.checked;save()};
-function exportPayload(include){return {app:'Nordland-Schichtplan',version:2,exportedAt:new Date().toISOString(),anchors:state.anchors,activePlan,theme:state.theme,events:include?state.events:undefined,periods:include?state.periods:undefined,reminders:include?state.reminders:undefined}}
+function exportPayload(include){return {app:'Nordland-Schichtplan',version:2,exportedAt:new Date().toISOString(),anchors:state.anchors,activePlan,theme:state.theme,events:include?state.events:undefined,periods:include?state.periods:undefined,birthdays:include?state.birthdays:undefined,reminders:include?state.reminders:undefined}}
 function download(obj,name){let blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();URL.revokeObjectURL(url)}
 $('backupBtn').onclick=()=>tab('settings');
 $('exportAll').onclick=()=>download(exportPayload(true),'nordland-datensicherung.json');
 $('exportICS').onclick=()=>{const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Nordland//Schichtplan//DE','CALSCALE:GREGORIAN'];const esc=x=>String(x).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\n/g,'\\n');const dt=x=>x.replace(/-/g,'');for(const k of ['A','B','C','D']){const anchor=state.anchors[k];if(!anchor)continue;for(let i=0;i<365;i++){const d=plus(parseDate(anchor),i),date=iso(d),sh=shiftForForPlan(date,k);if(sh.code==='X')continue;const end=plus(d,1);lines.push('BEGIN:VEVENT','UID:'+k+'-'+date+'@nordland-schichtplan','DTSTAMP:'+new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,''),'DTSTART;VALUE=DATE:'+dt(date),'DTEND;VALUE=DATE:'+dt(iso(end)),'SUMMARY:'+esc('Plan '+k+' – '+sh.name),'DESCRIPTION:'+esc(sh.name+' '+(shiftHours[sh.code]||'')),'END:VEVENT')}}state.events.forEach(e=>{lines.push('BEGIN:VEVENT','UID:event-'+e.id+'@nordland-schichtplan','DTSTAMP:'+new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,''),'DTSTART;VALUE=DATE:'+dt(e.date),'DTEND;VALUE=DATE:'+dt(iso(plus(parseDate(e.date),1))),'SUMMARY:'+esc(e.title),'DESCRIPTION:'+esc(e.note||''),'END:VEVENT')});lines.push('END:VCALENDAR');const blob=new Blob([lines.join('\r\n')],{type:'text/calendar;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Nordland-Kalender.ics';a.click();URL.revokeObjectURL(url)};
 function shiftForForPlan(dateStr,plan){const old=activePlan;activePlan=plan;const result=shiftFor(dateStr);activePlan=old;return result;}
+// Übernahmelink: Die ausgewählten Daten liegen komprimiert im Link (ohne Server).
+function bytesToB64url(bytes){let bin='';for(let i=0;i<bytes.length;i++)bin+=String.fromCharCode(bytes[i]);return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+function b64urlToBytes(str){str=str.replace(/-/g,'+').replace(/_/g,'/');while(str.length%4)str+='=';const bin=atob(str);return Uint8Array.from(bin,c=>c.charCodeAt(0))}
+async function encodeShareLink(payload){const raw=new TextEncoder().encode(JSON.stringify(payload));let bytes=raw,tag='j';if('CompressionStream'in window){try{const stream=new Blob([raw]).stream().pipeThrough(new CompressionStream('gzip'));bytes=new Uint8Array(await new Response(stream).arrayBuffer());tag='g'}catch(e){}}const token=tag+bytesToB64url(bytes);return location.origin+location.pathname+'#nordland-share='+token}
+async function decodeShareLink(token){const tag=token[0],bytes=b64urlToBytes(token.slice(1));let raw=bytes;if(tag==='g'){if(!('DecompressionStream'in window))throw Error('Dieser Browser kann den Übernahmelink nicht öffnen. Bitte die Datendatei verwenden.');const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));raw=new Uint8Array(await new Response(stream).arrayBuffer())}const data=JSON.parse(new TextDecoder().decode(raw));if(data.app!=='Nordland-Schichtplan')throw Error('Der Link gehört nicht zur Nordland-App.');return data}
+function mergeSharedData(data){if(data.anchors&&typeof data.anchors==='object')state.anchors={...state.anchors,...data.anchors};
+ const periodKey=p=>[p.start||p.date||'',p.end||'',p.type||'',p.title||''].join('|').toLowerCase();
+ if(Array.isArray(data.periods)){const keys=new Set(state.periods.map(periodKey));data.periods.forEach(p=>{const k=periodKey(p);if(!keys.has(k)){state.periods.push(p);keys.add(k)}})}
+ const eventKey=e=>[e.date||'',e.title||'',e.time||'',e.note||''].join('|').toLowerCase();
+ if(Array.isArray(data.events)){const keys=new Set(state.events.map(eventKey));data.events.forEach(e=>{const k=eventKey(e);if(!keys.has(k)){state.events.push(e);keys.add(k)}})}
+ const birthdayKey=b=>[b.first||'',b.last||'',b.day||'',b.month||''].join('|').toLowerCase();
+ if(Array.isArray(data.birthdays)){const keys=new Set(state.birthdays.map(birthdayKey));data.birthdays.forEach(b=>{const k=birthdayKey(b);if(!keys.has(k)){state.birthdays.push(b);keys.add(k)}})}
+ save();render();if(!$('year').classList.contains('hidden'))renderYearOverview();
+}
+let pendingReceive=null;
+async function checkIncomingShare(){const prefix='#nordland-share=';if(!location.hash.startsWith(prefix))return;try{pendingReceive=await decodeShareLink(location.hash.slice(prefix.length));const names={shift:'Schichteinteilung',Urlaub:'Urlaubstage',AZK:'AZK',LZK:'LZK',Krank:'Kranktage',Termine:'Termine',birthdays:'Geburtstage','Opa-Tage':'Opa-Tage'};const list=(pendingReceive.sharedCategories||[]).map(x=>names[x]||x);$('receiveSummary').textContent='Geteilt wurden: '+(list.join(', ')||'Daten für deinen Schichtkalender')+'.';$('receiveDialog').showModal()}catch(err){alert('Der Übernahmelink konnte nicht gelesen werden: '+err.message)}}
+$('cancelReceive').onclick=()=>{$('receiveDialog').close();pendingReceive=null;history.replaceState(null,'',location.pathname+location.search)};
+$('confirmReceive').onclick=()=>{if(!pendingReceive)return;mergeSharedData(pendingReceive);pendingReceive=null;$('receiveDialog').close();history.replaceState(null,'',location.pathname+location.search);alert('Die ausgewählten Daten wurden in deinen Schichtkalender übernommen.')};
+
 $('importBtn').onclick=()=>$('importFile').click();
 $('importFile').onchange=async e=>{let f=e.target.files[0];if(!f)return;try{pendingImport=JSON.parse(await f.text());if(pendingImport.app!=='Nordland-Schichtplan')throw Error('Diese Datei gehört nicht zur Nordland-App.');$('importDialog').showModal()}catch(err){alert('Import nicht möglich: '+err.message)}e.target.value=''};
 $('cancelImport').onclick=()=>$('importDialog').close();
-$('confirmImport').onclick=()=>{if(!pendingImport)return;let mode=document.querySelector('input[name=importMode]:checked').value;if(pendingImport.anchors&&typeof pendingImport.anchors==='object')state.anchors={...state.anchors,...pendingImport.anchors};else if(pendingImport.anchor)state.anchors.A=pendingImport.anchor;if(Array.isArray(pendingImport.events)){if(mode==='replace')state.events=pendingImport.events;else{let ids=new Set(state.events.map(e=>e.id));state.events.push(...pendingImport.events.filter(e=>!ids.has(e.id)))}}if(Array.isArray(pendingImport.periods)){if(mode==='replace')state.periods=pendingImport.periods;else{let ids=new Set(state.periods.map(p=>p.id));state.periods.push(...pendingImport.periods.filter(p=>!ids.has(p.id)))}}if(typeof pendingImport.reminders==='boolean')state.reminders=pendingImport.reminders;save();pendingImport=null;$('importDialog').close();render();if(!$('year').classList.contains('hidden'))renderYearOverview();alert('Daten wurden importiert.')};
+$('confirmImport').onclick=()=>{if(!pendingImport)return;let mode=document.querySelector('input[name=importMode]:checked').value;if(pendingImport.anchors&&typeof pendingImport.anchors==='object')state.anchors={...state.anchors,...pendingImport.anchors};else if(pendingImport.anchor)state.anchors.A=pendingImport.anchor;if(Array.isArray(pendingImport.events)){if(mode==='replace')state.events=pendingImport.events;else{let ids=new Set(state.events.map(e=>e.id));state.events.push(...pendingImport.events.filter(e=>!ids.has(e.id)))}}if(Array.isArray(pendingImport.periods)){if(mode==='replace')state.periods=pendingImport.periods;else{let ids=new Set(state.periods.map(p=>p.id));state.periods.push(...pendingImport.periods.filter(p=>!ids.has(p.id)))}}if(Array.isArray(pendingImport.birthdays)){if(mode==='replace')state.birthdays=pendingImport.birthdays;else{let keys=new Set(state.birthdays.map(b=>(b.first+'|'+b.last+'|'+b.day+'|'+b.month).toLowerCase()));state.birthdays.push(...pendingImport.birthdays.filter(b=>!keys.has((b.first+'|'+b.last+'|'+b.day+'|'+b.month).toLowerCase())))}}if(typeof pendingImport.reminders==='boolean')state.reminders=pendingImport.reminders;save();pendingImport=null;$('importDialog').close();render();if(!$('year').classList.contains('hidden'))renderYearOverview();alert('Daten wurden importiert.')};
 $('shareBtn').onclick=()=>$('shareDialog').showModal();$('cancelShare').onclick=()=>$('shareDialog').close();
-$('doShare').onclick=async()=>{let include=document.querySelector('input[name=shareMode]:checked').value==='all';let payload=exportPayload(include);$('shareDialog').close();let file=new File([JSON.stringify(payload,null,2)],'nordland-schichtplan.json',{type:'application/json'});try{if(navigator.canShare?.({files:[file]})){await navigator.share({title:'Nordland-Schichtplan',text:include?'Schichtplan mit persönlichen Terminen':'Schichtplan ohne persönliche Termine',files:[file]})}else if(navigator.share){await navigator.share({title:'Nordland-Schichtplan',text:JSON.stringify(payload)})}else{download(payload,'nordland-schichtplan.json');alert('Datei erstellt. Du kannst sie jetzt z. B. über WhatsApp versenden.')}}catch(err){if(err.name!=='AbortError')alert('Teilen nicht möglich. Bitte Datendatei exportieren und manuell versenden.')}};
+$('shareSelectAll').onclick=()=>document.querySelectorAll('#shareChoices input[type=checkbox]').forEach(x=>x.checked=true);
+$('shareSelectNone').onclick=()=>document.querySelectorAll('#shareChoices input[type=checkbox]').forEach(x=>x.checked=false);
+function selectedSharePayload(){
+ const chosen=[...document.querySelectorAll('#shareChoices input[type=checkbox]:checked')].map(x=>x.dataset.share);
+ const payload={app:'Nordland-Schichtplan',version:2,exportedAt:new Date().toISOString(),sharedCategories:chosen};
+ if(chosen.includes('shift')){payload.anchors=state.anchors;payload.activePlan=activePlan;}
+ const periodTypes=chosen.filter(x=>['Urlaub','AZK','LZK','Krank','Opa-Tage','Termine'].includes(x));
+ if(periodTypes.length)payload.periods=state.periods.filter(p=>periodTypes.includes(p.type));
+ if(chosen.includes('Termine'))payload.events=state.events;
+ if(chosen.includes('birthdays'))payload.birthdays=state.birthdays;
+ return payload;
+}
+$('doShare').onclick=async()=>{
+ const chosen=[...document.querySelectorAll('#shareChoices input[type=checkbox]:checked')].map(x=>x.dataset.share);
+ if(!chosen.length){alert('Bitte mindestens eine Datenart auswählen.');return;}
+ const payload=selectedSharePayload();
+ const names={shift:'Schichteinteilung',Urlaub:'Urlaubstage',AZK:'AZK',LZK:'LZK',Krank:'Kranktage',Termine:'Termine',birthdays:'Geburtstage','Opa-Tage':'Opa-Tage'};
+ const summary=chosen.map(x=>names[x]).join(', ');
+ const file=new File([JSON.stringify(payload,null,2)],'Nordland-Daten-'+new Date().toISOString().slice(0,10)+'.json',{type:'application/json'});
+ $('doShare').disabled=true;
+ try{
+  const link=await encodeShareLink(payload);
+  const message='Nordland-Schichtplan – für dich freigegeben: '+summary+'.\n\nTippe auf diesen Link und bestätige einmal „Daten jetzt übernehmen“:\n'+link+'\n\nEs werden nur die oben genannten Daten ergänzt. Deine eigenen Einträge bleiben erhalten.';
+  $('shareDialog').close();
+  if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+   await navigator.share({title:'Nordland-Schichtplan – Datenauswahl',text:message,files:[file]});
+  }else{
+   download(payload,file.name);
+   const wa='https://wa.me/?text='+encodeURIComponent(message);
+   alert('Die Datendatei wurde gespeichert. WhatsApp öffnet sich mit dem fertigen Text und Übernahmelink. Hänge dort bitte zusätzlich die gespeicherte Datei an, falls du sie mitschicken möchtest.');
+   location.href=wa;
+  }
+ }catch(err){
+  if(err.name==='AbortError')return;
+  download(payload,file.name);
+  const fallback='Nordland-Schichtplan – für dich freigegeben: '+summary+'. Die Datendatei wurde gespeichert. Bitte als Dokument anhängen.';
+  location.href='https://wa.me/?text='+encodeURIComponent(fallback);
+  alert('Der direkte Dateiversand war nicht möglich. Die Datei wurde gespeichert; WhatsApp öffnet sich mit dem Beschreibungstext.');
+ }finally{$('doShare').disabled=false;}
+};
 function reminderCheck(){if(!state.reminders||!('Notification'in window)||Notification.permission!=='granted')return;let now=new Date();const offsets={ '1d':86400000,'2d':172800000,'3h':10800000,'2h':7200000,'1h':3600000,'30m':1800000,'ontime':0};state.events.forEach(e=>{if(!e.reminder)return;[['one',e.reminderOne,e.reminderOneTime],['two',e.reminderTwo,e.reminderTwoTime]].forEach(([slot,kind,clock])=>{if(!kind||kind==='off')return;let eventDate=parseDate(e.date);if(e.time){let [hh,mm]=e.time.split(':').map(Number);eventDate.setHours(hh,mm,0,0)}else eventDate.setHours(9,0,0,0);let target;if(kind==='ontime'){target=parseDate(e.date);let [hh,mm]=(clock||'07:00').split(':').map(Number);target.setHours(hh,mm,0,0)}else{target=new Date(eventDate.getTime()-offsets[kind]);let [hh,mm]=(clock||'09:00').split(':').map(Number);target.setHours(hh,mm,0,0)}let delta=now-target;if(delta>=0&&delta<60000){let key='notified_'+e.id+'_'+slot+'_'+e.date;if(!localStorage.getItem(key)){new Notification('Erinnerung: '+e.title,{body:'Termin '+fmt(parseDate(e.date))+(e.time?' um '+e.time+' Uhr':'')});localStorage.setItem(key,'1')}}})})}
-setInterval(reminderCheck,30000);
+setInterval(reminderCheck,30000);setInterval(birthdayReminderCheck,30000);
+setInterval(updateReminderNav,60000);
 if(state.pin&&!sessionStorage.getItem('nordlandUnlocked')){$('pinDialog').showModal()}
 $('unlockBtn').onclick=()=>{if($('unlockPin').value===state.pin){sessionStorage.setItem('nordlandUnlocked','1');$('pinDialog').close()}else alert('PIN ist nicht korrekt.')};
 if('serviceWorker'in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{});
-render();reminderCheck();
+render();reminderCheck();birthdayReminderCheck();updateReminderNav();scrollReminderAboveCalendar();checkIncomingShare();
 </script>
 </body></html>
