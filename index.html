@@ -711,16 +711,33 @@ $('leaveAdd').onclick=()=>{
 $('leaveApply').onclick=()=>{
  if(!leaveDrafts.length){alert('Bitte zuerst mindestens einen Zeitraum zur Liste hinzufügen.');return}
  const ordered=leaveDrafts.slice().sort((a,b)=>a.start.localeCompare(b.start));
+ // Urlaub wird ausschließlich auf geplante Arbeitstage gelegt. Freischichten bleiben frei.
+ // Zusammenhängende Arbeitstage werden wieder zu kompakten Zeitabschnitten gebündelt.
+ const expanded=[];
+ ordered.forEach(p=>{
+  if(p.type!=='Urlaub'){expanded.push({...p});return;}
+  const workDays=daysBetween(p.start,p.end).filter(date=>shiftFor(date).code!=='X');
+  let segment=null;
+  workDays.forEach(date=>{
+   if(!segment){segment={start:date,end:date,type:p.type};return;}
+   if(iso(plus(parseDate(segment.end),1))===date){segment.end=date;}
+   else{expanded.push(segment);segment={start:date,end:date,type:p.type};}
+  });
+  if(segment)expanded.push(segment);
+ });
+ const vacationWorkCount=ordered.filter(p=>p.type==='Urlaub').reduce((n,p)=>n+daysBetween(p.start,p.end).filter(date=>shiftFor(date).code!=='X').length,0);
+ const vacationFreeCount=ordered.filter(p=>p.type==='Urlaub').reduce((n,p)=>n+daysBetween(p.start,p.end).filter(date=>shiftFor(date).code==='X').length,0);
  const lines=ordered.map((p,i)=>`${i+1}. ${p.type}: ${fmt(parseDate(p.start))} bis ${fmt(parseDate(p.end))}`).join('\n');
- const existingOverlaps=ordered.some(d=>state.periods.some(p=>d.start<=p.end&&d.end>=p.start));
- const draftOverlaps=ordered.some((d,i)=>ordered.slice(i+1).some(n=>d.start<=n.end&&d.end>=n.start));
- let question='Bitte prüfe deine Zeiträume:\n\n'+lines+'\n\nSollen diese '+ordered.length+' Zeiträume jetzt in den Schichtkalender übernommen werden?';
+ const expandedLines=expanded.map((p,i)=>`${i+1}. ${p.type}: ${fmt(parseDate(p.start))} bis ${fmt(parseDate(p.end))}`).join('\n');
+ const existingOverlaps=expanded.some(d=>state.periods.some(p=>d.start<=p.end&&d.end>=p.start));
+ const draftOverlaps=expanded.some((d,i)=>expanded.slice(i+1).some(n=>d.start<=n.end&&d.end>=n.start));
+ let question='Bitte prüfe deine Zeiträume für Schichtplan '+activePlan+':\n\n'+lines+'\n\nTatsächlich eingetragen werden:\n'+(expandedLines||'Keine Arbeitstage – der gesamte Urlaubszeitraum liegt auf freien Tagen.')+'\n\nUrlaub wird nur für geplante Arbeitstage angerechnet: '+vacationWorkCount+' Urlaubstage.'+(vacationFreeCount?'\n'+vacationFreeCount+' reguläre freie Tage/Freischichten bleiben unverändert frei und werden nicht als Urlaub gezählt.':'')+'\n\nSollen diese Einträge jetzt in den Schichtkalender übernommen werden?';
  if(existingOverlaps)question+='\n\nAchtung: Mindestens ein Zeitraum überschneidet sich mit einem bereits gespeicherten Kalendereintrag.';
  if(draftOverlaps)question+='\nAchtung: Auch innerhalb deiner Vormerkliste gibt es überlappende Zeiträume.';
  question+='\n\nBereits vorhandene Einträge bleiben bestehen.';
  if(!confirm(question))return;
- const stamp=Date.now();ordered.forEach((p,i)=>state.periods.push({id:'leave-'+stamp+'-'+i+'-'+Math.random().toString(36).slice(2,7),...p}));
- const first=ordered[0].start;leaveDrafts=[];save();selected=first;month=new Date(parseDate(first).getFullYear(),parseDate(first).getMonth(),1);tab('calendar');render();if(!$('year').classList.contains('hidden'))renderYearOverview();alert('Alle vorgemerkten Zeiträume wurden in den Schichtkalender übernommen.');
+ const stamp=Date.now();expanded.forEach((p,i)=>state.periods.push({id:'leave-'+stamp+'-'+i+'-'+Math.random().toString(36).slice(2,7),...p}));
+ const first=ordered[0].start;leaveDrafts=[];save();selected=first;month=new Date(parseDate(first).getFullYear(),parseDate(first).getMonth(),1);tab('calendar');render();if(!$('year').classList.contains('hidden'))renderYearOverview();alert('Die vorgemerkten Zeiträume wurden übernommen. Urlaub wurde nur auf geplante Arbeitstage gebucht; freie Schichttage bleiben frei.');
 };
 $('leaveClear').onclick=()=>{if(!leaveDrafts.length)return;if(confirm('Alle nur vorgemerkten Zeiträume aus der Liste entfernen?')){leaveDrafts=[];renderLeaveDrafts()}};
 $('savePeriod').onclick=()=>{let a=$('periodStart').value,b=$('periodEnd').value,t=$('periodType').value;if(!a||!b){alert('Bitte Von- und Bis-Datum auswählen.');return}if(b<a){alert('Das Bis-Datum darf nicht vor dem Von-Datum liegen.');return}let overlap=state.periods.filter(p=>a<=p.end&&b>=p.start);if(overlap.length&&!confirm('Der Zeitraum überschneidet sich mit einem bestehenden Eintrag. Soll der neue Eintrag trotzdem gespeichert werden?'))return;state.periods.push({id:String(Date.now()),start:a,end:b,type:t});state.periods.sort((x,y)=>x.start.localeCompare(y.start));rangeStart=rangeEnd=null;save();render();if(!$('year').classList.contains('hidden'))renderYearOverview();alert('Zeitraum wurde gespeichert.')};
