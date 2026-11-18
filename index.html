@@ -68,6 +68,7 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
  </div>
  <nav class="tabs" aria-label="Hauptbereiche">
   <button class="active" data-tab="calendar"><span style="display:block;font-size:25px;margin-bottom:5px">▦</span>Schichtkalender</button>
+  <button data-tab="leave"><span style="display:block;font-size:25px;margin-bottom:5px">🏖️</span>Urlaubsplaner</button>
   <button data-tab="day"><span style="display:block;font-size:25px;margin-bottom:5px">☷</span>Terminübersicht</button>
   <button data-tab="year"><span style="display:block;font-size:25px;margin-bottom:5px">▤</span>Jahresübersicht</button>
   <button data-tab="vacation"><span style="display:block;font-size:25px;margin-bottom:5px">☀</span>Ferienplaner</button>
@@ -82,6 +83,22 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
    <div class="calendar-layout"><div class="month-side"><h3 class="title" style="font-size:16px">Monat auswählen</h3><div class="month-picker" id="monthPicker"></div></div><div class="days-side"><h3 class="title" style="font-size:16px;margin:0 0 4px">Tagesübersicht</h3><p class="hint">Lange drücken (2 Sekunden) und über die Tage ziehen, um einen Zeitraum zu markieren.</p><div id="monthDayList" class="day-list"></div></div></div>
   </div>
   <div class="card"><div class="row"><div><div class="title" id="selectedTitle">Ausgewählter Tag</div><div class="sub shift-summary" id="selectedShift"></div></div><button id="openDay">Details</button></div><div id="selectedEvents" class="muted small"></div></div>
+ </section>
+ <section id="leave" class="hidden">
+  <div class="card">
+   <h2 class="title">Urlaubsplaner – Zeiträume direkt eintragen</h2>
+   <p class="hint">Trage hier unabhängig vom Schichtkalender einen oder mehrere Zeiträume ein. Du kannst zum Beispiel zuerst Urlaub, danach AZK und anschließend LZK hinzufügen. Erst mit „Alle Zeiträume in den Schichtkalender übernehmen“ werden die Einträge gespeichert.</p>
+   <div class="range-tools">
+    <div class="field"><label for="leaveStart">Von</label><input id="leaveStart" type="date"></div>
+    <div class="field"><label for="leaveEnd">Bis einschließlich</label><input id="leaveEnd" type="date"></div>
+   </div>
+   <div class="field"><label for="leaveType">Art des Zeitraums</label><select id="leaveType"><option value="Urlaub">Urlaub</option><option value="AZK">AZK</option><option value="LZK">LZK</option><option value="Krank">Krank</option><option value="Opa-Tage">Opa-Tage</option></select></div>
+   <div class="actions"><button class="primary" id="leaveAdd">+ Zeitraum zur Liste hinzufügen</button></div>
+   <h3 class="title" style="font-size:16px;margin-top:22px">Deine vorgemerkten Zeiträume</h3>
+   <div id="leaveDraftList"><p class="hint">Noch keine Zeiträume vorgemerkt.</p></div>
+   <div class="actions" style="margin-top:18px"><button class="primary" id="leaveApply">Alle Zeiträume in den Schichtkalender übernehmen</button><button id="leaveClear">Liste leeren</button></div>
+   <p class="hint">Die übernommenen Zeiträume erscheinen anschließend direkt im Schichtkalender. Bereits vorhandene Einträge bleiben erhalten.</p>
+  </div>
  </section>
  <section id="day" class="hidden">
   <div class="card">
@@ -258,6 +275,7 @@ state.birthdays=Array.isArray(state.birthdays)?state.birthdays:[];
 state.reminderRead=(state.reminderRead&&typeof state.reminderRead==='object')?state.reminderRead:{};
 state.anchors={...defaultState.anchors,...(state.anchors||{}),...(state.anchor?{A:state.anchor}:{})};
 let activePlan=state.activePlan||'A';
+let leaveDrafts=[];
 let selected=todayISO(), month=new Date(new Date().getFullYear(),new Date().getMonth(),1), overviewYear=new Date().getFullYear(); let pendingImport=null, editingId=null, rangeStart=null, rangeEnd=null, dragSelecting=false, suppressDayClick=false;
 function save(){localStorage.setItem('nordlandState',JSON.stringify(state));if(typeof updateReminderNav==='function')updateReminderNav()}
 const shiftHours={F:'05:30–13:30',S:'13:30–21:30',N:'21:30–05:30'};
@@ -676,6 +694,35 @@ $('cancelEvent').onclick=()=>$('eventDialog').close();
 $('saveEvent').onclick=()=>{let title=$('eventTitle').value.trim();if(!title){alert('Bitte einen Titel eingeben.');return}let e={id:editingId||String(Date.now()),date:$('eventDate').value,title,time:$('eventTime').value,note:$('eventNote').value,reminderOne:$('reminderOne').value,reminderOneTime:$('reminderOneTime').value,reminderTwo:$('reminderTwo').value,reminderTwoTime:$('reminderTwoTime').value,reminder:$('reminderOne').value!=='off'||$('reminderTwo').value!=='off'};if(editingId)state.events=state.events.map(x=>x.id===editingId?e:x);else state.events.push(e);state.events.sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));selected=e.date;save();$('eventDialog').close();render();if(!$('year').classList.contains('hidden'))renderYearOverview()};
 $('saveBirthday').onclick=()=>{const first=$('birthdayFirst').value.trim(),last=$('birthdayLast').value.trim(),day=Number($('birthdayDay').value),month=Number($('birthdayMonth').value);if(!first||!last){alert('Bitte Vorname und Nachname eingeben.');return}if(month===2&&day>29||[4,6,9,11].includes(month)&&day>30){alert('Dieses Datum gibt es nicht.');return}const item={id:editingBirthdayId||('birthday-'+Date.now()),first,last,day,month};if(editingBirthdayId)state.birthdays=state.birthdays.map(b=>b.id===editingBirthdayId?item:b);else state.birthdays.push(item);editingBirthdayId=null;$('birthdayFirst').value='';$('birthdayLast').value='';$('birthdayDay').value='1';$('birthdayMonth').value='1';$('saveBirthday').textContent='Geburtstag speichern';$('cancelBirthdayEdit').classList.add('hidden');save();renderBirthdays();render();alert('Geburtstag wurde gespeichert.')};
 $('cancelBirthdayEdit').onclick=()=>{editingBirthdayId=null;$('birthdayFirst').value='';$('birthdayLast').value='';$('saveBirthday').textContent='Geburtstag speichern';$('cancelBirthdayEdit').classList.add('hidden')};
+function renderLeaveDrafts(){
+ const root=$('leaveDraftList');
+ if(!leaveDrafts.length){root.innerHTML='<p class="hint">Noch keine Zeiträume vorgemerkt.</p>';return}
+ root.innerHTML=leaveDrafts.map((p,i)=>`<div class="item"><div class="row"><span><strong>${fmt(parseDate(p.start))}</strong> bis <strong>${fmt(parseDate(p.end))}</strong><br><span class="pill">${escapeHtml(p.type)}</span></span><span class="actions" style="margin:0"><button type="button" data-leave-edit="${i}">Ändern</button><button type="button" data-leave-remove="${i}">Entfernen</button></span></div></div>`).join('');
+ root.querySelectorAll('[data-leave-remove]').forEach(b=>b.onclick=()=>{leaveDrafts.splice(Number(b.dataset.leaveRemove),1);renderLeaveDrafts()});
+ root.querySelectorAll('[data-leave-edit]').forEach(b=>b.onclick=()=>{const i=Number(b.dataset.leaveEdit),p=leaveDrafts[i];$('leaveStart').value=p.start;$('leaveEnd').value=p.end;$('leaveType').value=p.type;leaveDrafts.splice(i,1);renderLeaveDrafts();$('leaveStart').scrollIntoView({behavior:'smooth',block:'center'});});
+}
+$('leaveAdd').onclick=()=>{
+ const a=$('leaveStart').value,b=$('leaveEnd').value,t=$('leaveType').value;
+ if(!a||!b){alert('Bitte Von- und Bis-Datum auswählen.');return}
+ if(b<a){alert('Das Bis-Datum darf nicht vor dem Von-Datum liegen.');return}
+ leaveDrafts.push({start:a,end:b,type:t});leaveDrafts.sort((x,y)=>x.start.localeCompare(y.start));renderLeaveDrafts();
+ $('leaveStart').value='';$('leaveEnd').value='';
+};
+$('leaveApply').onclick=()=>{
+ if(!leaveDrafts.length){alert('Bitte zuerst mindestens einen Zeitraum zur Liste hinzufügen.');return}
+ const ordered=leaveDrafts.slice().sort((a,b)=>a.start.localeCompare(b.start));
+ const lines=ordered.map((p,i)=>`${i+1}. ${p.type}: ${fmt(parseDate(p.start))} bis ${fmt(parseDate(p.end))}`).join('\n');
+ const existingOverlaps=ordered.some(d=>state.periods.some(p=>d.start<=p.end&&d.end>=p.start));
+ const draftOverlaps=ordered.some((d,i)=>ordered.slice(i+1).some(n=>d.start<=n.end&&d.end>=n.start));
+ let question='Bitte prüfe deine Zeiträume:\n\n'+lines+'\n\nSollen diese '+ordered.length+' Zeiträume jetzt in den Schichtkalender übernommen werden?';
+ if(existingOverlaps)question+='\n\nAchtung: Mindestens ein Zeitraum überschneidet sich mit einem bereits gespeicherten Kalendereintrag.';
+ if(draftOverlaps)question+='\nAchtung: Auch innerhalb deiner Vormerkliste gibt es überlappende Zeiträume.';
+ question+='\n\nBereits vorhandene Einträge bleiben bestehen.';
+ if(!confirm(question))return;
+ const stamp=Date.now();ordered.forEach((p,i)=>state.periods.push({id:'leave-'+stamp+'-'+i+'-'+Math.random().toString(36).slice(2,7),...p}));
+ const first=ordered[0].start;leaveDrafts=[];save();selected=first;month=new Date(parseDate(first).getFullYear(),parseDate(first).getMonth(),1);tab('calendar');render();if(!$('year').classList.contains('hidden'))renderYearOverview();alert('Alle vorgemerkten Zeiträume wurden in den Schichtkalender übernommen.');
+};
+$('leaveClear').onclick=()=>{if(!leaveDrafts.length)return;if(confirm('Alle nur vorgemerkten Zeiträume aus der Liste entfernen?')){leaveDrafts=[];renderLeaveDrafts()}};
 $('savePeriod').onclick=()=>{let a=$('periodStart').value,b=$('periodEnd').value,t=$('periodType').value;if(!a||!b){alert('Bitte Von- und Bis-Datum auswählen.');return}if(b<a){alert('Das Bis-Datum darf nicht vor dem Von-Datum liegen.');return}let overlap=state.periods.filter(p=>a<=p.end&&b>=p.start);if(overlap.length&&!confirm('Der Zeitraum überschneidet sich mit einem bestehenden Eintrag. Soll der neue Eintrag trotzdem gespeichert werden?'))return;state.periods.push({id:String(Date.now()),start:a,end:b,type:t});state.periods.sort((x,y)=>x.start.localeCompare(y.start));rangeStart=rangeEnd=null;save();render();if(!$('year').classList.contains('hidden'))renderYearOverview();alert('Zeitraum wurde gespeichert.')};
 $('cancelPeriod').onclick=()=>{rangeStart=rangeEnd=null;$('periodStart').value=selected;$('periodEnd').value='';render()};
 $('periodStart').onchange=e=>{rangeStart=e.target.value;rangeEnd=null;render()};$('periodEnd').onchange=e=>{rangeEnd=e.target.value;if(rangeStart&&rangeEnd&&rangeEnd<rangeStart){[rangeStart,rangeEnd]=[rangeEnd,rangeStart]}render()};
