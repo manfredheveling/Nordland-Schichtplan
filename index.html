@@ -16,7 +16,7 @@ header{background:#173b63;color:white;padding:18px max(18px,calc((100vw - 980px)
 main{max-width:980px;margin:0 auto;padding:18px 14px 90px}.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
 button,.btn{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:11px;padding:10px 13px;font:inherit;font-weight:650;cursor:pointer}
 button.primary{background:var(--accent);border-color:var(--accent);color:white}button:disabled{opacity:.45;cursor:not-allowed}
-.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin:8px 0 20px;padding:0}.tabs button{min-height:86px;padding:13px 9px;border:2px solid var(--accent);border-radius:15px;background:var(--soft);color:var(--text);font-size:15px;font-weight:900;line-height:1.25;white-space:normal;box-shadow:0 4px 12px #173b6320}.tabs button.active{background:var(--blue);color:white;border-color:var(--blue);box-shadow:0 5px 15px #173b6330}.tabs button[data-action=share]{background:#173b63;border-color:#173b63;color:#fff}.tabs button:active{transform:scale(.98)}.tabs button.birthday-nav{justify-self:stretch;width:100%}.tabs button.share-nav{grid-column:1/-1;justify-self:stretch;width:100%}.task-done{opacity:.62}.task-done .task-title{text-decoration:line-through}.task-meta{font-size:12px;color:var(--muted);margin-top:5px}.task-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.task-actions button{padding:6px 10px;font-size:12px}.bottom-settings{display:flex;justify-content:flex-end;margin:22px 2px 4px;padding-top:10px;border-top:1px solid var(--line)}.bottom-settings button{min-height:30px;padding:5px 11px;font-size:11px;font-weight:600;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--muted);box-shadow:none}
+.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin:8px 0 20px;padding:0}.tabs button{min-height:86px;padding:13px 9px;border:2px solid var(--accent);border-radius:15px;background:var(--soft);color:var(--text);font-size:15px;font-weight:900;line-height:1.25;white-space:normal;box-shadow:0 4px 12px #173b6320}.tabs button.active{background:var(--blue);color:white;border-color:var(--blue);box-shadow:0 5px 15px #173b6330}.tabs button[data-action=share]{background:#173b63;border-color:#173b63;color:#fff}.tabs button:active{transform:scale(.98)}.tabs button.birthday-nav{justify-self:stretch;width:100%}.tabs button.feedback-nav{grid-column:1/-1;justify-self:center;width:min(100%,360px);min-height:76px;text-align:center;white-space:normal;overflow-wrap:anywhere}.tabs button.share-nav{grid-column:1/-1;justify-self:stretch;width:100%}.task-done{opacity:.62}.task-done .task-title{text-decoration:line-through}.task-meta{font-size:12px;color:var(--muted);margin-top:5px}.task-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.task-actions button{padding:6px 10px;font-size:12px}.bottom-settings{display:flex;justify-content:flex-end;margin:22px 2px 4px;padding-top:10px;border-top:1px solid var(--line)}.bottom-settings button{min-height:30px;padding:5px 11px;font-size:11px;font-weight:600;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--muted);box-shadow:none}
 .tabs button.reminder-nav{grid-column:1/-1;justify-self:stretch;width:100%;min-height:76px;background:#e65100;border:3px solid #ff9800;color:#fff;font-size:18px;letter-spacing:.4px;box-shadow:0 5px 18px #e6510050}
 .tabs button.reminder-nav.has-unread{animation:reminderPulse 1.25s ease-in-out infinite}
 .tabs button.reminder-nav .reminder-count{display:inline-flex;align-items:center;justify-content:center;min-width:25px;height:25px;padding:0 7px;margin-left:8px;border-radius:99px;background:#fff;color:#c62828;font-size:14px;font-weight:950}
@@ -57,7 +57,7 @@ textarea{min-height:85px;resize:vertical}.actions{display:flex;flex-wrap:wrap;ga
 .vacation-result{border:1px solid var(--line);border-radius:12px;padding:13px;margin:10px 0;background:var(--panel)}.vacation-result h3{margin:0 0 5px;font-size:15px}.vacation-result .actions{margin-top:9px}.mode-active{outline:2px solid var(--accent);font-weight:900}.hidden{display:none!important}
 dialog{border:1px solid var(--line);border-radius:18px;background:var(--panel);color:var(--text);width:min(92vw,480px);padding:20px;box-shadow:0 20px 80px #0005}
 dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
-@media(max-width:560px){main{padding:12px 10px 28px}.tabs{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:7px 0 16px}.tabs button.birthday-nav{grid-column:auto;width:100%;justify-self:stretch}.tabs button.share-nav{grid-column:1/-1;width:100%}.tabs button{min-height:88px;font-size:14px;padding:11px 7px}.card{padding:13px}.day{min-height:76px;padding:4px}.day.selected{padding:3px}.shift{font-size:12px;padding:5px 3px}.grid2{grid-template-columns:1fr}.brand{font-size:18px}}
+@media(max-width:560px){main{padding:12px 10px 28px}.tabs{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:7px 0 16px}.tabs button.birthday-nav{grid-column:auto;width:100%;justify-self:stretch}.tabs button.feedback-nav{grid-column:1/-1;width:min(100%,360px);justify-self:center}.tabs button.share-nav{grid-column:1/-1;width:100%}.tabs button{min-height:88px;font-size:14px;padding:11px 7px}.card{padding:13px}.day{min-height:76px;padding:4px}.day.selected{padding:3px}.shift{font-size:12px;padding:5px 3px}.grid2{grid-template-columns:1fr}.brand{font-size:18px}}
 </style>
 </head>
 <body>
@@ -75,6 +75,7 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
   <button data-tab="bridge"><span style="display:block;font-size:25px;margin-bottom:5px">↔</span>Brückentagsplaner</button>
   <button data-tab="tasks"><span style="display:block;font-size:25px;margin-bottom:5px">☑</span>Aufgaben &amp; Notizen</button>
   <button class="birthday-nav" data-tab="birthdays"><span style="display:block;font-size:25px;margin-bottom:5px">🎂</span>Geburtstagskalender</button>
+  <button class="feedback-nav" data-tab="feedback"><span style="display:block;font-size:25px;margin-bottom:5px">✉</span>Verbesserungsvorschläge</button>
   <button class="reminder-nav" data-tab="reminders" id="reminderNav"><span style="display:block;font-size:27px;margin-bottom:4px">🔔</span>WICHTIGE ERINNERUNGEN <span id="reminderNavCount" class="reminder-count">0</span><small style="display:block;font-size:11px;font-weight:700;margin-top:3px">Neue Meldungen ansehen</small></button>
   <button class="share-nav" type="button" data-action="share"><span style="display:block;font-size:25px;margin-bottom:5px">↗</span>Daten teilen</button>
  </nav>
@@ -128,6 +129,23 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
    <div class="row"><h3 class="title" style="font-size:17px">Meine Aufgaben</h3><span class="pill" id="taskCount">0 offen</span></div>
    <div class="field"><label for="taskFilter">Anzeige</label><select id="taskFilter"><option value="open">Offene Aufgaben</option><option value="all">Alle Aufgaben</option><option value="done">Erledigte Aufgaben</option></select></div>
    <div id="taskList"><p class="hint">Noch keine Aufgaben eingetragen.</p></div>
+  </div>
+ </section>
+ <section id="feedback" class="hidden">
+  <div class="card">
+   <h2 class="title">Kontakt &amp; Verbesserungsvorschläge</h2>
+   <p>Hast du eine Idee, einen Fehler entdeckt oder einen Wunsch für den Nordland-Schichtplan? Dann kannst du hier einen Verbesserungsvorschlag einreichen.</p>
+   <div class="notice"><strong>Anonymes Feedback:</strong> Es sollen keine Namen, E-Mail-Adressen oder Telefonnummern abgefragt werden. Eine Anmeldung soll nicht erforderlich sein.</div>
+   <div class="field">
+    <label for="feedbackTopic">Worum geht es? (optional)</label>
+    <select id="feedbackTopic"><option>Verbesserungsvorschlag</option><option>Fehler melden</option><option>Neue Funktion wünschen</option><option>Sonstige Rückmeldung</option></select>
+   </div>
+   <div class="field">
+    <label for="feedbackMessage">Dein Vorschlag</label>
+    <textarea id="feedbackMessage" rows="5" maxlength="3000" placeholder="Schreibe hier deine Idee oder Fehlermeldung …"></textarea>
+   </div>
+   <button class="primary" id="sendFeedback" type="button" disabled>Vorschlag absenden</button>
+   <p class="hint" id="feedbackStatus">Das anonyme Google-Formular ist noch nicht verbunden. Sobald der Formular-Link vorliegt, wird dieser Bereich damit verknüpft.</p>
   </div>
  </section>
  <section id="year" class="hidden">
@@ -709,6 +727,20 @@ document.querySelectorAll('input[name="vacAreaFilter"]').forEach(el=>el.addEvent
 $('vacFind').onclick=()=>{try{vacationPlanner()}catch(error){console.error('Ferienplaner-Suche fehlgeschlagen:',error);$('vacResults').innerHTML='<p class="notice">Bei der Suche ist ein Fehler aufgetreten. Bitte prüfe Planungsjahr und Dauer und versuche es erneut.</p>';$('vacAllocation').innerHTML=''}};
 let bridgeYear=new Date().getFullYear();
 function scrollReminderAboveCalendar(){const reminder=$('reminderNav');if(!reminder)return;requestAnimationFrame(()=>{const top=reminder.getBoundingClientRect().top+window.scrollY-12;window.scrollTo({top:Math.max(0,top),behavior:'smooth'});});}
+// Anonyme Vorschlagsbox: Google-Formular-Link wird nach Einrichtung hier eingetragen.
+const FEEDBACK_FORM_URL = '';
+const sendFeedbackButton = $('sendFeedback');
+if (sendFeedbackButton) {
+ sendFeedbackButton.disabled = !FEEDBACK_FORM_URL;
+ sendFeedbackButton.onclick = () => {
+  const message = $('feedbackMessage').value.trim();
+  if (!message) { alert('Bitte schreibe zuerst deinen Verbesserungsvorschlag.'); return; }
+  const topic = $('feedbackTopic').value;
+  const target = new URL(FEEDBACK_FORM_URL);
+  target.searchParams.set('usp', 'pp_url');
+  window.open(target.href, '_blank', 'noopener');
+ };
+}
 function tab(name){document.querySelectorAll('main section').forEach(s=>s.classList.toggle('hidden',s.id!==name));document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));if(name==='day')render();if(name==='tasks')renderTasks();if(name==='year')renderYearOverview();if(name==='bridge')renderBridgePlanner();if(name==='birthdays')renderBirthdays();if(name==='reminders')renderReminders();if(name==='vacation'){$('vacYear').value=String(Math.max(2026,new Date().getFullYear()));$('vacResults').innerHTML='';$('vacAllocation').innerHTML=''}if(name==='calendar')scrollReminderAboveCalendar()}
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>tab(b.dataset.tab));
 document.querySelector('[data-action=share]').onclick=()=>$('shareDialog').showModal();
