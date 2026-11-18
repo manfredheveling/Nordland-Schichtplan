@@ -16,7 +16,7 @@ header{background:#173b63;color:white;padding:18px max(18px,calc((100vw - 980px)
 main{max-width:980px;margin:0 auto;padding:18px 14px 90px}.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
 button,.btn{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:11px;padding:10px 13px;font:inherit;font-weight:650;cursor:pointer}
 button.primary{background:var(--accent);border-color:var(--accent);color:white}button:disabled{opacity:.45;cursor:not-allowed}
-.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin:8px 0 20px;padding:0}.tabs button{min-height:86px;padding:13px 9px;border:2px solid var(--accent);border-radius:15px;background:var(--soft);color:var(--text);font-size:15px;font-weight:900;line-height:1.25;white-space:normal;box-shadow:0 4px 12px #173b6320}.tabs button.active{background:var(--blue);color:white;border-color:var(--blue);box-shadow:0 5px 15px #173b6330}.tabs button[data-action=share]{background:#173b63;border-color:#173b63;color:#fff}.tabs button:active{transform:scale(.98)}.tabs button.birthday-nav{justify-self:stretch;width:100%}.tabs button.share-nav{grid-column:1/-1;justify-self:stretch;width:100%}.bottom-settings{display:flex;justify-content:flex-end;margin:22px 2px 4px;padding-top:10px;border-top:1px solid var(--line)}.bottom-settings button{min-height:30px;padding:5px 11px;font-size:11px;font-weight:600;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--muted);box-shadow:none}
+.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin:8px 0 20px;padding:0}.tabs button{min-height:86px;padding:13px 9px;border:2px solid var(--accent);border-radius:15px;background:var(--soft);color:var(--text);font-size:15px;font-weight:900;line-height:1.25;white-space:normal;box-shadow:0 4px 12px #173b6320}.tabs button.active{background:var(--blue);color:white;border-color:var(--blue);box-shadow:0 5px 15px #173b6330}.tabs button[data-action=share]{background:#173b63;border-color:#173b63;color:#fff}.tabs button:active{transform:scale(.98)}.tabs button.birthday-nav{justify-self:stretch;width:100%}.tabs button.share-nav{grid-column:1/-1;justify-self:stretch;width:100%}.task-done{opacity:.62}.task-done .task-title{text-decoration:line-through}.task-meta{font-size:12px;color:var(--muted);margin-top:5px}.task-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.task-actions button{padding:6px 10px;font-size:12px}.bottom-settings{display:flex;justify-content:flex-end;margin:22px 2px 4px;padding-top:10px;border-top:1px solid var(--line)}.bottom-settings button{min-height:30px;padding:5px 11px;font-size:11px;font-weight:600;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--muted);box-shadow:none}
 .tabs button.reminder-nav{grid-column:1/-1;justify-self:stretch;width:100%;min-height:76px;background:#e65100;border:3px solid #ff9800;color:#fff;font-size:18px;letter-spacing:.4px;box-shadow:0 5px 18px #e6510050}
 .tabs button.reminder-nav.has-unread{animation:reminderPulse 1.25s ease-in-out infinite}
 .tabs button.reminder-nav .reminder-count{display:inline-flex;align-items:center;justify-content:center;min-width:25px;height:25px;padding:0 7px;margin-left:8px;border-radius:99px;background:#fff;color:#c62828;font-size:14px;font-weight:950}
@@ -73,6 +73,7 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
   <button data-tab="year"><span style="display:block;font-size:25px;margin-bottom:5px">▤</span>Jahresübersicht</button>
   <button data-tab="vacation"><span style="display:block;font-size:25px;margin-bottom:5px">☀</span>Ferienplaner</button>
   <button data-tab="bridge"><span style="display:block;font-size:25px;margin-bottom:5px">↔</span>Brückentagsplaner</button>
+  <button data-tab="tasks"><span style="display:block;font-size:25px;margin-bottom:5px">☑</span>Aufgaben &amp; Notizen</button>
   <button class="birthday-nav" data-tab="birthdays"><span style="display:block;font-size:25px;margin-bottom:5px">🎂</span>Geburtstagskalender</button>
   <button class="reminder-nav" data-tab="reminders" id="reminderNav"><span style="display:block;font-size:27px;margin-bottom:4px">🔔</span>WICHTIGE ERINNERUNGEN <span id="reminderNavCount" class="reminder-count">0</span><small style="display:block;font-size:11px;font-weight:700;margin-top:3px">Neue Meldungen ansehen</small></button>
   <button class="share-nav" type="button" data-action="share"><span style="display:block;font-size:25px;margin-bottom:5px">↗</span>Daten teilen</button>
@@ -112,6 +113,21 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
    <div class="title" style="font-size:16px;margin-top:22px">Persönliche Termine und Notizen</div>
    <div id="eventList"></div>
    <div class="actions"><button class="primary" id="addEvent">+ Termin / Notiz</button></div>
+  </div>
+ </section>
+ <section id="tasks" class="hidden">
+  <div class="card">
+   <h2 class="title">Aufgaben- und Notizplaner</h2>
+   <p class="hint">Halte Aufgaben, Erledigungen und persönliche Notizen fest. Ein Datum ist freiwillig. Deine Einträge werden auf diesem Gerät gespeichert.</p>
+   <div class="field"><label for="taskTitle">Aufgabe / Überschrift</label><input id="taskTitle" maxlength="120" placeholder="z. B. Auto zum TÜV bringen"></div>
+   <div class="range-tools"><div class="field"><label for="taskDate">Fällig am (optional)</label><input id="taskDate" type="date"></div><div class="field"><label for="taskPriority">Wichtigkeit</label><select id="taskPriority"><option value="Normal">Normal</option><option value="Wichtig">Wichtig</option><option value="Dringend">Dringend</option></select></div></div>
+   <div class="field"><label for="taskNote">Notiz / Einzelheiten (optional)</label><textarea id="taskNote" maxlength="1500" rows="3" placeholder="Weitere Informationen …"></textarea></div>
+   <div class="actions"><button class="primary" id="taskSave">Aufgabe speichern</button><button id="taskCancel" class="hidden" type="button">Bearbeiten abbrechen</button></div>
+  </div>
+  <div class="card">
+   <div class="row"><h3 class="title" style="font-size:17px">Meine Aufgaben</h3><span class="pill" id="taskCount">0 offen</span></div>
+   <div class="field"><label for="taskFilter">Anzeige</label><select id="taskFilter"><option value="open">Offene Aufgaben</option><option value="all">Alle Aufgaben</option><option value="done">Erledigte Aufgaben</option></select></div>
+   <div id="taskList"><p class="hint">Noch keine Aufgaben eingetragen.</p></div>
   </div>
  </section>
  <section id="year" class="hidden">
@@ -243,6 +259,7 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
   <label class="item"><input type="checkbox" data-share="Termine" style="width:auto"> Termine und Notizen</label>
   <label class="item"><input type="checkbox" data-share="birthdays" style="width:auto"> Geburtstage</label>
   <label class="item"><input type="checkbox" data-share="Opa-Tage" style="width:auto"> Opa-Tage</label>
+  <label class="item"><input type="checkbox" data-share="tasks" style="width:auto"> Aufgaben und Notizen</label>
  </div>
  <div class="notice" style="margin-top:12px">Es werden nur die angekreuzten Daten geteilt. WhatsApp erhält automatisch einen Nachrichtentext mit den ausgewählten Daten und einen Übernahmelink. Der Empfänger muss in seiner Nordland-App nur noch einmal bestätigen.</div>
  <div class="dialog-actions"><button id="cancelShare">Abbrechen</button><button class="primary" id="doShare">Mit WhatsApp teilen</button></div>
@@ -267,11 +284,12 @@ const parseDate=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1
 const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const plus=(d,n)=>{let x=new Date(d);x.setDate(x.getDate()+n);return x};
 const fmt=d=>d.toLocaleDateString('de-DE',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
-const defaultState={anchors:{A:'2026-10-26',B:'2026-11-16',C:'2026-11-09',D:'2026-11-02'},activePlan:'A',events:[],periods:[],birthdays:[],theme:'dark',reminders:false,pin:''};
+const defaultState={tasks:[],anchors:{A:'2026-10-26',B:'2026-11-16',C:'2026-11-09',D:'2026-11-02'},activePlan:'A',events:[],periods:[],birthdays:[],theme:'dark',reminders:false,pin:''};
 let state={...defaultState,...JSON.parse(localStorage.getItem('nordlandState')||'{}')};
 // Die überarbeitete Oberfläche startet bewusst dunkel. Danach bleibt die Wahl des Nutzers gespeichert.
 if(!sessionStorage.getItem('nordlandThemeChosen')) state.theme='dark';
 state.birthdays=Array.isArray(state.birthdays)?state.birthdays:[];
+state.tasks=Array.isArray(state.tasks)?state.tasks:[];
 state.reminderRead=(state.reminderRead&&typeof state.reminderRead==='object')?state.reminderRead:{};
 state.anchors={...defaultState.anchors,...(state.anchors||{}),...(state.anchor?{A:state.anchor}:{})};
 let activePlan=state.activePlan||'A';
@@ -454,6 +472,23 @@ function yearStatsForMonth(year, monthIndex){
  }
  return stats;
 }
+let editingTaskId=null;
+function renderTasks(){
+ const root=$('taskList');if(!root)return;
+ const open=state.tasks.filter(t=>!t.done).length;
+ $('taskCount').textContent=open+' offen';
+ const filter=$('taskFilter').value;
+ let items=state.tasks.filter(t=>filter==='all'||(filter==='done'?!!t.done:!t.done));
+ items.sort((a,b)=>Number(!!a.done)-Number(!!b.done)||(a.date||'9999-99-99').localeCompare(b.date||'9999-99-99')||(b.created||0)-(a.created||0));
+ if(!items.length){root.innerHTML='<p class="hint">'+(filter==='done'?'Noch keine erledigten Aufgaben.':filter==='all'?'Noch keine Aufgaben eingetragen.':'Keine offenen Aufgaben. Gut gemacht!')+'</p>';return;}
+ root.innerHTML=items.map(t=>`<div class="item ${t.done?'task-done':''}"><div class="row"><strong class="task-title">${escapeHtml(t.title)}</strong><span class="pill">${escapeHtml(t.priority||'Normal')}</span></div>${t.date?`<div class="task-meta">Fällig: ${fmt(parseDate(t.date))}</div>`:''}${t.note?`<div class="small" style="white-space:pre-wrap;margin-top:7px">${escapeHtml(t.note)}</div>`:''}<div class="task-actions"><button type="button" data-task-done="${t.id}">${t.done?'Wieder öffnen':'✓ Erledigt'}</button><button type="button" data-task-edit="${t.id}">Bearbeiten</button><button type="button" data-task-delete="${t.id}">Löschen</button></div></div>`).join('');
+ root.querySelectorAll('[data-task-done]').forEach(b=>b.onclick=()=>{const t=state.tasks.find(x=>x.id===b.dataset.taskDone);if(t)t.done=!t.done;save();renderTasks()});
+ root.querySelectorAll('[data-task-edit]').forEach(b=>b.onclick=()=>{const t=state.tasks.find(x=>x.id===b.dataset.taskEdit);if(!t)return;editingTaskId=t.id;$('taskTitle').value=t.title;$('taskDate').value=t.date||'';$('taskPriority').value=t.priority||'Normal';$('taskNote').value=t.note||'';$('taskSave').textContent='Änderungen speichern';$('taskCancel').classList.remove('hidden');$('taskTitle').scrollIntoView({behavior:'smooth',block:'center'});});
+ root.querySelectorAll('[data-task-delete]').forEach(b=>b.onclick=()=>{if(!confirm('Diese Aufgabe wirklich löschen?'))return;state.tasks=state.tasks.filter(x=>x.id!==b.dataset.taskDelete);save();renderTasks()});
+}
+$('taskSave').onclick=()=>{const title=$('taskTitle').value.trim();if(!title){alert('Bitte eine Aufgabe oder Überschrift eingeben.');return;}const item={id:editingTaskId||('task-'+Date.now()),title,date:$('taskDate').value,note:$('taskNote').value.trim(),priority:$('taskPriority').value,done:editingTaskId?(!!state.tasks.find(t=>t.id===editingTaskId)?.done):false,created:Date.now()};if(editingTaskId)state.tasks=state.tasks.map(t=>t.id===editingTaskId?item:t);else state.tasks.push(item);editingTaskId=null;$('taskTitle').value='';$('taskDate').value='';$('taskNote').value='';$('taskPriority').value='Normal';$('taskSave').textContent='Aufgabe speichern';$('taskCancel').classList.add('hidden');save();renderTasks()};
+$('taskCancel').onclick=()=>{editingTaskId=null;$('taskTitle').value='';$('taskDate').value='';$('taskNote').value='';$('taskPriority').value='Normal';$('taskSave').textContent='Aufgabe speichern';$('taskCancel').classList.add('hidden')};
+$('taskFilter').onchange=renderTasks;
 function renderYearOverview(){
  $('yearLabel').textContent='Jahresübersicht '+overviewYear+' · Plan '+activePlan;
  const totals={Urlaub:{calendar:0,work:0},Krank:{calendar:0,work:0},AZK:{calendar:0,work:0},LZK:{calendar:0,work:0},'Opa-Tage':{calendar:0,work:0},Termine:0,Frei:0};
@@ -674,7 +709,7 @@ document.querySelectorAll('input[name="vacAreaFilter"]').forEach(el=>el.addEvent
 $('vacFind').onclick=()=>{try{vacationPlanner()}catch(error){console.error('Ferienplaner-Suche fehlgeschlagen:',error);$('vacResults').innerHTML='<p class="notice">Bei der Suche ist ein Fehler aufgetreten. Bitte prüfe Planungsjahr und Dauer und versuche es erneut.</p>';$('vacAllocation').innerHTML=''}};
 let bridgeYear=new Date().getFullYear();
 function scrollReminderAboveCalendar(){const reminder=$('reminderNav');if(!reminder)return;requestAnimationFrame(()=>{const top=reminder.getBoundingClientRect().top+window.scrollY-12;window.scrollTo({top:Math.max(0,top),behavior:'smooth'});});}
-function tab(name){document.querySelectorAll('main section').forEach(s=>s.classList.toggle('hidden',s.id!==name));document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));if(name==='day')render();if(name==='year')renderYearOverview();if(name==='bridge')renderBridgePlanner();if(name==='birthdays')renderBirthdays();if(name==='reminders')renderReminders();if(name==='vacation'){$('vacYear').value=String(Math.max(2026,new Date().getFullYear()));$('vacResults').innerHTML='';$('vacAllocation').innerHTML=''}if(name==='calendar')scrollReminderAboveCalendar()}
+function tab(name){document.querySelectorAll('main section').forEach(s=>s.classList.toggle('hidden',s.id!==name));document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));if(name==='day')render();if(name==='tasks')renderTasks();if(name==='year')renderYearOverview();if(name==='bridge')renderBridgePlanner();if(name==='birthdays')renderBirthdays();if(name==='reminders')renderReminders();if(name==='vacation'){$('vacYear').value=String(Math.max(2026,new Date().getFullYear()));$('vacResults').innerHTML='';$('vacAllocation').innerHTML=''}if(name==='calendar')scrollReminderAboveCalendar()}
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>tab(b.dataset.tab));
 document.querySelector('[data-action=share]').onclick=()=>$('shareDialog').showModal();
 $('yearPrev').onclick=()=>{overviewYear--;renderYearOverview()};$('yearNext').onclick=()=>{overviewYear++;renderYearOverview()};
@@ -747,7 +782,7 @@ $('savePin').onclick=()=>{let p=$('pinInput').value;if(p&& !/^\d{4}$/.test(p)){a
 $('refreshReminders').onclick=()=>renderReminders();
 $('enableNotifications').onclick=async()=>{if(!('Notification'in window)){alert('Dieser Browser unterstützt keine Benachrichtigungen.');return}let p=await Notification.requestPermission();alert(p==='granted'?'Benachrichtigungen erlaubt. Geburtstage werden zusätzlich am Vortag und am Geburtstag um 08:00 Uhr gemeldet.':'Benachrichtigungen nicht erlaubt. Die Erinnerungsübersicht in der App bleibt verfügbar.');birthdayReminderCheck();renderReminders()};
 $('reminderToggle').onchange=e=>{state.reminders=e.target.checked;save()};
-function exportPayload(include){return {app:'Nordland-Schichtplan',version:2,exportedAt:new Date().toISOString(),anchors:state.anchors,activePlan,theme:state.theme,events:include?state.events:undefined,periods:include?state.periods:undefined,birthdays:include?state.birthdays:undefined,reminders:include?state.reminders:undefined}}
+function exportPayload(include){return {app:'Nordland-Schichtplan',version:2,exportedAt:new Date().toISOString(),anchors:state.anchors,activePlan,theme:state.theme,events:include?state.events:undefined,periods:include?state.periods:undefined,birthdays:include?state.birthdays:undefined,tasks:include?state.tasks:undefined,reminders:include?state.reminders:undefined}}
 function download(obj,name){let blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();URL.revokeObjectURL(url)}
 $('backupBtn').onclick=()=>tab('settings');
 $('exportAll').onclick=()=>download(exportPayload(true),'nordland-datensicherung.json');
@@ -765,17 +800,19 @@ function mergeSharedData(data){if(data.anchors&&typeof data.anchors==='object')s
  if(Array.isArray(data.events)){const keys=new Set(state.events.map(eventKey));data.events.forEach(e=>{const k=eventKey(e);if(!keys.has(k)){state.events.push(e);keys.add(k)}})}
  const birthdayKey=b=>[b.first||'',b.last||'',b.day||'',b.month||''].join('|').toLowerCase();
  if(Array.isArray(data.birthdays)){const keys=new Set(state.birthdays.map(birthdayKey));data.birthdays.forEach(b=>{const k=birthdayKey(b);if(!keys.has(k)){state.birthdays.push(b);keys.add(k)}})}
+ const taskKey=t=>[t.title||'',t.date||'',t.note||''].join('|').toLowerCase();
+ if(Array.isArray(data.tasks)){const keys=new Set(state.tasks.map(taskKey));data.tasks.forEach(t=>{const k=taskKey(t);if(!keys.has(k)){state.tasks.push(t);keys.add(k)}})}
  save();render();if(!$('year').classList.contains('hidden'))renderYearOverview();
 }
 let pendingReceive=null;
-async function checkIncomingShare(){const prefix='#nordland-share=';if(!location.hash.startsWith(prefix))return;try{pendingReceive=await decodeShareLink(location.hash.slice(prefix.length));const names={shift:'Schichteinteilung',Urlaub:'Urlaubstage',AZK:'AZK',LZK:'LZK',Krank:'Kranktage',Termine:'Termine',birthdays:'Geburtstage','Opa-Tage':'Opa-Tage'};const list=(pendingReceive.sharedCategories||[]).map(x=>names[x]||x);$('receiveSummary').textContent='Geteilt wurden: '+(list.join(', ')||'Daten für deinen Schichtkalender')+'.';$('receiveDialog').showModal()}catch(err){alert('Der Übernahmelink konnte nicht gelesen werden: '+err.message)}}
+async function checkIncomingShare(){const prefix='#nordland-share=';if(!location.hash.startsWith(prefix))return;try{pendingReceive=await decodeShareLink(location.hash.slice(prefix.length));const names={shift:'Schichteinteilung',Urlaub:'Urlaubstage',AZK:'AZK',LZK:'LZK',Krank:'Kranktage',Termine:'Termine',birthdays:'Geburtstage','Opa-Tage':'Opa-Tage',tasks:'Aufgaben und Notizen'};const list=(pendingReceive.sharedCategories||[]).map(x=>names[x]||x);$('receiveSummary').textContent='Geteilt wurden: '+(list.join(', ')||'Daten für deinen Schichtkalender')+'.';$('receiveDialog').showModal()}catch(err){alert('Der Übernahmelink konnte nicht gelesen werden: '+err.message)}}
 $('cancelReceive').onclick=()=>{$('receiveDialog').close();pendingReceive=null;history.replaceState(null,'',location.pathname+location.search)};
 $('confirmReceive').onclick=()=>{if(!pendingReceive)return;mergeSharedData(pendingReceive);pendingReceive=null;$('receiveDialog').close();history.replaceState(null,'',location.pathname+location.search);alert('Die ausgewählten Daten wurden in deinen Schichtkalender übernommen.')};
 
 $('importBtn').onclick=()=>$('importFile').click();
 $('importFile').onchange=async e=>{let f=e.target.files[0];if(!f)return;try{pendingImport=JSON.parse(await f.text());if(pendingImport.app!=='Nordland-Schichtplan')throw Error('Diese Datei gehört nicht zur Nordland-App.');$('importDialog').showModal()}catch(err){alert('Import nicht möglich: '+err.message)}e.target.value=''};
 $('cancelImport').onclick=()=>$('importDialog').close();
-$('confirmImport').onclick=()=>{if(!pendingImport)return;let mode=document.querySelector('input[name=importMode]:checked').value;if(pendingImport.anchors&&typeof pendingImport.anchors==='object')state.anchors={...state.anchors,...pendingImport.anchors};else if(pendingImport.anchor)state.anchors.A=pendingImport.anchor;if(Array.isArray(pendingImport.events)){if(mode==='replace')state.events=pendingImport.events;else{let ids=new Set(state.events.map(e=>e.id));state.events.push(...pendingImport.events.filter(e=>!ids.has(e.id)))}}if(Array.isArray(pendingImport.periods)){if(mode==='replace')state.periods=pendingImport.periods;else{let ids=new Set(state.periods.map(p=>p.id));state.periods.push(...pendingImport.periods.filter(p=>!ids.has(p.id)))}}if(Array.isArray(pendingImport.birthdays)){if(mode==='replace')state.birthdays=pendingImport.birthdays;else{let keys=new Set(state.birthdays.map(b=>(b.first+'|'+b.last+'|'+b.day+'|'+b.month).toLowerCase()));state.birthdays.push(...pendingImport.birthdays.filter(b=>!keys.has((b.first+'|'+b.last+'|'+b.day+'|'+b.month).toLowerCase())))}}if(typeof pendingImport.reminders==='boolean')state.reminders=pendingImport.reminders;save();pendingImport=null;$('importDialog').close();render();if(!$('year').classList.contains('hidden'))renderYearOverview();alert('Daten wurden importiert.')};
+$('confirmImport').onclick=()=>{if(!pendingImport)return;let mode=document.querySelector('input[name=importMode]:checked').value;if(pendingImport.anchors&&typeof pendingImport.anchors==='object')state.anchors={...state.anchors,...pendingImport.anchors};else if(pendingImport.anchor)state.anchors.A=pendingImport.anchor;if(Array.isArray(pendingImport.events)){if(mode==='replace')state.events=pendingImport.events;else{let ids=new Set(state.events.map(e=>e.id));state.events.push(...pendingImport.events.filter(e=>!ids.has(e.id)))}}if(Array.isArray(pendingImport.periods)){if(mode==='replace')state.periods=pendingImport.periods;else{let ids=new Set(state.periods.map(p=>p.id));state.periods.push(...pendingImport.periods.filter(p=>!ids.has(p.id)))}}if(Array.isArray(pendingImport.birthdays)){if(mode==='replace')state.birthdays=pendingImport.birthdays;else{let keys=new Set(state.birthdays.map(b=>(b.first+'|'+b.last+'|'+b.day+'|'+b.month).toLowerCase()));state.birthdays.push(...pendingImport.birthdays.filter(b=>!keys.has((b.first+'|'+b.last+'|'+b.day+'|'+b.month).toLowerCase())))}}if(Array.isArray(pendingImport.tasks)){if(mode==='replace')state.tasks=pendingImport.tasks;else{let keys=new Set(state.tasks.map(t=>(t.title+'|'+(t.date||'')+'|'+(t.note||'')).toLowerCase()));state.tasks.push(...pendingImport.tasks.filter(t=>!keys.has((t.title+'|'+(t.date||'')+'|'+(t.note||'')).toLowerCase())))}}if(typeof pendingImport.reminders==='boolean')state.reminders=pendingImport.reminders;save();pendingImport=null;$('importDialog').close();render();if(!$('year').classList.contains('hidden'))renderYearOverview();alert('Daten wurden importiert.')};
 $('shareBtn').onclick=()=>$('shareDialog').showModal();$('cancelShare').onclick=()=>$('shareDialog').close();
 $('shareSelectAll').onclick=()=>document.querySelectorAll('#shareChoices input[type=checkbox]').forEach(x=>x.checked=true);
 $('shareSelectNone').onclick=()=>document.querySelectorAll('#shareChoices input[type=checkbox]').forEach(x=>x.checked=false);
@@ -787,13 +824,14 @@ function selectedSharePayload(){
  if(periodTypes.length)payload.periods=state.periods.filter(p=>periodTypes.includes(p.type));
  if(chosen.includes('Termine'))payload.events=state.events;
  if(chosen.includes('birthdays'))payload.birthdays=state.birthdays;
+ if(chosen.includes('tasks'))payload.tasks=state.tasks;
  return payload;
 }
 $('doShare').onclick=async()=>{
  const chosen=[...document.querySelectorAll('#shareChoices input[type=checkbox]:checked')].map(x=>x.dataset.share);
  if(!chosen.length){alert('Bitte mindestens eine Datenart auswählen.');return;}
  const payload=selectedSharePayload();
- const names={shift:'Schichteinteilung',Urlaub:'Urlaubstage',AZK:'AZK',LZK:'LZK',Krank:'Kranktage',Termine:'Termine',birthdays:'Geburtstage','Opa-Tage':'Opa-Tage'};
+ const names={shift:'Schichteinteilung',Urlaub:'Urlaubstage',AZK:'AZK',LZK:'LZK',Krank:'Kranktage',Termine:'Termine',birthdays:'Geburtstage','Opa-Tage':'Opa-Tage',tasks:'Aufgaben und Notizen'};
  const summary=chosen.map(x=>names[x]).join(', ');
  $('doShare').disabled=true;
  try{
