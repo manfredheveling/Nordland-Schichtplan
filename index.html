@@ -1,0 +1,947 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#111923">
+<meta name="description" content="Nordland Schichtplan – persönlicher Schichtkalender">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Nordland – Schichtplan</title>
+<style>
+:root{--bg:#f2f5f9;--panel:#fff;--text:#172334;--muted:#66758a;--line:#dce3ec;--blue:#173b63;--accent:#2874b9;--soft:#eaf2fb;--shadow:0 8px 24px #173b6312}
+[data-theme=dark]{--bg:#111923;--panel:#1b2735;--text:#edf3fa;--muted:#a9b7c8;--line:#344355;--blue:#8db9e8;--accent:#69a9e7;--soft:#263b52;--shadow:0 8px 24px #0003}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:#173b63;color:white;padding:18px max(18px,calc((100vw - 980px)/2));display:flex;align-items:center;justify-content:space-between;gap:12px}.header-owner{text-align:right}.header-owner .copyright{display:block;font-size:10px;opacity:.82;margin-top:3px}
+.brand{font-weight:800;font-size:20px;letter-spacing:.2px}.brand small{display:block;font-size:11px;font-weight:500;opacity:.8;letter-spacing:1.3px}
+main{max-width:980px;margin:0 auto;padding:18px 14px 90px}.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+button,.btn{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:11px;padding:10px 13px;font:inherit;font-weight:650;cursor:pointer}
+button.primary{background:var(--accent);border-color:var(--accent);color:white}button:disabled{opacity:.45;cursor:not-allowed}
+.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin:8px 0 20px;padding:0}.tabs button{min-height:86px;padding:13px 9px;border:2px solid var(--accent);border-radius:15px;background:var(--soft);color:var(--text);font-size:15px;font-weight:900;line-height:1.25;white-space:normal;box-shadow:0 4px 12px #173b6320}.tabs button.active{background:var(--blue);color:white;border-color:var(--blue);box-shadow:0 5px 15px #173b6330}.tabs button[data-action=share]{background:#173b63;border-color:#173b63;color:#fff}.tabs button:active{transform:scale(.98)}.tabs button.birthday-nav{justify-self:stretch;width:100%}.tabs button.share-nav{grid-column:1/-1;justify-self:stretch;width:100%}.bottom-settings{display:flex;justify-content:flex-end;margin:22px 2px 4px;padding-top:10px;border-top:1px solid var(--line)}.bottom-settings button{min-height:30px;padding:5px 11px;font-size:11px;font-weight:600;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--muted);box-shadow:none}
+.tabs button.reminder-nav{grid-column:1/-1;justify-self:stretch;width:100%;min-height:76px;background:#e65100;border:3px solid #ff9800;color:#fff;font-size:18px;letter-spacing:.4px;box-shadow:0 5px 18px #e6510050}
+.tabs button.reminder-nav.has-unread{animation:reminderPulse 1.25s ease-in-out infinite}
+.tabs button.reminder-nav .reminder-count{display:inline-flex;align-items:center;justify-content:center;min-width:25px;height:25px;padding:0 7px;margin-left:8px;border-radius:99px;background:#fff;color:#c62828;font-size:14px;font-weight:950}
+@keyframes reminderPulse{0%,100%{transform:scale(1);box-shadow:0 5px 16px #e6510050;filter:brightness(1)}50%{transform:scale(1.012);box-shadow:0 0 0 7px #ff980044,0 7px 24px #e6510090;filter:brightness(1.15)}}
+@media(prefers-reduced-motion:reduce){.tabs button.reminder-nav.has-unread{animation:none;outline:4px solid #ff9800}}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow);margin-bottom:14px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px}.muted{color:var(--muted)}.small{font-size:12px}.title{font-size:20px;font-weight:800;margin:0 0 10px}.sub{font-size:13px;color:var(--muted);margin-top:-5px}
+.monthhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.monthhead strong{font-size:18px}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.month-picker{display:flex;flex-direction:column;gap:7px;max-height:420px;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;padding:2px 5px 2px 0;scrollbar-width:thin;scroll-behavior:smooth}.month-picker button{width:100%;padding:9px 10px;text-align:left;text-transform:uppercase;letter-spacing:.5px}.month-picker button.active{background:var(--accent);border-color:var(--accent);color:#fff}.month-picker button.current:not(.active){border:2px solid var(--accent)}.month-picker button.active{font-weight:900}.day-row.active{font-weight:800;box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 22%,transparent)}.calendar-layout{display:grid;grid-template-columns:minmax(112px,.55fr) minmax(0,1.45fr);gap:10px;align-items:start}.month-side,.days-side{min-width:0}.month-side{position:sticky;top:10px}.days-side{border-left:1px solid var(--line);padding-left:14px;min-height:0}.day-list{display:grid;gap:6px;height:420px;max-height:420px;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;scrollbar-width:thin;scroll-behavior:auto;transition:opacity .22s ease}.day-row{touch-action:pan-y;display:grid;grid-template-columns:76px 1fr auto;align-items:center;gap:8px;text-align:left;padding:9px;border-radius:10px}.day-row.active{outline:2px solid var(--accent);background:var(--soft)}.day-row.today-row{border:1px solid var(--accent)}.day-row.today-row .weekday-date{color:var(--accent)}.day-row.range-start,.day-row.range-end,.day-row.in-range{outline:2px solid #b68a24;background:var(--soft)}.day-row .weekday-date{font-weight:900;font-size:14px}.day-row .shift{font-size:15px;padding:6px 5px;margin-top:0}.day-row .day-info{font-size:12px;color:var(--muted)}@media(max-width:650px){.calendar-layout{grid-template-columns:minmax(104px,.62fr) minmax(0,1.38fr);gap:8px}.month-side{position:static}.month-picker{max-height:min(58vh,420px)}.month-picker button{font-size:11px;padding:8px 6px}.days-side{border-left:1px solid var(--line);border-top:0;padding:0 0 0 8px}.day-list{height:min(58vh,520px);max-height:min(58vh,520px);min-height:220px}.day-row{grid-template-columns:48px minmax(0,1fr);gap:5px;padding:7px 4px}.day-row>span:last-child{display:none}.day-row .weekday-date{font-size:12px}.day-row .shift{font-size:11px;padding:5px 2px}.day-row .day-info{font-size:10px}}.weekday{text-align:center;color:var(--muted);font-size:11px;font-weight:700;padding:4px 0}
+.day{min-height:82px;border:1px solid var(--line);border-radius:10px;padding:6px;background:var(--panel);text-align:left;position:relative}
+.day.out{opacity:.35}.day.today{outline:2px solid var(--accent)}.day.selected{border:2px solid var(--accent);padding:5px}
+.day .num{font-weight:800;font-size:13px}.shift{display:block;font-size:13px;font-weight:900;line-height:1.2;border-radius:7px;padding:5px 4px;margin-top:5px;text-align:center;letter-spacing:.1px}
+.F{background:#d9f2df;color:#17612c}.S{background:#fff0b8;color:#725300}.N{background:#ffd9d9;color:#8a2020}.X{background:#e4ece7;color:#42624d}
+[data-theme=dark] .F{background:#245b36;color:#d5ffe0}[data-theme=dark] .S{background:#665018;color:#fff0b8}[data-theme=dark] .N{background:#702d2d;color:#ffd9d9}[data-theme=dark] .X{background:#294637;color:#c9f1d5}
+.dot{width:5px;height:5px;background:#e17b39;border-radius:50%;display:inline-block;margin:4px 2px 0}.day.range-start,.day.range-end,.day.in-range{outline:2px solid #b68a24;background:var(--soft)}.special-label{display:block;font-size:10px;font-weight:800;line-height:1.15;margin-top:3px;padding:3px 2px;border-radius:5px;text-align:center;overflow-wrap:anywhere}.category-Termine{background:#13a6a6!important;color:#fff!important}.category-Urlaub,.category-LZK,.category-AZK,.category-Krank,.category-Opa-Tage{background:#000!important;color:#fff!important}.shift-summary{display:inline-block;margin-top:5px;padding:6px 10px;border-radius:8px;font-size:15px;font-weight:900;background:var(--soft);color:var(--text)}.shift-time{display:block;font-size:8px;font-weight:700;line-height:1.1;margin-top:1px;text-align:center;color:var(--text)}.range-tools{display:grid;grid-template-columns:1fr 1fr;gap:10px}.hint{font-size:12px;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:5px;margin:9px 0}.field label{font-size:12px;color:var(--muted);font-weight:700}
+input,select,textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--text);font:inherit}
+textarea{min-height:85px;resize:vertical}.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.item{padding:11px 0;border-bottom:1px solid var(--line)}.item:last-child{border:0}.pill{display:inline-block;padding:3px 8px;border-radius:99px;background:var(--soft);color:var(--blue);font-size:11px;font-weight:800}
+.notice{padding:12px;border-radius:12px;background:var(--soft);color:var(--text);font-size:13px;margin:10px 0}
+.year-totals{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.year-stat{border:1px solid var(--line);border-left:6px solid var(--stat-color,#777);border-radius:12px;padding:12px;background:var(--soft);min-width:0}.year-stat strong{display:block;font-size:26px;line-height:1.15;font-weight:900}.year-stat span{display:block;font-size:13px;font-weight:800;margin-top:4px}.year-stat small{display:block;color:var(--muted);font-size:11px;margin-top:3px}.year-months{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.year-month{border:1px solid var(--line);border-radius:12px;padding:11px;min-width:0}.year-month h4{margin:0 0 8px;font-size:15px}.year-month .ym-line{display:flex;justify-content:space-between;gap:8px;font-size:12px;padding:3px 0;border-bottom:1px solid var(--line)}.year-month .ym-line:last-child{border:0}.year-month b{font-variant-numeric:tabular-nums}.year-stat.urlaub{--stat-color:#238b45}.year-stat.krank{--stat-color:#c62828}.year-stat.azk{--stat-color:#e58a22}.year-stat.lzk{--stat-color:#2874b9}.year-stat.frei{--stat-color:#68717d}.year-stat.opa{--stat-color:#7654a5}
+
+.holiday-label{background:#efcc72!important;color:#3e2b00!important}.birthday-label{background:#f59e0b!important;color:#241300!important}.bridge-holiday{border:1px solid var(--line);border-radius:13px;padding:13px;margin:10px 0;background:var(--panel)}
+.bridge-holiday-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.bridge-holiday h3{font-size:15px;margin:0 0 3px}.bridge-suggestions{display:grid;gap:8px;margin-top:10px}
+.bridge-suggestion{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;padding:10px;border-radius:10px;background:var(--soft)}
+.bridge-suggestion strong{display:block;font-size:13px}.bridge-suggestion .hint{margin-top:2px}
+.bridge-suggestion-controls{display:flex;align-items:center;gap:6px;min-width:190px}
+.bridge-suggestion-controls select{padding:8px;font-size:12px;min-width:86px}.bridge-suggestion-controls button{padding:8px 10px;font-size:12px;white-space:nowrap}
+.bridge-status{font-size:12px;color:var(--muted);margin-top:8px}
+@media(max-width:560px){.bridge-suggestion{grid-template-columns:1fr}.bridge-suggestion-controls{min-width:0}.bridge-suggestion-controls select{flex:1}}
+
+
+.vacation-modes{margin:18px 0 20px}.mode-heading{font-size:17px;font-weight:900;margin-bottom:4px}.mode-intro{font-size:13px;color:var(--muted);margin:0 0 10px}.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.mode-choice{display:flex;align-items:flex-start;gap:11px;padding:15px 13px;border:2px solid #2674c9;border-radius:14px;background:#e7f1ff;color:#12345a;cursor:pointer;min-height:125px;transition:border-color .15s,background .15s,box-shadow .15s}.mode-choice input{width:22px;height:22px;flex:0 0 22px;margin:2px 0 0;accent-color:#155db0}.mode-choice:has(input:checked){border-color:#104f9c;background:#2674c9;color:#fff;box-shadow:0 0 0 3px rgba(38,116,201,.28)}.mode-copy{display:flex;flex-direction:column;gap:7px;min-width:0}.mode-copy strong{font-size:15px;line-height:1.3;color:inherit}.mode-copy small{font-size:12px;line-height:1.4;color:inherit;opacity:.88}.mode-copy em{font-size:11px;font-style:normal;font-weight:900;letter-spacing:.2px;margin-top:auto;color:inherit}.mode-footnote{font-size:11px;color:var(--muted);margin-top:9px}
+@media(max-width:560px){.mode-grid{grid-template-columns:1fr}.mode-choice{min-height:0;padding:13px}}
+
+.random-result{min-height:100px;display:flex;align-items:center;justify-content:center;gap:18px;margin:14px 0 4px;padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--soft);font-size:54px;font-weight:900;text-align:center;flex-wrap:wrap}.random-result .winner{font-size:25px;overflow-wrap:anywhere;animation:winner-reveal .65s cubic-bezier(.18,.85,.25,1.3) both}
+/* Große, plastisch wirkende Spielwürfel mit klaren Augen */
+.random-result{min-height:164px;gap:22px;padding:22px;perspective:900px}
+.random-result .die{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:5px;width:clamp(112px,30vw,154px);height:clamp(112px,30vw,154px);padding:13px;border-radius:24px;background:linear-gradient(145deg,#fff 0%,#f2f4f7 58%,#d9dee6 100%);border:1px solid #c4cbd5;box-shadow:inset 3px 3px 7px #fff,inset -5px -6px 12px #aeb6c2,0 12px 20px #0004;transform-style:preserve-3d;box-sizing:border-box}
+.random-result .die .pip{display:block;width:100%;height:100%;border-radius:50%;background:transparent}
+.random-result .die .pip.on{background:radial-gradient(circle at 35% 30%,#555 0%,#171b22 55%,#05070a 100%);box-shadow:inset 1px 2px 3px #0008,0 1px 1px #fff}
+.random-result.rolling .die{animation:dice-tumble .24s ease-in-out infinite}
+.random-result.name-rolling{filter:brightness(1.08);border-color:var(--accent)}
+.random-result.name-rolling .rolling-name{display:flex;align-items:center;justify-content:center;min-height:126px;width:min(100%,420px);padding:18px;border-radius:23px;background:linear-gradient(145deg,#fff 0%,#edf1f7 55%,#cbd3df 100%);border:1px solid #c1cad6;box-shadow:inset 3px 3px 8px #fff,inset -5px -6px 12px #aeb6c2,0 12px 20px #0004;color:#17202d;font-size:clamp(25px,6vw,38px);font-weight:950;overflow-wrap:anywhere;animation:name-flash .13s linear infinite}
+.random-result .winner{display:flex;align-items:center;justify-content:center;min-height:126px;width:min(100%,420px);padding:18px;border-radius:23px;background:linear-gradient(145deg,#fff9df,#ffe08a 55%,#e7a92f);border:2px solid #d79b22;box-shadow:inset 3px 3px 8px #fff,0 12px 22px #0004;color:#402900;font-size:clamp(25px,6vw,38px);font-weight:950;overflow-wrap:anywhere}
+.random-result.winner-ready{animation:winner-glow .9s ease-out}
+@keyframes dice-tumble{0%{transform:rotateX(-18deg) rotateY(-25deg) rotateZ(-13deg) translateY(-8px) scale(.92)}50%{transform:rotateX(20deg) rotateY(25deg) rotateZ(12deg) translateY(5px) scale(1.07)}100%{transform:rotateX(-18deg) rotateY(-25deg) rotateZ(-13deg) translateY(-8px) scale(.92)}}
+@keyframes name-flash{0%{transform:translateY(-3px) rotate(-1deg);opacity:.7}50%{transform:translateY(3px) rotate(1deg);opacity:1}100%{transform:translateY(-3px) rotate(-1deg);opacity:.7}}
+@keyframes winner-reveal{0%{transform:scale(.55) rotate(-5deg);opacity:0}70%{transform:scale(1.12) rotate(2deg);opacity:1}100%{transform:scale(1) rotate(0)}}
+@keyframes winner-glow{0%{box-shadow:0 0 0 0 rgba(255,190,40,.0)}35%{box-shadow:0 0 0 8px rgba(255,190,40,.24)}100%{box-shadow:0 0 0 0 rgba(255,190,40,0)}}
+/* Großer Namenswürfel: Der gezogene Name steht direkt auf der Würfelfläche. */
+.random-result.name-result{min-height:260px;padding:22px;perspective:1100px;overflow:hidden}
+.name-cube{width:min(100%,520px);min-height:230px;display:flex;align-items:center;justify-content:center;position:relative;padding:30px 24px;border-radius:34px;background:linear-gradient(145deg,#fff 0%,#f6f7fa 34%,#d8dee8 72%,#b9c3d1 100%);border:2px solid #aeb8c7;box-shadow:inset 5px 5px 12px #fff,inset -8px -9px 18px #9da8b8,0 20px 32px #0005,0 5px 0 #8f9aaa;transform-style:preserve-3d;}
+.name-cube:before,.name-cube:after{content:"";position:absolute;width:19px;height:19px;border-radius:50%;background:radial-gradient(circle at 32% 28%,#555,#111 68%,#000);box-shadow:inset 1px 2px 4px #0009,0 1px 1px #fff;top:18px}
+.name-cube:before{left:18px}.name-cube:after{right:18px}
+.name-cube .cube-name{position:relative;z-index:1;max-width:100%;color:#172334;font-size:clamp(27px,7vw,48px);line-height:1.12;font-weight:1000;text-align:center;overflow-wrap:anywhere;text-shadow:0 1px 0 #fff;}
+.name-result.name-rolling .name-cube{animation:name-cube-roll .32s ease-in-out infinite}
+.name-result.name-rolling .cube-name{animation:name-flash .16s linear infinite}
+.name-result.winner-ready .name-cube{background:linear-gradient(145deg,#fff9dc,#ffe18a 55%,#d99c2d);border-color:#c58b1b;box-shadow:inset 5px 5px 12px #fff9, inset -8px -9px 18px #c58b1b,0 20px 32px #0005,0 5px 0 #9b6b16;animation:winner-glow .9s ease-out}
+.name-result.winner-ready .cube-name{color:#402900;font-size:clamp(30px,7.5vw,52px)}
+@keyframes name-cube-roll{0%{transform:rotateX(-8deg) rotateY(-10deg) rotateZ(-3deg) translateY(-5px)}50%{transform:rotateX(9deg) rotateY(11deg) rotateZ(3deg) translateY(5px)}100%{transform:rotateX(-8deg) rotateY(-10deg) rotateZ(-3deg) translateY(-5px)}}
+@media(max-width:560px){.random-result.name-result{min-height:220px;padding:12px}.name-cube{min-height:190px;padding:25px 18px;border-radius:27px}}
+
+.vacation-result{border:1px solid var(--line);border-radius:12px;padding:13px;margin:10px 0;background:var(--panel)}.vacation-result h3{margin:0 0 5px;font-size:15px}.vacation-result .actions{margin-top:9px}.mode-active{outline:2px solid var(--accent);font-weight:900}.hidden{display:none!important}
+dialog{border:1px solid var(--line);border-radius:18px;background:var(--panel);color:var(--text);width:min(92vw,480px);padding:20px;box-shadow:0 20px 80px #0005}
+dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+@media(max-width:560px){main{padding:12px 10px 28px}.tabs{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:7px 0 16px}.tabs button.birthday-nav{grid-column:auto;width:100%;justify-self:stretch}.tabs button.share-nav{grid-column:1/-1;width:100%}.tabs button{min-height:88px;font-size:14px;padding:11px 7px}.card{padding:13px}.day{min-height:76px;padding:4px}.day.selected{padding:3px}.shift{font-size:12px;padding:5px 3px}.grid2{grid-template-columns:1fr}.brand{font-size:18px}}
+
+/* Vollbild-Bühne für den Wurf: wächst während des Würfelns auf den ganzen Bildschirm */
+.roll-fullscreen{position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:22px;background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;color:#fff;pointer-events:none;animation:stage-in .22s ease-out both}
+.roll-fullscreen .stage-caption:empty{display:none}.roll-fullscreen .stage-caption{font-size:clamp(17px,3.6vw,28px);font-weight:950;text-align:center;letter-spacing:.04em;background:#142235d9;color:#fff;padding:9px 18px;border-radius:999px;text-shadow:0 2px 5px #0008;box-shadow:0 5px 18px #0004}
+.roll-fullscreen .stage-result{display:flex;align-items:center;justify-content:center;gap:clamp(14px,4vw,35px);width:100%;max-width:none;min-height:72vh;perspective:1400px;overflow:visible}
+.roll-fullscreen .die{width:clamp(190px,34vw,330px);height:clamp(190px,34vw,330px);padding:clamp(18px,3vw,30px);gap:clamp(8px,1.5vw,14px);border-radius:clamp(28px,5vw,48px);box-shadow:inset 5px 5px 12px #fff,inset -8px -10px 18px #9da8b8,0 28px 45px #0009}
+.roll-fullscreen .die .pip{border-radius:50%}
+.roll-fullscreen .name-cube{width:min(94vw,850px);min-height:min(62vh,560px);padding:clamp(35px,7vw,75px);border-radius:clamp(32px,6vw,58px);box-shadow:inset 8px 8px 18px #fff,inset -12px -14px 24px #9da8b8,0 30px 55px #0009}
+.roll-fullscreen .name-cube .cube-name{font-size:clamp(38px,9vw,100px)}
+.roll-fullscreen .name-cube:before,.roll-fullscreen .name-cube:after{width:clamp(18px,3vw,30px);height:clamp(18px,3vw,30px)}
+.roll-fullscreen.rolling-stage .die{animation:dice-tumble .24s ease-in-out infinite}
+.roll-fullscreen.rolling-stage .name-cube{animation:name-cube-roll .32s ease-in-out infinite}
+.roll-fullscreen.winner-stage .name-cube{background:linear-gradient(145deg,#fff9dc,#ffe18a 55%,#d99c2d);border-color:#c58b1b}
+@keyframes stage-in{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+@media(max-width:560px){.roll-fullscreen{padding:14px}.roll-fullscreen .stage-result{min-height:55vh}.roll-fullscreen .die{width:min(42vw,230px);height:min(42vw,230px)}}
+
+
+/* Echter 3D-Wuerfel: sechs sichtbare Seiten, der Wuerfel rollt durchs Vollbild. */
+.die{position:relative;display:block!important;width:clamp(112px,30vw,154px)!important;height:clamp(112px,30vw,154px)!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;perspective:900px;transform-style:preserve-3d;}
+.die-cube{position:absolute;inset:0;transform-style:preserve-3d;transform:translateZ(calc(clamp(112px,30vw,154px) / -2));}
+.die-face{position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:5%;padding:10%;box-sizing:border-box;border-radius:18%;border:2px solid #c4cbd5;background:linear-gradient(145deg,#fff 0%,#f2f4f7 58%,#cbd2dc 100%);box-shadow:inset 3px 3px 8px #fff,inset -5px -6px 12px #aeb6c2;backface-visibility:hidden;}
+.die-face .pip{display:block;width:100%;height:100%;border-radius:50%;background:transparent}
+.die-face .pip.on{background:radial-gradient(circle at 35% 30%,#555 0%,#171b22 55%,#05070a 100%);box-shadow:inset 1px 2px 3px #0008,0 1px 1px #fff}
+.die-face.front{transform:rotateY(0deg) translateZ(calc(clamp(112px,30vw,154px) / 2))}
+.die-face.back{transform:rotateY(180deg) translateZ(calc(clamp(112px,30vw,154px) / 2))}
+.die-face.right{transform:rotateY(90deg) translateZ(calc(clamp(112px,30vw,154px) / 2))}
+.die-face.left{transform:rotateY(-90deg) translateZ(calc(clamp(112px,30vw,154px) / 2))}
+.die-face.top{transform:rotateX(90deg) translateZ(calc(clamp(112px,30vw,154px) / 2))}
+.die-face.bottom{transform:rotateX(-90deg) translateZ(calc(clamp(112px,30vw,154px) / 2))}
+.roll-fullscreen .die{width:clamp(190px,34vw,330px)!important;height:clamp(190px,34vw,330px)!important}
+.roll-fullscreen .die-cube{transform:translateZ(calc(clamp(190px,34vw,330px) / -2));}
+.roll-fullscreen .die-face{border-radius:18%;gap:5%;padding:10%;box-shadow:inset 6px 6px 14px #fff,inset -8px -10px 18px #9da8b8,0 10px 16px #0003}
+.roll-fullscreen .die-face.front{transform:rotateY(0deg) translateZ(calc(clamp(190px,34vw,330px) / 2))}
+.roll-fullscreen .die-face.back{transform:rotateY(180deg) translateZ(calc(clamp(190px,34vw,330px) / 2))}
+.roll-fullscreen .die-face.right{transform:rotateY(90deg) translateZ(calc(clamp(190px,34vw,330px) / 2))}
+.roll-fullscreen .die-face.left{transform:rotateY(-90deg) translateZ(calc(clamp(190px,34vw,330px) / 2))}
+.roll-fullscreen .die-face.top{transform:rotateX(90deg) translateZ(calc(clamp(190px,34vw,330px) / 2))}
+.roll-fullscreen .die-face.bottom{transform:rotateX(-90deg) translateZ(calc(clamp(190px,34vw,330px) / 2))}
+.roll-fullscreen.rolling-stage .die-cube{animation:full-cube-roll 1.05s cubic-bezier(.35,.02,.6,.98) infinite}
+.roll-fullscreen.rolling-stage .stage-result:after{content:'';position:absolute;left:5vw;right:5vw;bottom:9vh;height:12px;border-radius:50%;background:#14223530;filter:blur(9px);z-index:-1}
+.roll-fullscreen.rolling-stage .name-cube{animation:full-name-cube-roll 1.05s cubic-bezier(.35,.02,.6,.98) infinite}
+@keyframes full-cube-roll{0%{transform:translateZ(calc(clamp(190px,34vw,330px) / -2)) rotateX(0) rotateY(0) rotateZ(0) translate(-22vw,8vh)}25%{transform:translateZ(calc(clamp(190px,34vw,330px) / -2)) rotateX(170deg) rotateY(130deg) rotateZ(90deg) translate(12vw,-10vh)}50%{transform:translateZ(calc(clamp(190px,34vw,330px) / -2)) rotateX(360deg) rotateY(270deg) rotateZ(190deg) translate(24vw,10vh)}75%{transform:translateZ(calc(clamp(190px,34vw,330px) / -2)) rotateX(530deg) rotateY(410deg) rotateZ(280deg) translate(-12vw,-8vh)}100%{transform:translateZ(calc(clamp(190px,34vw,330px) / -2)) rotateX(720deg) rotateY(540deg) rotateZ(360deg) translate(-22vw,8vh)}}
+@keyframes full-name-cube-roll{0%{transform:rotateX(0) rotateY(0) rotateZ(0) translate(-22vw,8vh) scale(.75)}25%{transform:rotateX(170deg) rotateY(130deg) rotateZ(90deg) translate(12vw,-10vh) scale(1.08)}50%{transform:rotateX(360deg) rotateY(270deg) rotateZ(190deg) translate(24vw,10vh) scale(1.18)}75%{transform:rotateX(530deg) rotateY(410deg) rotateZ(280deg) translate(-12vw,-8vh) scale(1.04)}100%{transform:rotateX(720deg) rotateY(540deg) rotateZ(360deg) translate(-22vw,8vh) scale(.75)}}
+@media(max-width:560px){.roll-fullscreen .die{width:min(54vw,260px)!important;height:min(54vw,260px)!important}.roll-fullscreen .die-cube{transform:translateZ(calc(min(54vw,260px) / -2))}}
+
+/* Namenswürfel als echter Spielwürfel: sechs Flächen, Name auf jeder Seite. */
+.name-die{position:relative;width:clamp(190px,34vw,310px);height:clamp(190px,34vw,310px);perspective:1300px;flex:0 0 auto;filter:drop-shadow(0 28px 24px #0007)}
+.name-die-cube{position:absolute;inset:0;transform-style:preserve-3d;transform:translateZ(calc(clamp(190px,34vw,310px) / -2));}
+.name-die-face{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:12%;overflow:hidden;border-radius:19%;border:3px solid #c1cad6;background:linear-gradient(145deg,#fff 0%,#f1f4f8 58%,#c7d0dc 100%);box-shadow:inset 7px 7px 15px #fff,inset -9px -10px 17px #9da8b8;color:#172334;font-size:clamp(24px,5vw,48px);font-weight:1000;line-height:1.05;text-align:center;overflow-wrap:anywhere;backface-visibility:hidden;text-shadow:0 1px 0 #fff}
+.name-die-face.front{transform:rotateY(0deg) translateZ(calc(clamp(190px,34vw,310px) / 2))}.name-die-face.back{transform:rotateY(180deg) translateZ(calc(clamp(190px,34vw,310px) / 2))}.name-die-face.right{transform:rotateY(90deg) translateZ(calc(clamp(190px,34vw,310px) / 2))}.name-die-face.left{transform:rotateY(-90deg) translateZ(calc(clamp(190px,34vw,310px) / 2))}.name-die-face.top{transform:rotateX(90deg) translateZ(calc(clamp(190px,34vw,310px) / 2))}.name-die-face.bottom{transform:rotateX(-90deg) translateZ(calc(clamp(190px,34vw,310px) / 2))}
+.roll-fullscreen.rolling-stage .name-die-cube{animation:name-die-traverse 1.08s cubic-bezier(.35,.02,.6,.98) infinite}
+@keyframes name-die-traverse{0%{transform:translateZ(calc(clamp(190px,34vw,310px) / -2)) translate(-48vw,12vh) rotateX(0) rotateY(0) rotateZ(0) scale(.72)}25%{transform:translateZ(calc(clamp(190px,34vw,310px) / -2)) translate(-12vw,-12vh) rotateX(180deg) rotateY(140deg) rotateZ(95deg) scale(1.02)}50%{transform:translateZ(calc(clamp(190px,34vw,310px) / -2)) translate(42vw,9vh) rotateX(360deg) rotateY(280deg) rotateZ(190deg) scale(1.15)}75%{transform:translateZ(calc(clamp(190px,34vw,310px) / -2)) translate(8vw,-10vh) rotateX(540deg) rotateY(420deg) rotateZ(285deg) scale(1.02)}100%{transform:translateZ(calc(clamp(190px,34vw,310px) / -2)) translate(-48vw,12vh) rotateX(720deg) rotateY(560deg) rotateZ(380deg) scale(.72)}}
+.roll-fullscreen.winner-stage .name-die-face{background:linear-gradient(145deg,#fff9dc,#ffe18a 55%,#d99c2d);border-color:#c58b1b;color:#402900}
+#nameResult .name-die{width:clamp(150px,42vw,230px);height:clamp(150px,42vw,230px)}
+#nameResult .name-die-cube{transform:translateZ(calc(clamp(150px,42vw,230px) / -2))}
+#nameResult .name-die-face.front{transform:rotateY(0deg) translateZ(calc(clamp(150px,42vw,230px) / 2))}#nameResult .name-die-face.back{transform:rotateY(180deg) translateZ(calc(clamp(150px,42vw,230px) / 2))}#nameResult .name-die-face.right{transform:rotateY(90deg) translateZ(calc(clamp(150px,42vw,230px) / 2))}#nameResult .name-die-face.left{transform:rotateY(-90deg) translateZ(calc(clamp(150px,42vw,230px) / 2))}#nameResult .name-die-face.top{transform:rotateX(90deg) translateZ(calc(clamp(150px,42vw,230px) / 2))}#nameResult .name-die-face.bottom{transform:rotateX(-90deg) translateZ(calc(clamp(150px,42vw,230px) / 2))}
+#nameResult.rolling-stage-mini .name-die-cube{animation:name-die-traverse 1.08s cubic-bezier(.35,.02,.6,.98) infinite}
+#nameResult.winner-ready .name-die-face{background:linear-gradient(145deg,#fff9dc,#ffe18a 55%,#d99c2d);border-color:#c58b1b;color:#402900}
+@media(max-width:560px){.name-die{width:min(62vw,250px);height:min(62vw,250px)}.name-die-cube{transform:translateZ(calc(min(62vw,250px) / -2))}.name-die-face.front{transform:rotateY(0deg) translateZ(calc(min(62vw,250px) / 2))}.name-die-face.back{transform:rotateY(180deg) translateZ(calc(min(62vw,250px) / 2))}.name-die-face.right{transform:rotateY(90deg) translateZ(calc(min(62vw,250px) / 2))}.name-die-face.left{transform:rotateY(-90deg) translateZ(calc(min(62vw,250px) / 2))}.name-die-face.top{transform:rotateX(90deg) translateZ(calc(min(62vw,250px) / 2))}.name-die-face.bottom{transform:rotateX(-90deg) translateZ(calc(min(62vw,250px) / 2))}}
+
+
+</style>
+</head>
+<body>
+<header><div class="brand">NORDLAND <small>SCHICHTPLAN</small></div><div class="header-owner"><div class="small">Manfred Heveling</div><small class="copyright">© 2026 Manfred Heveling · Alle Rechte vorbehalten</small></div></header>
+<main>
+ <div class="toolbar">
+  <label class="small" style="display:flex;align-items:center;gap:6px">Plan <select id="planSelect" style="width:auto;padding:8px"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></label><button id="todayBtn" class="primary">Heute</button><button id="themeBtn">☾ Darstellung</button><button id="shareBtn" class="primary">Teilen / Export</button><button id="backupBtn">Datensicherung</button>
+ </div>
+ <nav class="tabs" aria-label="Hauptbereiche">
+  <button class="active" data-tab="calendar"><span style="display:block;font-size:25px;margin-bottom:5px">▦</span>Schichtkalender</button>
+  <button data-tab="leave"><span style="display:block;font-size:25px;margin-bottom:5px">🏖️</span>Urlaubsplaner</button>
+  <button data-tab="day"><span style="display:block;font-size:25px;margin-bottom:5px">☷</span>Terminübersicht</button>
+  <button data-tab="year"><span style="display:block;font-size:25px;margin-bottom:5px">▤</span>Jahresübersicht</button>
+  <button data-tab="vacation"><span style="display:block;font-size:25px;margin-bottom:5px">☀</span>Ferienplaner</button>
+  <button data-tab="bridge"><span style="display:block;font-size:25px;margin-bottom:5px">↔</span>Brückentagsplaner</button>
+  <button data-tab="random"><span style="display:block;font-size:25px;margin-bottom:5px">🥤</span>Knobelbecher</button>
+  <button class="birthday-nav" data-tab="birthdays"><span style="display:block;font-size:25px;margin-bottom:5px">🎂</span>Geburtstagskalender</button>
+  <button class="reminder-nav" data-tab="reminders" id="reminderNav"><span style="display:block;font-size:27px;margin-bottom:4px">🔔</span>WICHTIGE ERINNERUNGEN <span id="reminderNavCount" class="reminder-count">0</span><small style="display:block;font-size:11px;font-weight:700;margin-top:3px">Neue Meldungen ansehen</small></button>
+  <button class="share-nav" type="button" data-action="share"><span style="display:block;font-size:25px;margin-bottom:5px">↗</span>Daten teilen</button>
+ </nav>
+ <section id="calendar">
+  <div class="card">
+   <div class="monthhead"><button id="prevMonth" aria-label="Vorheriger Monat">‹</button><div style="display:flex;align-items:center;justify-content:center;gap:10px;min-width:0"><strong id="monthLabel"></strong><button id="dayTodayBtn" class="primary" type="button" style="padding:7px 12px;font-size:12px;white-space:nowrap">Heute</button></div><button id="nextMonth" aria-label="Nächster Monat">›</button></div>
+   <div class="calendar-layout"><div class="month-side"><h3 class="title" style="font-size:16px">Monat auswählen</h3><div class="month-picker" id="monthPicker"></div></div><div class="days-side"><h3 class="title" style="font-size:16px;margin:0 0 4px">Tagesübersicht</h3><p class="hint">Lange drücken (2 Sekunden) und über die Tage ziehen, um einen Zeitraum zu markieren.</p><div id="monthDayList" class="day-list"></div></div></div>
+  </div>
+  <div class="card"><div class="row"><div><div class="title" id="selectedTitle">Ausgewählter Tag</div><div class="sub shift-summary" id="selectedShift"></div></div><button id="openDay">Details</button></div><div id="selectedEvents" class="muted small"></div></div>
+ </section>
+ <section id="leave" class="hidden">
+  <div class="card">
+   <h2 class="title">Urlaubsplaner – Zeiträume direkt eintragen</h2>
+   <p class="hint">Trage hier einen oder mehrere Zeiträume ein. Bei Urlaub werden nur tatsächliche Arbeitstage deines ausgewählten Schichtplans als Urlaub markiert; reguläre freie Tage bleiben frei. Erst mit „Alle Zeiträume in den Schichtkalender übernehmen“ werden die Einträge gespeichert.</p>
+   <div class="range-tools">
+    <div class="field"><label for="leaveStart">Von</label><input id="leaveStart" type="date"></div>
+    <div class="field"><label for="leaveEnd">Bis einschließlich</label><input id="leaveEnd" type="date"></div>
+   </div>
+   <div class="field"><label for="leaveType">Art des Zeitraums</label><select id="leaveType"><option value="Urlaub">Urlaub</option><option value="AZK">AZK</option><option value="LZK">LZK</option><option value="Krank">Krank</option><option value="Opa-Tage">Opa-Tage</option></select></div>
+   <div class="actions"><button class="primary" id="leaveAdd">+ Zeitraum zur Liste hinzufügen</button></div>
+   <h3 class="title" style="font-size:16px;margin-top:22px">Deine vorgemerkten Zeiträume</h3>
+   <div id="leaveDraftList"><p class="hint">Noch keine Zeiträume vorgemerkt.</p></div>
+   <div class="actions" style="margin-top:18px"><button class="primary" id="leaveApply">Alle Zeiträume in den Schichtkalender übernehmen</button><button id="leaveClear">Liste leeren</button></div>
+   <p class="hint">Die übernommenen Zeiträume erscheinen anschließend direkt im Schichtkalender. Bereits vorhandene Einträge bleiben erhalten.</p>
+  </div>
+ </section>
+ <section id="random" class="hidden">
+  <div class="card">
+   <h2 class="title">🥤 Knobelbecher</h2>
+   <p class="hint">Wähle einen oder zwei Zahlenwürfel oder ziehe einen Namen. Der Würfel rollt über das Spielfeld und spricht das Ergebnis aus.</p>
+   <div class="field"><label for="randomMode">Würfelart</label><select id="randomMode"><option value="dice">Zahlenwürfel – 1 bis 6</option><option value="names">Namenswürfel</option></select></div>
+   <div id="diceOptions">
+    <div class="field"><label for="diceCount">Anzahl der Würfel</label><select id="diceCount"><option value="1">Ein Würfel</option><option value="2">Zwei Würfel</option></select></div>
+    <div id="diceResult" class="random-result" aria-live="polite">🎲</div>
+    <p id="diceTotal" class="hint" style="text-align:center">Bereit zum Würfeln</p>
+    <div class="actions"><button class="primary" id="rollDice">Würfeln</button></div>
+   </div>
+   <div id="nameOptions" class="hidden">
+    <div class="field"><label for="randomNames">Namensliste (jeweils ein Name pro Zeile)</label><textarea id="randomNames" rows="7" placeholder="Max Mustermann&#10;Erika Musterfrau&#10;…"></textarea><p class="hint" id="namesSavedStatus" aria-live="polite">Deine Namensliste wird automatisch auf diesem Gerät gespeichert.</p></div>
+    <div id="nameResult" class="random-result name-result" aria-live="polite">🥤</div><div class="actions"><button class="primary" id="drawName">Namen ziehen</button></div>
+   </div>
+  </div>
+ </section>
+ <section id="day" class="hidden">
+  <div class="card">
+   <div class="row"><div><h2 class="title" id="dayHeading">Tagesdetails</h2><div class="sub shift-summary" id="dayShift"></div></div><input id="dayDate" type="date" style="max-width:155px"></div>
+   <div class="title" style="font-size:16px;margin-top:18px">Urlaub, AZK und LZK – Zeitraum eintragen</div>
+   <p class="hint">Wähle Von- und Bis-Datum. Du kannst auch im Monatskalender einen Starttag und danach einen Endtag antippen.</p>
+   <div class="range-tools"><div class="field"><label>Von</label><input id="periodStart" type="date"></div><div class="field"><label>Bis</label><input id="periodEnd" type="date"></div></div>
+   <div class="field"><label>Eintrag</label><select id="periodType"><option value="Termine">Termine</option><option value="Urlaub">Urlaub</option><option value="LZK">LZK</option><option value="AZK">AZK</option><option value="Krank">Krank</option><option value="Opa-Tage">Opa-Tage</option></select></div>
+   <div class="actions"><button class="primary" id="savePeriod">Zeitraum speichern</button><button id="cancelPeriod">Abbrechen</button></div>
+   <div id="periodList"></div>
+   <div class="title" style="font-size:16px;margin-top:22px">Persönliche Termine und Notizen</div>
+   <div id="eventList"></div>
+   <div class="actions"><button class="primary" id="addEvent">+ Termin / Notiz</button></div>
+  </div>
+ </section>
+ <section id="year" class="hidden">
+  <div class="card">
+   <div class="monthhead"><button id="yearPrev" aria-label="Vorheriges Jahr">‹</button><strong id="yearLabel">Jahresübersicht</strong><button id="yearNext" aria-label="Nächstes Jahr">›</button></div>
+   <p class="hint">Auswertung für den oben ausgewählten Schichtplan. Urlaub, AZK und LZK werden zusätzlich nach tatsächlich geplanten Arbeitstagen gezählt.</p>
+   <div id="yearTotals" class="year-totals"></div>
+   <h3 class="title" style="font-size:17px;margin-top:22px">Monatsübersicht</h3>
+   <div id="yearMonths" class="year-months"></div>
+   <p class="hint" style="margin-top:14px">„Frei“ zeigt die laut Schichtplan freien Tage. Bei Urlaub, Krank, AZK und LZK werden Kalendertage und geplante Arbeitstage getrennt ausgewiesen.</p>
+  </div>
+ </section>
+ <section id="bridge" class="hidden">
+  <div class="card">
+   <div class="monthhead"><button id="bridgePrev" aria-label="Vorheriges Jahr">‹</button><strong id="bridgeYearLabel">Brückentage im Vier-Schicht-Betrieb 2026</strong><button id="bridgeNext" aria-label="Nächstes Jahr">›</button></div>
+   <p class="hint">Die Vorschläge werden für den oben ausgewählten Schichtplan berechnet. Angezeigt werden gesetzliche Feiertage in Niedersachsen und passende angrenzende Arbeitstage, wenn dein Schichtplan am Feiertag selbst frei vorsieht.</p>
+   <div class="notice">Wichtig im Vier-Schicht-Betrieb: Ein gesetzlicher Feiertag bedeutet nicht automatisch, dass du persönlich dienstfrei hast. Die App berücksichtigt deshalb deinen Schichtplan A, B, C oder D. Prüfe Feiertagsdienste und mögliche Ausgleichsregelungen zusätzlich mit deinem betrieblichen Dienstplan.</div>
+   <div id="bridgeResults"></div>
+  </div>
+ </section>
+ <section id="vacation" class="hidden">
+  <div class="card">
+   <h2 class="title">Ferien- und Urlaubsplaner</h2>
+   <p class="hint">Plane zusammenhängende Freizeit passend zu deinem ausgewählten Schichtplan. Die App zählt nur Tage, an denen laut Schichtplan tatsächlich Dienst wäre.</p>
+   <div class="grid2">
+    <div class="field"><label for="vacYear">Planungsjahr</label><input id="vacYear" type="number" min="2026" step="1" value="2026" inputmode="numeric" aria-describedby="vacYearHint"><small class="hint" id="vacYearHint">Ab 2026 frei auswählbar – ohne festes Endjahr. Du kannst auch 2031, 2040 oder ein späteres Jahr eingeben.</small></div>
+   </div>
+   <div class="vacation-modes">
+    <div class="mode-heading">Wo soll deine freie Zeit liegen?</div>
+    <p class="mode-intro">Wähle vor der Suche aus, welche Zeiträume bevorzugt werden sollen.</p>
+    <div class="mode-grid">
+     <label class="mode-choice"><input type="radio" name="vacAreaFilter" value="outside"><span class="mode-copy"><strong>Außerhalb der Schulferien</strong><small>Suche bevorzugt zusammenhängende freie Zeit außerhalb der niedersächsischen Schulferien.</small><em>Außerhalb bevorzugen</em></span></label>
+     <label class="mode-choice"><input type="radio" name="vacAreaFilter" value="inside"><span class="mode-copy"><strong>Innerhalb der Schulferien</strong><small>Suche bevorzugt zusammenhängende freie Zeit innerhalb der Schulferien.</small><em>Ferienzeit bevorzugen</em></span></label>
+     <label class="mode-choice"><input type="radio" name="vacAreaFilter" value="both" checked><span class="mode-copy"><strong>Beides</strong><small>Durchsuche das ganze Jahr ohne Bevorzugung – auch Zeiträume, die Feriengrenzen überschreiten.</small><em>Gesamtes Jahr durchsuchen</em></span></label>
+    </div>
+    <p class="mode-footnote">Bei Zeiträumen an Feriengrenzen sind bis zu 3 zusätzliche Tage davor und bis zu 3 Tage danach möglich. Die Verlängerung ist freiwillig – 0, 1, 2 oder 3 Tage je Seite werden berücksichtigt.</p>
+   </div>
+    <div class="field"><label>Gewünschte Dauer</label><select id="vacWeeks"><option value="1">1 Woche (7 Tage)</option><option value="2" selected>2 Wochen (14 Tage)</option><option value="3">3 Wochen (21 Tage)</option><option value="4">4 Wochen (28 Tage)</option><option value="5">5 Wochen (35 Tage)</option><option value="6">6 Wochen (42 Tage)</option><option value="custom">Eigene Dauer</option></select></div>
+   <div class="field hidden" id="vacCustomWrap"><label>Eigene Dauer in Tagen</label><input id="vacCustomDays" type="number" min="1" max="60" value="14"></div>
+   <div class="notice" style="margin:14px 0"><strong>Hinweis zu den Feriengrenzen:</strong> Ein vorgeschlagener Freizeitblock kann bei Bedarf bis zu 3 Kalendertage vor dem Beginn der Schulferien und/oder bis zu 3 Kalendertage nach dem Ende der Schulferien reichen. Diese zusätzlichen Tage sind eine Möglichkeit, aber kein Muss: Die Suche prüft auch passende Zeiträume ganz ohne Verlängerung sowie mit 1, 2 oder 3 zusätzlichen Tagen – vor und nach den Ferien unabhängig voneinander. Dein ausgewählter Schichtplan A, B, C oder D entscheidet, welche Tage tatsächlich freigestellt werden müssen.</div>
+   <h3 class="title" style="font-size:16px;margin-top:16px">So sucht die App</h3>
+   <div class="notice">Die App sucht zuerst passende zusammenhängende Zeiträume und sortiert sie danach, wie wenige geplante Arbeitstage du dafür freistellen musst. Erst wenn du einen Vorschlag auswählst, teilst du diese Arbeitstage auf Urlaub, AZK und LZK auf. Bereits freie Schichttage werden mitgerechnet.</div>
+   <div class="actions"><button class="primary" id="vacFind">Beste Zeiträume suchen</button></div>
+   <div id="vacResults" aria-live="polite"></div>
+   <div id="vacAllocation" aria-live="polite"></div>
+  </div>
+ </section>
+ <section id="reminders" class="hidden">
+  <div class="card">
+   <h2 class="title">Wichtige Erinnerungen</h2>
+   <p class="sub">Hier erscheinen Geburtstage, Termine, wichtige Zeiträume, Feiertage und persönliche Einträge. Normale Schichtzeiten und Schichtwechsel werden hier nicht angezeigt. Neue Meldungen bleiben gekennzeichnet, bis du sie als gelesen markierst. Versehentlich gelesene Meldungen kannst du jederzeit wieder auf ungelesen setzen.</p>
+   <div id="reminderPermission" class="notice">Browser-Benachrichtigungen werden zusätzlich verwendet. Erlaube sie in den Einstellungen deines Browsers, damit Geburtstagsmeldungen auch als Browser-Hinweis erscheinen können.</div>
+   <div class="row" style="margin:12px 0"><strong id="reminderSummary">Erinnerungen werden geladen …</strong><button id="refreshReminders">Aktualisieren</button></div>
+   <div id="reminderList" aria-live="polite"></div>
+  </div>
+ </section>
+ <section id="birthdays" class="hidden">
+  <div class="card">
+   <h2 class="title">Geburtstagskalender</h2>
+   <p class="sub">Geburtstage wiederholen sich jedes Jahr. Gespeichert werden nur Vor- und Nachname sowie Tag und Monat – kein Geburtsjahr und kein Alter.</p>
+   <div class="grid2">
+    <div class="field"><label for="birthdayFirst">Vorname</label><input id="birthdayFirst" maxlength="60" placeholder="Vorname"></div>
+    <div class="field"><label for="birthdayLast">Nachname</label><input id="birthdayLast" maxlength="60" placeholder="Nachname"></div>
+    <div class="field"><label for="birthdayDay">Tag</label><select id="birthdayDay"></select></div>
+    <div class="field"><label for="birthdayMonth">Monat</label><select id="birthdayMonth"></select></div>
+   </div>
+   <div class="actions"><button class="primary" id="saveBirthday">Geburtstag speichern</button><button id="cancelBirthdayEdit" class="hidden">Abbrechen</button></div>
+   <p class="hint">Erinnerung: am Vortag und am Geburtstag jeweils um 08:00 Uhr. Dafür müssen Benachrichtigungen im Browser erlaubt sein. Der 29. Februar wird in normalen Jahren am 28. Februar berücksichtigt.</p>
+  </div>
+  <div class="card"><h3 class="title" style="font-size:17px">Gespeicherte Geburtstage</h3><div id="birthdayList"></div></div>
+ </section>
+ <section id="settings" class="hidden">
+  <div class="card">
+   <h2 class="title">Schichtpläne A bis D</h2>
+   <p class="sub">Alle vier Pläne verwenden dieselbe 28-Tage-Folge. Wähle oben im Kalender, welchen Plan du ansehen möchtest.</p>
+   <div class="grid2">
+    <div class="field"><label>Plan A – Montag Früh</label><input id="anchorA" type="date" value="2026-10-26"></div>
+    <div class="field"><label>Plan B – Montag Früh</label><input id="anchorB" type="date" value="2026-11-16"></div>
+    <div class="field"><label>Plan C – Montag Früh</label><input id="anchorC" type="date" value="2026-11-09"></div>
+    <div class="field"><label>Plan D – Montag Früh</label><input id="anchorD" type="date" value="2026-11-02"></div>
+   </div>
+   <div class="notice">Festgelegte Folge (28 Tage): Früh Mo–Mi, Nacht Do–So, frei Mo–Di, Spät Mi–Sa, frei So, Spät Mo–Di, frei Mi, Früh Do–So, Nacht Mo–Mi, frei Do–So. Startpunkte: A 26.10.2026 · B 16.11.2026 · C 09.11.2026 · D 02.11.2026.</div>
+   <div class="actions"><button class="primary" id="saveSettings">Einstellungen speichern</button><button id="exportICS">Kalenderdatei (ICS) erstellen</button></div>
+  </div>
+  <div class="card">
+   <h2 class="title">PIN-Schutz</h2><p class="sub">Optionaler 4-stelliger PIN für diese App auf diesem Gerät.</p>
+   <div class="field"><label>4-stelliger PIN (leer = ausgeschaltet)</label><input id="pinInput" inputmode="numeric" maxlength="4" type="password" placeholder="PIN festlegen"></div>
+   <button id="savePin">PIN speichern</button>
+  </div>
+  <div class="card">
+   <h2 class="title">Erinnerungen</h2><p class="sub">Erinnerungen werden auf diesem Gerät verwaltet. Browser-Benachrichtigungen müssen erlaubt sein; zuverlässige Hintergrundzustellung ist ohne Server nicht auf jedem Gerät möglich.</p>
+   <label><input id="reminderToggle" type="checkbox" style="width:auto"> Benachrichtigungen für persönliche Termine aktivieren</label>
+   <div class="actions"><button id="enableNotifications">Benachrichtigungen erlauben</button></div>
+  </div>
+  <div class="card">
+   <h2 class="title">Daten übertragen</h2>
+   <p class="sub">Sichere deine Daten als Datei und importiere sie auf einem anderen eigenen Gerät. Die Datei enthält je nach Auswahl auch persönliche Termine.</p>
+   <div class="actions"><button class="primary" id="exportAll">Alle eigenen Daten exportieren</button><button id="importBtn">Datei importieren</button><input id="importFile" type="file" accept="application/json,.json" class="hidden"></div>
+   <div class="notice">Beim Import kannst du vorhandene Daten ersetzen oder Termine ergänzen. Exportdateien bitte vertraulich behandeln.</div>
+  </div>
+  <div class="card"><h2 class="title">Über die App</h2><p class="muted small">Nordland – Schichtplan · Erstellt für Manfred Heveling. Persönliche Daten bleiben lokal auf diesem Gerät, bis du sie ausdrücklich exportierst oder teilst.</p><p class="muted small">© 2026 Manfred Heveling · Alle Rechte vorbehalten</p></div>
+ </section>
+ <div class="bottom-settings"><button type="button" data-tab="settings">⚙ Einstellungen</button></div>
+</main>
+
+
+<dialog id="eventDialog">
+ <h2 class="title">Termin oder Notiz</h2>
+ <div class="field"><label>Datum</label><input id="eventDate" type="date"></div>
+ <div class="field"><label>Titel</label><input id="eventTitle" maxlength="100" placeholder="z. B. Arzttermin"></div>
+ <div class="field"><label>Uhrzeit (optional)</label><input id="eventTime" type="time"></div>
+ <div class="field"><label>Notiz (optional)</label><textarea id="eventNote" maxlength="1000"></textarea></div>
+ <div class="field"><label>Erinnerung 1</label><select id="reminderOne"><option value="off">Keine Erinnerung</option><option value="1d">1 Tag vorher</option><option value="2d">2 Tage vorher</option><option value="3h">3 Stunden vorher</option><option value="2h">2 Stunden vorher</option><option value="1h">1 Stunde vorher</option><option value="30m">30 Minuten vorher</option><option value="ontime">Am Termintag zur gewählten Uhrzeit</option></select></div>
+ <div class="field"><label>Uhrzeit für Erinnerung 1</label><input id="reminderOneTime" type="time" value="09:00"></div>
+ <div class="field"><label>Erinnerung 2 (optional)</label><select id="reminderTwo"><option value="off">Keine zweite Erinnerung</option><option value="1d">1 Tag vorher</option><option value="2d">2 Tage vorher</option><option value="3h">3 Stunden vorher</option><option value="2h">2 Stunden vorher</option><option value="1h">1 Stunde vorher</option><option value="30m">30 Minuten vorher</option><option value="ontime">Am Termintag zur gewählten Uhrzeit</option></select></div>
+ <div class="field"><label>Uhrzeit für Erinnerung 2</label><input id="reminderTwoTime" type="time" value="07:00"></div>
+ <div class="dialog-actions"><button id="cancelEvent">Abbrechen</button><button class="primary" id="saveEvent">Speichern</button></div>
+</dialog>
+<dialog id="shareDialog">
+ <h2 class="title">Daten teilen</h2>
+ <p>Wähle genau aus, was dieser Empfänger bekommen soll:</p>
+ <div class="actions" style="margin:8px 0 12px"><button type="button" id="shareSelectAll">Alle auswählen</button><button type="button" id="shareSelectNone">Alle abwählen</button></div>
+ <div id="shareChoices" style="display:grid;gap:7px">
+  <label class="item"><input type="checkbox" data-share="shift" checked style="width:auto"> Schichteinteilung (A/B/C/D)</label>
+  <label class="item"><input type="checkbox" data-share="Urlaub" style="width:auto"> Urlaubstage</label>
+  <label class="item"><input type="checkbox" data-share="AZK" style="width:auto"> AZK</label>
+  <label class="item"><input type="checkbox" data-share="LZK" style="width:auto"> LZK</label>
+  <label class="item"><input type="checkbox" data-share="Krank" style="width:auto"> Kranktage</label>
+  <label class="item"><input type="checkbox" data-share="Termine" style="width:auto"> Termine und Notizen</label>
+  <label class="item"><input type="checkbox" data-share="birthdays" style="width:auto"> Geburtstage</label>
+  <label class="item"><input type="checkbox" data-share="Opa-Tage" style="width:auto"> Opa-Tage</label>
+ </div>
+ <div class="notice" style="margin-top:12px">Es werden nur die angekreuzten Daten geteilt. WhatsApp erhält automatisch einen Nachrichtentext mit den ausgewählten Daten und einen Übernahmelink. Der Empfänger muss in seiner Nordland-App nur noch einmal bestätigen.</div>
+ <div class="dialog-actions"><button id="cancelShare">Abbrechen</button><button class="primary" id="doShare">Mit WhatsApp teilen</button></div>
+</dialog>
+<dialog id="receiveDialog">
+ <h2 class="title">Daten für deinen Schichtkalender</h2>
+ <p id="receiveSummary">Jemand hat Daten mit dir geteilt.</p>
+ <div class="notice">Wenn du bestätigst, werden nur die ausgewählten Daten ergänzt. Deine eigenen Einträge bleiben erhalten; doppelte Einträge werden übersprungen.</div>
+ <div class="dialog-actions"><button id="cancelReceive">Nicht übernehmen</button><button class="primary" id="confirmReceive">Daten jetzt übernehmen</button></div>
+</dialog>
+<dialog id="importDialog">
+ <h2 class="title">Daten importieren</h2><p>Wie sollen die importierten persönlichen Termine behandelt werden?</p>
+ <label class="item"><input type="radio" name="importMode" value="replace" checked style="width:auto"> Vorhandene Daten ersetzen</label>
+ <label class="item"><input type="radio" name="importMode" value="merge" style="width:auto"> Termine ergänzen (keine doppelten Einträge)</label>
+ <div class="dialog-actions"><button id="cancelImport">Abbrechen</button><button class="primary" id="confirmImport">Importieren</button></div>
+</dialog>
+<dialog id="pinDialog"><h2 class="title">PIN eingeben</h2><div class="field"><input id="unlockPin" type="password" inputmode="numeric" maxlength="4" placeholder="4-stelliger PIN"></div><div class="dialog-actions"><button class="primary" id="unlockBtn">Entsperren</button></div></dialog>
+<script>
+const $=id=>document.getElementById(id);
+const todayISO=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const parseDate=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
+const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const plus=(d,n)=>{let x=new Date(d);x.setDate(x.getDate()+n);return x};
+const fmt=d=>d.toLocaleDateString('de-DE',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+const defaultState={anchors:{A:'2026-10-26',B:'2026-11-16',C:'2026-11-09',D:'2026-11-02'},activePlan:'A',events:[],periods:[],birthdays:[],theme:'dark',reminders:false,pin:''};
+let state={...defaultState,...JSON.parse(localStorage.getItem('nordlandState')||'{}')};
+// Die überarbeitete Oberfläche startet bewusst dunkel. Danach bleibt die Wahl des Nutzers gespeichert.
+if(!sessionStorage.getItem('nordlandThemeChosen')) state.theme='dark';
+state.birthdays=Array.isArray(state.birthdays)?state.birthdays:[];
+state.reminderRead=(state.reminderRead&&typeof state.reminderRead==='object')?state.reminderRead:{};
+state.anchors={...defaultState.anchors,...(state.anchors||{}),...(state.anchor?{A:state.anchor}:{})};
+let activePlan=state.activePlan||'A';
+let leaveDrafts=[];
+let selected=todayISO(), month=new Date(new Date().getFullYear(),new Date().getMonth(),1), overviewYear=new Date().getFullYear(); let pendingImport=null, editingId=null, rangeStart=null, rangeEnd=null, dragSelecting=false, suppressDayClick=false;
+function save(){localStorage.setItem('nordlandState',JSON.stringify(state));if(typeof updateReminderNav==='function')updateReminderNav()}
+const shiftHours={F:'05:30–13:30',S:'13:30–21:30',N:'21:30–05:30'};
+function shiftFor(dateStr){
+ const anchor=state.anchors?.[activePlan]||state.anchors?.A;if(!anchor)return {code:'?',name:'Startdatum fehlt'};
+ const a=parseDate(anchor),d=parseDate(dateStr); let diff=Math.floor((d-a)/86400000);
+ let pos=((diff%28)+28)%28;
+ // Cycle day 0-27: Mon-Wed Früh; Thu-Sun Nacht; Mon-Tue frei; Wed-Sat Spät; Sun frei;
+ // Mon-Tue Spät; Wed frei; Thu-Sun Früh; Mon-Wed Nacht; Thu-Sun frei.
+ let code='X';
+ if(pos<=2)code='F'; else if(pos<=6)code='N'; else if(pos<=8)code='X';
+ else if(pos<=12)code='S'; else if(pos===13)code='X';
+ else if(pos<=15)code='S'; else if(pos===16)code='X';
+ else if(pos<=20)code='F'; else if(pos<=23)code='N'; else code='X';
+ return {code,name:{F:'Frühschicht',S:'Spätschicht',N:'Nachtschicht',X:'Frei'}[code]};
+}
+function eventsOn(date){return state.events.filter(e=>e.date===date)}
+function periodsOn(date){const sh=shiftFor(date);return state.periods.filter(p=>date>=p.start&&date<=p.end&&!(p.type==='Urlaub'&&sh.code==='X'))}
+function workdaysInPeriod(p){return daysBetween(p.start,p.end).filter(d=>shiftForForPlan(d,activePlan).code!=='X').length;}
+function periodText(date){return periodsOn(date).map(p=>p.type).join(', ')}
+function categoryClass(type){return 'category-'+String(type||'').replace(/[^a-zA-Z0-9-]/g,'-')}
+function daysBetween(a,b){let out=[];for(let d=parseDate(a);d<=parseDate(b);d=plus(d,1))out.push(iso(d));return out}
+function updateMonthControls(rebuildPicker=false){
+ $('monthLabel').textContent=month.toLocaleDateString('de-DE',{month:'long',year:'numeric'});
+ const picker=$('monthPicker');
+ if(rebuildPicker||!picker.children.length){
+  picker.innerHTML='';
+  const monthNames=['JAN','FEB','MÄR','APR','MAI','JUN','JUL','AUG','SEP','OKT','NOV','DEZ'];
+  monthNames.forEach((name,i)=>{let b=document.createElement('button');b.textContent=name;b.dataset.month=String(i);b.onclick=()=>{const day=Math.min(parseDate(selected).getDate(),new Date(month.getFullYear(),i+1,0).getDate());month=new Date(month.getFullYear(),i,1);selected=iso(new Date(month.getFullYear(),i,day));rangeStart=rangeEnd=null;render()};picker.append(b)});
+ }
+ [...picker.children].forEach((b,i)=>{b.classList.toggle('active',i===month.getMonth());b.classList.toggle('current',i===new Date().getMonth()&&month.getFullYear()===new Date().getFullYear())});
+}
+function birthdayDateFor(b,year){let m=Number(b.month),day=Number(b.day);if(m===2&&day===29&&!(year%4===0&&(year%100!==0||year%400===0)))day=28;return new Date(year,m-1,day)}
+function birthdaysOn(dateStr){const d=parseDate(dateStr);return state.birthdays.filter(b=>{const bd=birthdayDateFor(b,d.getFullYear());return bd.getMonth()===d.getMonth()&&bd.getDate()===d.getDate()})}
+function nextBirthday(b){const now=parseDate(todayISO());let d=birthdayDateFor(b,now.getFullYear());if(d<now)d=birthdayDateFor(b,now.getFullYear()+1);return d}
+function renderBirthdays(){
+ const day=$('birthdayDay'),mon=$('birthdayMonth');
+ if(!day.options.length)for(let i=1;i<=31;i++)day.add(new Option(String(i).padStart(2,'0'),String(i)));
+ if(!mon.options.length)['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'].forEach((x,i)=>mon.add(new Option(x,String(i+1))));
+ const list=$('birthdayList');
+ if(!state.birthdays.length){list.innerHTML='<p class="muted">Noch keine Geburtstage eingetragen.</p>';return}
+ list.innerHTML=state.birthdays.slice().sort((a,b)=>nextBirthday(a)-nextBirthday(b)).map(b=>{const d=nextBirthday(b);return `<div class="item"><div class="row"><strong>${escapeHtml(b.first+' '+b.last)}</strong><span class="pill">${String(b.day).padStart(2,'0')}.${String(b.month).padStart(2,'0')} · nächster: ${d.toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'})}</span></div><div class="actions"><button data-birthday-edit="${b.id}">Bearbeiten</button><button data-birthday-del="${b.id}">Löschen</button></div></div>`}).join('');
+ document.querySelectorAll('[data-birthday-edit]').forEach(btn=>btn.onclick=()=>{const b=state.birthdays.find(x=>x.id===btn.dataset.birthdayEdit);if(!b)return;editingBirthdayId=b.id;$('birthdayFirst').value=b.first;$('birthdayLast').value=b.last;$('birthdayDay').value=String(b.day);$('birthdayMonth').value=String(b.month);$('saveBirthday').textContent='Änderungen speichern';$('cancelBirthdayEdit').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'})});
+ document.querySelectorAll('[data-birthday-del]').forEach(btn=>btn.onclick=()=>{if(!confirm('Diesen Geburtstag wirklich löschen?'))return;state.birthdays=state.birthdays.filter(x=>x.id!==btn.dataset.birthdayDel);save();renderBirthdays();render()});
+}
+let editingBirthdayId=null;
+function birthdayReminderCheck(){if(!('Notification'in window)||Notification.permission!=='granted')return;const now=new Date();for(const b of state.birthdays){for(const year of [now.getFullYear(),now.getFullYear()+1]){const day=birthdayDateFor(b,year);for(const [slot,offset] of [['Vortag',-1],['Geburtstag',0]]){const target=plus(day,offset);target.setHours(8,0,0,0);const delta=now-target;if(delta>=0&&delta<600000){const key=`birthday_notice_${b.id}_${year}_${slot}`;if(!localStorage.getItem(key)){new Notification(slot==='Vortag'?'Morgen Geburtstag':'Heute Geburtstag',{body:`${b.first} ${b.last} hat ${slot==='Vortag'?'morgen':'heute'} Geburtstag.`});localStorage.setItem(key,'1')}}}}}}
+function collectReminderItems(){
+ const today=parseDate(todayISO()), end=plus(today,30), items=[];
+ const add=(id,date,time,type,title,detail)=>{if(date<iso(today)||date>iso(end))return;items.push({id,date,time:type==='Geburtstag'?'08:00':(time||''),type,title,detail:detail||''})};
+ for(const b of state.birthdays){
+  for(let year=today.getFullYear();year<=end.getFullYear();year++){
+   const bd=birthdayDateFor(b,year), birthdayISO=iso(bd), before=iso(plus(bd,-1));
+   add(`birthday-${b.id}-${birthdayISO}-before`,before,'08:00','Geburtstag','Morgen Geburtstag: '+b.first+' '+b.last,'Geburtstag ist morgen. Browser-Erinnerung um 08:00 Uhr.');
+   add(`birthday-${b.id}-${birthdayISO}-day`,birthdayISO,'08:00','Geburtstag','Heute Geburtstag: '+b.first+' '+b.last,'Heute ist der Geburtstag. Browser-Erinnerung um 08:00 Uhr.');
+  }
+ }
+ for(const e of state.events){add(`event-${e.id}-${e.date}`,e.date,e.time||'','Termin',e.title,e.note||'Persönlicher Termin');}
+ for(const p of state.periods){
+  add(`period-${p.id||p.start}-${p.start}`,p.start,'','Zeitraum','Beginn: '+p.type,p.start===p.end?'Eintrag für diesen Tag':'Beginn des eingetragenen Zeitraums bis '+fmt(parseDate(p.end)));
+  if(p.end!==p.start)add(`period-end-${p.id||p.start}-${p.end}`,p.end,'','Zeitraum','Letzter Tag: '+p.type,'Der eingetragene Zeitraum endet heute.');
+ }
+ for(let y=today.getFullYear();y<=end.getFullYear();y++)for(const h of holidaysForYear(y))add(`holiday-${h.date}`,h.date,'','Feiertag',h.name,'Gesetzlicher Feiertag in Niedersachsen. Schichtplan bitte beachten.');
+ // Schichtbeginn und normale Schichtzeiten gehören ausschließlich in den Schichtkalender,
+ // nicht in die Übersicht „Wichtige Erinnerungen“.
+ const typeOrder={'Geburtstag':0,'Termin':1,'Zeitraum':2,'Feiertag':3};
+ return items.sort((a,b)=>a.date.localeCompare(b.date)||(a.time||'').localeCompare(b.time||'')||(typeOrder[a.type]??9)-(typeOrder[b.type]??9));
+}
+function reminderIsDueSoon(item){const days=Math.ceil((parseDate(item.date)-parseDate(todayISO()))/86400000);const limit=item.type==='Geburtstag'?1:(item.type==='Feiertag'?3:7);return days>=0&&days<=limit}
+function updateReminderNav(){
+ const items=collectReminderItems(), unread=items.filter(x=>!state.reminderRead[x.id]&&reminderIsDueSoon(x)).length;
+ const btn=$('reminderNav'), count=$('reminderNavCount');
+ if(!btn||!count)return;
+ count.textContent=String(unread);btn.classList.toggle('has-unread',unread>0);
+ btn.setAttribute('aria-label',unread?`${unread} ungelesene wichtige Erinnerungen`:'Wichtige Erinnerungen');
+}
+function renderReminders(){
+ const items=collectReminderItems(), unread=items.filter(x=>!state.reminderRead[x.id]&&reminderIsDueSoon(x)).length;
+ $('reminderSummary').textContent=unread?`${unread} neue/ungelesene wichtige Meldungen in Kürze · ${items.length} Einträge insgesamt in den nächsten 30 Tagen`:`Keine unmittelbar anstehenden ungelesenen Meldungen · ${items.length} Einträge in den nächsten 30 Tagen`;
+ const permission=$('reminderPermission');
+ if(!('Notification'in window))permission.textContent='Dieser Browser unterstützt keine Browser-Benachrichtigungen. Die Erinnerungsübersicht in der App funktioniert trotzdem.';
+ else if(Notification.permission==='granted')permission.textContent='Browser-Benachrichtigungen sind erlaubt. Geburtstage werden zusätzlich am Vortag und am Geburtstag um 08:00 Uhr gemeldet, sofern die App bzw. der Browser die Prüfung ausführen kann.';
+ else permission.textContent='Browser-Benachrichtigungen sind noch nicht erlaubt. Du kannst sie in den Einstellungen des Browsers freigeben. Die Übersicht in der App bleibt unabhängig davon verfügbar.';
+ if(!items.length){$('reminderList').innerHTML='<p class="muted">In den nächsten 30 Tagen sind keine wichtigen Einträge vorhanden.</p>';updateReminderNav();return}
+ $('reminderList').innerHTML=items.map(x=>{const read=!!state.reminderRead[x.id];return `<div class="item" style="padding:13px 0"><div class="row" style="align-items:flex-start"><div style="min-width:0;flex:1"><div class="row" style="justify-content:flex-start;flex-wrap:wrap;gap:6px"><span class="pill">${escapeHtml(x.type)}</span><span class="pill">${parseDate(x.date).toLocaleDateString('de-DE',{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'})}${x.time?' · '+escapeHtml(x.time)+' Uhr':''}</span>${read?'<span class="pill" style="background:#c8e6c9;color:#1b5e20">GELESEN</span>':'<span class="pill" style="background:#ffcc80;color:#7f2704">NEU – UNGELESEN</span>'}</div><strong style="display:block;margin-top:5px">${escapeHtml(x.title)}</strong><div class="muted small">${escapeHtml(x.detail)}</div></div><button data-reminder-toggle="${escapeHtml(x.id)}">${read?'Als ungelesen markieren':'Ansehen / gelesen'}</button></div></div>`}).join('');
+ document.querySelectorAll('[data-reminder-toggle]').forEach(btn=>btn.onclick=()=>{const id=btn.dataset.reminderToggle;if(state.reminderRead[id])delete state.reminderRead[id];else state.reminderRead[id]=true;save();renderReminders();updateReminderNav()});
+ updateReminderNav();
+}
+function makeDayRow(d){
+ const s=iso(d),sh=shiftFor(s),ev=eventsOn(s),b=document.createElement('button');
+ b.dataset.date=s;
+ b.className='day-row'+(s===todayISO()?' today-row':'')+(s===selected?' active':'')+(rangeStart===s?' range-start':'')+(rangeEnd===s?' range-end':'')+(rangeStart&&rangeEnd&&s>rangeStart&&s<rangeEnd?' in-range':'');
+ b.innerHTML=`<span class="weekday-date">${d.toLocaleDateString('de-DE',{weekday:'short',day:'2-digit'})}</span><span><strong class="shift ${sh.code}">${sh.name}</strong>${holidayNameOn(s)?`<span class="special-label holiday-label">${escapeHtml(holidayNameOn(s))}</span>`:''}${birthdaysOn(s).map(b=>`<span class="special-label birthday-label">🎂 GEBURTSTAG: ${escapeHtml(b.first+' '+b.last)}</span>`).join('')}${periodsOn(s).map(p=>`<span class="special-label ${categoryClass(p.type)}">${escapeHtml(p.type)}</span>`).join('')}<br><span class="day-info">${shiftHours[sh.code]||'—'}${ev.length?' · '+ev.length+' Termin(e)':''}</span></span><span class="day-info">›</span>`;
+ let holdTimer=null,held=false;
+ b.onpointerdown=()=>{held=false;holdTimer=setTimeout(()=>{held=true;dragSelecting=true;rangeStart=s;rangeEnd=s;selected=s;b.classList.add('active');$('periodStart').value=s;$('periodEnd').value=s;},2000)};
+ b.onpointerleave=()=>clearTimeout(holdTimer);b.onpointercancel=()=>{clearTimeout(holdTimer);dragSelecting=false};
+ b.onclick=()=>{if(held||suppressDayClick){suppressDayClick=false;return}selected=s;month=new Date(d.getFullYear(),d.getMonth(),1);rangeStart=rangeEnd=null;render()};
+ return b;
+}
+function render(){
+ document.documentElement.dataset.theme=state.theme;
+ updateMonthControls(true);
+ const list=$('monthDayList');list.innerHTML='';
+ // Start mit drei Monaten. Beim Scrollen werden davor und danach fortlaufend
+ // weitere Monate ergänzt; die vorhandenen Tageszeilen bleiben dabei erhalten.
+ const first=new Date(month.getFullYear(),month.getMonth()-1,1);
+ const last=new Date(month.getFullYear(),month.getMonth()+2,0);
+ for(let d=new Date(first);d<=last;d=plus(d,1))list.append(makeDayRow(d));
+ list.dataset.start=iso(first);list.dataset.end=iso(last);
+ const activeDayRow=list.querySelector('.day-row.active');
+ if(activeDayRow){const targetTop=activeDayRow.offsetTop-list.offsetTop-(list.clientHeight-activeDayRow.offsetHeight)/2;list.scrollTop=Math.max(0,Math.min(targetTop,list.scrollHeight-list.clientHeight))}
+ const sh=shiftFor(selected);$('selectedTitle').textContent=fmt(parseDate(selected));$('selectedShift').textContent=sh.name+(shiftHours[sh.code]?' · '+shiftHours[sh.code]:'');$('selectedEvents').textContent=eventsOn(selected).map(e=>e.title).join(' · ')||'Keine persönlichen Termine';
+ $('dayDate').value=selected;$('dayHeading').textContent=fmt(parseDate(selected));$('dayShift').textContent=sh.name+(shiftHours[sh.code]?' · '+shiftHours[sh.code]:'');
+ $('eventList').innerHTML=eventsOn(selected).length?eventsOn(selected).map(e=>`<div class="item"><div class="row"><strong>${escapeHtml(e.title)}</strong><span class="pill">${e.time||'ohne Uhrzeit'}</span></div>${e.note?`<div class="muted small">${escapeHtml(e.note)}</div>`:''}<div class="row small muted"><span>${e.reminder?('Erinnerung: '+(e.reminderOne||'')+' '+(e.reminderOneTime||'')+(e.reminderTwo&&e.reminderTwo!=='off'?' · '+e.reminderTwo+' '+(e.reminderTwoTime||'') :'')):'Keine Erinnerung'}</span><span><button data-edit="${e.id}">Bearbeiten</button> <button data-del="${e.id}">Löschen</button></span></div></div>`).join(''):'<p class="muted">Für diesen Tag sind keine Termine eingetragen.</p>';
+ $('periodStart').value=rangeStart||selected;$('periodEnd').value=rangeEnd||'';
+ $('periodList').innerHTML=state.periods.length?'<h3 class="title" style="font-size:15px;margin-top:16px">Gespeicherte Zeiträume</h3>'+state.periods.slice().sort((a,b)=>a.start.localeCompare(b.start)).map(p=>`<div class="item row"><span><strong>${fmt(parseDate(p.start))}</strong> bis <strong>${fmt(parseDate(p.end))}</strong><br><span class="pill">${p.type}</span>${p.type==='Urlaub'?`<br><span class="hint">${workdaysInPeriod(p)} tatsächliche Urlaubstage im Plan ${activePlan}</span>`:''}</span><button data-period-del="${p.id}">Gesamten Zeitraum löschen</button></div>`).join(''):'<p class="hint">Noch keine Urlaubs-, AZK- oder LZK-Zeiträume gespeichert.</p>';
+ document.querySelectorAll('[data-period-del]').forEach(b=>b.onclick=()=>{state.periods=state.periods.filter(p=>p.id!==b.dataset.periodDel);save();render();if(!$('year').classList.contains('hidden'))renderYearOverview()});
+ ['A','B','C','D'].forEach(k=>{const el=$('anchor'+k);if(el)el.value=state.anchors[k]||''});$('planSelect').value=activePlan;$('pinInput').value='';$('reminderToggle').checked=!!state.reminders;
+ document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editEvent(b.dataset.edit));
+ document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{state.events=state.events.filter(e=>e.id!==b.dataset.del);save();render();if(!$('year').classList.contains('hidden'))renderYearOverview()});
+}
+// Endloses Scrollen: Bei Annäherung an den oberen oder unteren Rand wird
+// jeweils ein weiterer Monat eingefügt. Bereits angezeigte Tage werden nie
+// entfernt oder neu aufgebaut, daher springt die Liste nicht zurück.
+let extendingDayList=false;
+function extendDayList(direction){
+ const list=$('monthDayList');
+ if(extendingDayList||!list.children.length)return;
+ extendingDayList=true;
+ const oldHeight=list.scrollHeight,oldTop=list.scrollTop;
+ if(direction==='down'){
+  const end=parseDate(list.dataset.end);
+  const nextStart=new Date(end.getFullYear(),end.getMonth()+1,1);
+  const nextEnd=new Date(nextStart.getFullYear(),nextStart.getMonth()+1,0);
+  const fragment=document.createDocumentFragment();
+  for(let d=new Date(nextStart);d<=nextEnd;d=plus(d,1))fragment.append(makeDayRow(d));
+  list.append(fragment);list.dataset.end=iso(nextEnd);
+ }else{
+  const start=parseDate(list.dataset.start);
+  const prevStart=new Date(start.getFullYear(),start.getMonth()-1,1);
+  const prevEnd=new Date(start.getFullYear(),start.getMonth(),0);
+  const fragment=document.createDocumentFragment();
+  for(let d=new Date(prevStart);d<=prevEnd;d=plus(d,1))fragment.append(makeDayRow(d));
+  list.insertBefore(fragment,list.firstChild);list.dataset.start=iso(prevStart);
+  // Gleiche sichtbare Tagesposition beibehalten, obwohl oben Zeilen hinzukamen.
+  list.scrollTop=oldTop+(list.scrollHeight-oldHeight);
+ }
+ extendingDayList=false;
+}
+$('monthDayList').addEventListener('scroll',()=>{
+ const list=$('monthDayList');
+ if(list.scrollTop<220)extendDayList('up');
+ else if(list.scrollHeight-list.scrollTop-list.clientHeight<220)extendDayList('down');
+ const probe=list.getBoundingClientRect().top+list.clientHeight/2;
+ const rows=list.querySelectorAll('.day-row');
+ let visible=null;
+ for(const row of rows){if(row.getBoundingClientRect().bottom>probe){visible=row;break}}
+ if(!visible)return;
+ const d=parseDate(visible.dataset.date),nextMonth=new Date(d.getFullYear(),d.getMonth(),1);
+ if(nextMonth.getFullYear()!==month.getFullYear()||nextMonth.getMonth()!==month.getMonth()){
+  const yearChanged=nextMonth.getFullYear()!==month.getFullYear();
+  month=nextMonth;updateMonthControls(yearChanged);
+ }
+},{passive:true});
+document.addEventListener('pointermove',e=>{if(!dragSelecting)return;const row=document.elementFromPoint(e.clientX,e.clientY)?.closest('#monthDayList .day-row');if(row?.dataset.date){rangeEnd=row.dataset.date;$('periodEnd').value=rangeEnd;document.querySelectorAll('#monthDayList .day-row').forEach(x=>x.classList.toggle('in-range',x.dataset.date>=rangeStart&&x.dataset.date<=rangeEnd||x.dataset.date>=rangeEnd&&x.dataset.date<=rangeStart));}});
+document.addEventListener('pointerup',()=>{if(!dragSelecting)return;dragSelecting=false;suppressDayClick=true;if(rangeStart&&rangeEnd&&rangeEnd<rangeStart)[rangeStart,rangeEnd]=[rangeEnd,rangeStart];$('periodStart').value=rangeStart;$('periodEnd').value=rangeEnd;tab('day');render()});
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function yearStatsForMonth(year, monthIndex){
+ const start=new Date(year,monthIndex,1), end=new Date(year,monthIndex+1,0);
+ const stats={Urlaub:{calendar:0,work:0},Krank:{calendar:0,work:0},AZK:{calendar:0,work:0},LZK:{calendar:0,work:0},'Opa-Tage':{calendar:0,work:0},Termine:0,Frei:0};
+ for(let d=new Date(start);d<=end;d=plus(d,1)){
+  const date=iso(d), sh=shiftFor(date), work=sh.code!=='X';
+  if(sh.code==='X')stats.Frei++;
+  const types=new Set(periodsOn(date).map(p=>p.type));
+  stats.Termine+=eventsOn(date).length;
+  for(const type of ['Urlaub','Krank','AZK','LZK','Opa-Tage']) if(types.has(type)){stats[type].calendar++;if(work)stats[type].work++;}
+ }
+ return stats;
+}
+function renderYearOverview(){
+ $('yearLabel').textContent='Jahresübersicht '+overviewYear+' · Plan '+activePlan;
+ const totals={Urlaub:{calendar:0,work:0},Krank:{calendar:0,work:0},AZK:{calendar:0,work:0},LZK:{calendar:0,work:0},'Opa-Tage':{calendar:0,work:0},Termine:0,Frei:0};
+ const months=[];
+ for(let m=0;m<12;m++){
+  const st=yearStatsForMonth(overviewYear,m);months.push(st);
+  for(const k of ['Urlaub','Krank','AZK','LZK','Opa-Tage']){totals[k].calendar+=st[k].calendar;totals[k].work+=st[k].work;}
+  totals.Frei+=st.Frei;totals.Termine+=st.Termine;
+ }
+ const cards=[['Termine',totals.Termine,'eingetragene Termine','persönliche Kalendertermine','termine'],['Urlaub',totals.Urlaub.work,'Arbeitstage verbraucht',totals.Urlaub.calendar+' Kalendertage','urlaub'],['Krank',totals.Krank.calendar,'Kalendertage',totals.Krank.work+' davon geplante Arbeitstage','krank'],['AZK',totals.AZK.work,'geplante Arbeitstage',totals.AZK.calendar+' Kalendertage','azk'],['LZK',totals.LZK.work,'geplante Arbeitstage',totals.LZK.calendar+' Kalendertage','lzk'],['Frei',totals.Frei,'freie Schichtplantage','laut Schichtplan','frei'],['Opa-Tage',totals['Opa-Tage'].calendar,'eingetragene Tage',totals['Opa-Tage'].work+' davon geplante Arbeitstage','opa']];
+ $('yearTotals').innerHTML=cards.map(([name,num,label,sub,cls])=>`<div class="year-stat ${cls}"><strong>${num}</strong><span>${name}</span><small>${label} · ${sub}</small></div>`).join('');
+ const names=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+ $('yearMonths').innerHTML=months.map((st,i)=>`<div class="year-month"><h4>${names[i]}</h4><div class="ym-line"><span>Urlaub</span><b>${st.Urlaub.work} AT</b></div><div class="ym-line"><span>Krank</span><b>${st.Krank.calendar} Tage</b></div><div class="ym-line"><span>AZK</span><b>${st.AZK.work} AT</b></div><div class="ym-line"><span>LZK</span><b>${st.LZK.work} AT</b></div><div class="ym-line"><span>Frei</span><b>${st.Frei} Tage</b></div><div class="ym-line"><span>Opa-Tage</span><b>${st['Opa-Tage'].calendar} Tage</b></div><div class="ym-line"><span>Termine</span><b>${st.Termine}</b></div></div>`).join('');
+}
+// Gesetzliche Feiertage in Niedersachsen nach § 2 NFeiertagsG.
+// Bewegliche Feiertage werden aus dem Osterdatum des jeweiligen Jahres berechnet.
+function easterSunday(year){
+ const a=year%19,b=Math.floor(year/100),c=year%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451);
+ const monthNo=Math.floor((h+l-7*m+114)/31),dayNo=((h+l-7*m+114)%31)+1;
+ return new Date(year,monthNo-1,dayNo);
+}
+function holidaysForYear(year){
+ const easter=easterSunday(year);
+ return [
+  {date:year+'-01-01',name:'Neujahr'},
+  {date:iso(plus(easter,-2)),name:'Karfreitag'},
+  {date:iso(plus(easter,1)),name:'Ostermontag'},
+  {date:year+'-05-01',name:'Tag der Arbeit'},
+  {date:iso(plus(easter,39)),name:'Christi Himmelfahrt'},
+  {date:iso(plus(easter,50)),name:'Pfingstmontag'},
+  {date:year+'-10-03',name:'Tag der Deutschen Einheit'},
+  {date:year+'-10-31',name:'Reformationstag'},
+  {date:year+'-12-25',name:'1. Weihnachtstag'},
+  {date:year+'-12-26',name:'2. Weihnachtstag'}
+ ].sort((a,b)=>a.date.localeCompare(b.date));
+}
+const holidayLookupCache={};
+function holidayNameOn(date){const year=parseDate(date).getFullYear();if(!holidayLookupCache[year])holidayLookupCache[year]=new Map(holidaysForYear(year).map(h=>[h.date,h.name]));return holidayLookupCache[year].get(date)||''}
+function isShiftFree(date,plan){return shiftForForPlan(date,plan).code==='X'}
+function existingPeriodType(date){return state.periods.find(p=>date>=p.start&&date<=p.end)?.type||''}
+function bridgeSuggestionsForHoliday(holiday,holidayDates,year,plan){
+ // Nur dann als Brücke werten, wenn der Feiertag laut gewähltem Plan ohnehin frei ist.
+ if(!isShiftFree(holiday.date,plan))return [];
+ const suggestions=[];
+ for(let offset=-3;offset<=3;offset++){
+  if(offset===0)continue;
+  const candidate=iso(plus(parseDate(holiday.date),offset));
+  const shift=shiftForForPlan(candidate,plan);
+  if(shift.code==='X'||existingPeriodType(candidate))continue;
+  // Der vorgeschlagene Tag muss direkt an einen bereits freien Tag anschließen.
+  const before=iso(plus(parseDate(candidate),-1)),after=iso(plus(parseDate(candidate),1));
+  if(!isShiftFree(before,plan)&&!isShiftFree(after,plan))continue;
+  // Gesamten zusammenhängenden Freizeitblock nach Freinahme dieses Tages ermitteln.
+  let start=parseDate(candidate),end=parseDate(candidate);
+  for(let i=0;i<10;i++){const prev=iso(plus(start,-1));if(!isShiftFree(prev,plan))break;start=plus(start,-1)}
+  for(let i=0;i<10;i++){const next=iso(plus(end,1));if(!isShiftFree(next,plan))break;end=plus(end,1)}
+  // Kandidat ist frei; prüfen, ob der Feiertag im so verbundenen Block liegt.
+  if(holiday.date<iso(start)||holiday.date>iso(end))continue;
+  let total=Math.round((end-start)/86400000)+1;
+  // Im Zeitraum liegt ein gesetzlicher Feiertag; dieser ist Teil des Blocks, sofern laut Schichtplan frei.
+  suggestions.push({date:candidate,shift:shift.name,total,offset:Math.abs(offset)});
+ }
+ return suggestions.sort((a,b)=>b.total-a.total||a.offset-b.offset||a.date.localeCompare(b.date));
+}
+function renderBridgePlanner(){
+ $('bridgeYearLabel').textContent='Brückentage im Vier-Schicht-Betrieb '+bridgeYear+' · Plan '+activePlan;
+ const root=$('bridgeResults');root.innerHTML='';
+ const holidays=holidaysForYear(bridgeYear),holidaySet=new Set(holidays.map(h=>h.date));
+ holidays.forEach(h=>{
+  const d=parseDate(h.date),sh=shiftForForPlan(h.date,activePlan),card=document.createElement('div');
+  card.className='bridge-holiday';
+  const header=document.createElement('div');header.className='bridge-holiday-head';
+  const title=document.createElement('div');
+  const h3=document.createElement('h3');h3.textContent=h.name;title.append(h3);
+  const meta=document.createElement('div');meta.className='hint';meta.textContent=fmt(d)+' · '+(sh.code==='X'?'laut Plan frei':sh.name+' laut Plan');title.append(meta);
+  const badge=document.createElement('span');badge.className='pill';badge.textContent=sh.code==='X'?'Feiertag + Frei':'Feiertag · Dienst laut Plan';
+  header.append(title,badge);card.append(header);
+  const suggestions=bridgeSuggestionsForHoliday(h,holidaySet,bridgeYear,activePlan);
+  if(sh.code!=='X'){
+   const note=document.createElement('p');note.className='bridge-status';note.textContent='Für diesen Feiertag gibt es keinen automatischen Brückentagsvorschlag, weil dein ausgewählter Schichtplan hier Dienst vorsieht.';card.append(note);
+  }else if(!suggestions.length){
+   const note=document.createElement('p');note.className='bridge-status';note.textContent='Keine passenden zusätzlichen Arbeitstage direkt neben dem freien Feiertagszeitraum gefunden.';card.append(note);
+  }else{
+   const list=document.createElement('div');list.className='bridge-suggestions';
+   suggestions.forEach(sug=>{
+    const row=document.createElement('div');row.className='bridge-suggestion';
+    const info=document.createElement('div');
+    const strong=document.createElement('strong');strong.textContent=fmt(parseDate(sug.date))+' · '+sug.shift;info.append(strong);
+    const hint=document.createElement('div');hint.className='hint';hint.textContent='Mit diesem Tag: '+sug.total+' zusammenhängende freie Kalendertage (rechnerischer Vorschlag)';info.append(hint);
+    const controls=document.createElement('div');controls.className='bridge-suggestion-controls';
+    const select=document.createElement('select');select.setAttribute('aria-label','Eintragsart für '+sug.date);
+    ['Urlaub','AZK','LZK'].forEach(t=>{const op=document.createElement('option');op.value=t;op.textContent=t;select.append(op)});
+    const btn=document.createElement('button');btn.className='primary';btn.textContent='Übernehmen';btn.dataset.bridgeDate=sug.date;btn.dataset.bridgeType='';
+    btn.onclick=()=>applyBridgeDay(sug.date,select.value);
+    controls.append(select,btn);row.append(info,controls);list.append(row);
+   });
+   card.append(list);
+  }
+  root.append(card);
+ });
+}
+function applyBridgeDay(date,type){
+ const existing=existingPeriodType(date);
+ if(existing&&!confirm(date+' ist bereits als '+existing+' eingetragen. Soll der Eintrag trotzdem zusätzlich gespeichert werden?'))return;
+ if(!confirm('Den '+fmt(parseDate(date))+' als '+type+' in deinen Kalender übernehmen?'))return;
+ state.periods.push({id:'bridge-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),start:date,end:date,type});
+ state.periods.sort((a,b)=>a.start.localeCompare(b.start));save();render();renderBridgePlanner();
+ alert(type+' wurde am '+fmt(parseDate(date))+' eingetragen.');
+}
+// Amtliche Schulferien Niedersachsen laut Kultusministerium (Ferienordnung 2024/25 bis 2029/30).
+const schoolBreaks=[
+ ['Sommerferien 2026','2026-07-02','2026-08-12'],['Herbstferien 2026','2026-10-12','2026-10-24'],['Weihnachtsferien 2026/27','2026-12-23','2027-01-09'],
+ ['Halbjahresferien 2027','2027-02-01','2027-02-02'],['Osterferien 2027','2027-03-22','2027-04-03'],['Sommerferien 2027','2027-07-08','2027-08-18'],['Herbstferien 2027','2027-10-16','2027-10-30'],['Weihnachtsferien 2027/28','2027-12-23','2028-01-08'],
+ ['Halbjahresferien 2028','2028-01-31','2028-02-01'],['Osterferien 2028','2028-04-10','2028-04-22'],['Sommerferien 2028','2028-07-20','2028-08-30'],['Herbstferien 2028','2028-10-02','2028-10-02'],['Herbstferien 2028','2028-10-23','2028-11-04'],['Weihnachtsferien 2028/29','2028-12-27','2029-01-06'],
+ ['Halbjahresferien 2029','2029-02-01','2029-02-02'],['Osterferien 2029','2029-03-19','2029-04-03'],['Sommerferien 2029','2029-07-19','2029-08-29'],['Herbstferien 2029','2029-10-04','2029-10-05'],['Herbstferien 2029','2029-10-22','2029-11-02'],['Weihnachtsferien 2029/30','2029-12-21','2030-01-05'],
+ ['Halbjahresferien 2030','2030-01-31','2030-02-01'],['Osterferien 2030','2030-04-08','2030-04-23'],['Sommerferien 2030','2030-07-11','2030-08-21']
+];
+function schoolBreakName(date){return schoolBreaks.find(x=>date>=x[1]&&date<=x[2])?.[0]||''}
+function vacationPlanner(){
+ const year=Number($('vacYear').value),weeks=$('vacWeeks').value,days=weeks==='custom'?Number($('vacCustomDays').value):Number(weeks)*7;
+ const areaFilter=document.querySelector('input[name="vacAreaFilter"]:checked')?.value||'both';
+ const root=$('vacResults'),allocation=$('vacAllocation');root.innerHTML='';allocation.innerHTML='';
+ if(!Number.isSafeInteger(year)||year<2026||year>9999){root.innerHTML='<p class="notice">Bitte ein gültiges Planungsjahr ab 2026 eingeben. Es gibt kein festgelegtes Endjahr.</p>';return}
+ if(year>2030&&areaFilter!=='both'){root.innerHTML='<p class="notice"><strong>Schulferientermine noch nicht verfügbar:</strong> Für '+year+' sind die niedersächsischen Ferientermine noch nicht hinterlegt. Deshalb kann die Suche „'+(areaFilter==='inside'?'Innerhalb':'Außerhalb')+' der Schulferien“ noch keine verlässlichen Ergebnisse liefern. Sobald die Ferientermine für dieses Jahr ergänzt sind, funktioniert diese Auswahl automatisch. Mit „Beides“ kannst du das gesamte Jahr schon jetzt unabhängig von den Ferien durchsuchen.</p>';return}
+ if(!Number.isInteger(days)||days<1||days>60){root.innerHTML='<p class="notice">Bitte eine Dauer zwischen 1 und 60 Tagen eingeben.</p>';return}
+ const yearStart=iso(new Date(year,0,1)),yearEnd=iso(new Date(year,11,31));
+ const breaks=schoolBreaks.filter(b=>b[2]>=yearStart&&b[1]<=yearEnd);
+ const candidates=[];
+ // Das gesamte Planungsjahr durchsuchen – nicht nur die unmittelbaren Feriengrenzen.
+ for(let d=parseDate(yearStart);d<=parseDate(yearEnd);d=plus(d,1)){
+  const a=iso(d),b=iso(plus(d,days-1));
+  const dates=daysBetween(a,b);
+  if(dates.some(x=>state.periods.some(p=>x>=p.start&&x<=p.end)))continue;
+  const shifts=dates.map(x=>({date:x,...shiftForForPlan(x,activePlan)}));
+  const work=shifts.filter(x=>x.code!=='X');
+  const breakDates=dates.filter(x=>schoolBreakName(x));
+  const breakDays=breakDates.length;
+  const holidayDays=dates.filter(x=>holidayNameOn(x)).length;
+  const freeDays=days-work.length;
+  const matchingBreaks=breaks.filter(br=>br[2]>=a&&br[1]<=b);
+  const breakNames=[...new Set(matchingBreaks.map(x=>x[0]))];
+  let boundaryBefore=0,boundaryAfter=0,first=null,last=null;
+  if(matchingBreaks.length){
+   first=matchingBreaks.reduce((v,x)=>x[1]<v?x[1]:v,matchingBreaks[0][1]);
+   last=matchingBreaks.reduce((v,x)=>x[2]>v?x[2]:v,matchingBreaks[0][2]);
+   boundaryBefore=a<first?Math.round((parseDate(first)-parseDate(a))/86400000):0;
+   boundaryAfter=b>last?Math.round((parseDate(b)-parseDate(last))/86400000):0;
+  }
+  let category='Außerhalb der Schulferien';
+  if(matchingBreaks.length){
+   const allInside=breakDays===dates.length;
+   if(allInside)category='Mitten in den Schulferien';
+   else if(a<first&&b>last)category='Über die Ferien hinweg';
+   else if(a<first)category=boundaryBefore<=3?'Bis zu 3 Tage vor Ferienbeginn':'Vor den Ferien begonnen';
+   else if(b>last)category=boundaryAfter<=3?'Bis zu 3 Tage nach Ferienende':'Über das Ferienende hinaus';
+   else category='Teilweise innerhalb der Schulferien';
+  }
+  const shiftCounts={F:work.filter(x=>x.code==='F').length,S:work.filter(x=>x.code==='S').length,N:work.filter(x=>x.code==='N').length};
+  const outsideDays=dates.length-breakDays;
+  candidates.push({start:a,end:b,dates,work,breakDays,outsideDays,freeDays,breakNames,holidayDays,category,shiftCounts});
+ }
+ // Bei den beiden Schwerpunkt-Modi müssen mehr Kalendertage auf der gewählten Seite liegen.
+ // Im Modus Beides bleibt die bisherige Gesamtsuche über das ganze Jahr erhalten.
+ const matchingCandidates=candidates.filter(c=>{
+  if(areaFilter==='both')return true;
+  // An Feriengrenzen darf die Suche optional höchstens drei Tage auf jede Seite erweitern.
+  // Zeiträume vollständig innerhalb oder vollständig außerhalb der Ferien bleiben uneingeschränkt.
+  const touchesBreak=c.breakDays>0;
+  const first=c.breakNames.length?breaks.filter(br=>c.breakNames.includes(br[0])&&br[2]>=c.start&&br[1]<=c.end).reduce((v,x)=>x[1]<v?x[1]:v,'9999-12-31'):null;
+  const last=c.breakNames.length?breaks.filter(br=>c.breakNames.includes(br[0])&&br[2]>=c.start&&br[1]<=c.end).reduce((v,x)=>x[2]>v?x[2]:v,'0000-01-01'):null;
+  const before=touchesBreak&&first&&c.start<first?Math.round((parseDate(first)-parseDate(c.start))/86400000):0;
+  const after=touchesBreak&&last&&c.end>last?Math.round((parseDate(c.end)-parseDate(last))/86400000):0;
+  if(touchesBreak&&(before>3||after>3))return false;
+  return areaFilter==='inside'?c.breakDays>c.outsideDays:c.outsideDays>c.breakDays;
+ });
+ matchingCandidates.sort((a,b)=>a.work.length-b.work.length||b.freeDays-a.freeDays||(areaFilter==='inside'?b.breakDays-a.breakDays:areaFilter==='outside'?b.outsideDays-a.outsideDays:b.breakDays-a.breakDays)||b.holidayDays-a.holidayDays||a.start.localeCompare(b.start));
+ // Unterschiedliche, nicht überlappende Vorschläge aus dem ganzen Jahr zeigen.
+ const chosen=[];
+ for(const c of matchingCandidates){if(chosen.every(x=>c.end<x.start||c.start>x.end)){chosen.push(c);if(chosen.length===12)break}}
+ if(!chosen.length){const wanted=areaFilter==='inside'?'überwiegend innerhalb':areaFilter==='outside'?'überwiegend außerhalb':'innerhalb und außerhalb';root.innerHTML='<p class="notice">Für '+year+' wurden keine passenden freien Zeiträume '+wanted+' der Schulferien gefunden. Wähle eine andere Dauer oder die Suche „Beides“.</p>';return}
+ const filterLabel=areaFilter==='inside'?'innerhalb der Schulferien bevorzugt':areaFilter==='outside'?'außerhalb der Schulferien bevorzugt':'gesamtes Jahr – innerhalb und außerhalb der Schulferien';
+ const heading=document.createElement('h3');heading.className='title';heading.style.fontSize='17px';heading.style.marginTop='20px';heading.textContent='Passende Zeiträume für Schichtplan '+activePlan+' – '+filterLabel;root.append(heading);
+ chosen.forEach((c,i)=>{
+  const card=document.createElement('div');card.className='vacation-result';
+  const h=document.createElement('h3');h.textContent=(i+1)+'. '+fmt(parseDate(c.start))+' bis '+fmt(parseDate(c.end));card.append(h);
+  const category=document.createElement('p');category.className='small';category.style.fontWeight='800';category.textContent=c.category;card.append(category);
+  const p=document.createElement('p');p.className='hint';p.textContent=c.dates.length+' Kalendertage · '+c.freeDays+' ohnehin freie Schichttage · '+c.work.length+' geplante Arbeitstage';card.append(p);
+  const detail=document.createElement('p');detail.className='small';detail.textContent=(c.breakNames.length?c.breakNames.join(', '):(year>2030?'Schulferientermine für dieses Jahr nicht hinterlegt':'Keine Schulferien im Zeitraum'))+' · '+c.breakDays+' Ferientage · '+c.outsideDays+' Tage außerhalb der Ferien · '+c.holidayDays+' gesetzliche Feiertage';card.append(detail);
+  const shifts=document.createElement('p');shifts.className='small';shifts.textContent='Benötigte Dienste: '+c.shiftCounts.F+' Früh · '+c.shiftCounts.S+' Spät · '+c.shiftCounts.N+' Nacht';card.append(shifts);
+  const btn=document.createElement('button');btn.className='primary';btn.textContent='Diesen Zeitraum auswählen';btn.onclick=()=>showVacationAllocation(c,i+1);card.append(btn);root.append(card);
+ });
+ const best=chosen[0];
+ const note=document.createElement('div');note.className='notice';note.style.marginTop='18px';note.innerHTML='<strong>Günstigster Vorschlag nach benötigten Arbeitstagen:</strong> '+fmt(parseDate(best.start))+' bis '+fmt(parseDate(best.end))+' · '+best.work.length+' Arbeitstage freizustellen · '+best.freeDays+' ohnehin freie Schichttage · '+best.category+'.';root.prepend(note);
+}
+function showVacationAllocation(c,number){
+ const root=$('vacAllocation');root.innerHTML='';
+ const card=document.createElement('div');card.className='card';
+ const title=document.createElement('h3');title.className='title';title.textContent='Deine Aufteilung für Vorschlag '+number;card.append(title);
+ const info=document.createElement('p');info.className='hint';info.textContent='Für diesen Zeitraum müssen '+c.work.length+' geplante Arbeitstage abgedeckt werden. Verteile diese Tage selbst auf Urlaub, AZK und LZK.';card.append(info);
+ const grid=document.createElement('div');grid.className='grid2';
+ const fields={};[['Urlaub','Urlaub'],['AZK','AZK'],['LZK','LZK']].forEach(([key,label])=>{const wrap=document.createElement('div');wrap.className='field';const lab=document.createElement('label');lab.textContent=label+'-Tage';const input=document.createElement('input');input.type='number';input.min='0';input.max=String(c.work.length);input.value=key==='Urlaub'?String(c.work.length):'0';input.id='alloc'+key;wrap.append(lab,input);grid.append(wrap);fields[key]=input});card.append(grid);
+ const status=document.createElement('div');status.className='notice';status.style.marginTop='12px';card.append(status);
+ const update=()=>{const total=Number(fields.Urlaub.value||0)+Number(fields.AZK.value||0)+Number(fields.LZK.value||0);status.textContent=total===c.work.length?'Passt genau: '+total+' von '+c.work.length+' benötigten Arbeitstagen sind verteilt.':'Noch '+(c.work.length-total>0?c.work.length-total+' Tage zu verteilen.':(total-c.work.length)+' Tage zu viel eingeplant.');};
+ Object.values(fields).forEach(x=>x.addEventListener('input',update));update();
+ const btn=document.createElement('button');btn.className='primary';btn.textContent='Aufteilung prüfen und Zeitraum übernehmen';btn.onclick=()=>{const counts={Urlaub:Number(fields.Urlaub.value||0),AZK:Number(fields.AZK.value||0),LZK:Number(fields.LZK.value||0)};const total=counts.Urlaub+counts.AZK+counts.LZK;if(Object.values(counts).some(n=>!Number.isInteger(n)||n<0)||total!==c.work.length){alert('Bitte verteile genau '+c.work.length+' Arbeitstage auf Urlaub, AZK und LZK.');return;}let remaining={...counts},assign=[];for(const date of c.work){const type=['Urlaub','AZK','LZK'].find(t=>remaining[t]>0);if(!type)break;remaining[type]--;assign.push({date,type});}applyVacationSuggestion(c,assign);};card.append(btn);
+ const hint=document.createElement('p');hint.className='hint';hint.textContent='Beispiel: Bei 14 benötigten Arbeitstagen könntest du 5 Urlaub + 4 AZK + 5 LZK eintragen. Die Reihenfolge wird auf die Arbeitstage im Zeitraum verteilt.';card.append(hint);
+ root.append(card);root.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function applyVacationSuggestion(c,assign){
+ if(!confirm('Diesen Zeitraum in deinen Kalender übernehmen? Es werden nur geplante Arbeitstage mit Urlaub/AZK/LZK markiert.'))return;
+ let groups=[];for(const item of assign){let last=groups[groups.length-1];if(last&&last.type===item.type&&iso(plus(parseDate(last.end),1))===item.date)last.end=item.date;else groups.push({type:item.type,start:item.date,end:item.date})}
+ groups.forEach((g,i)=>state.periods.push({id:'vac-'+Date.now()+'-'+i+'-'+Math.random().toString(36).slice(2,6),...g}));
+ state.periods.sort((a,b)=>a.start.localeCompare(b.start));save();render();alert('Die geplanten Urlaub-/AZK-/LZK-Tage wurden übernommen.');
+}
+$('vacWeeks').onchange=()=>{$('vacCustomWrap').classList.toggle('hidden',$('vacWeeks').value!=='custom');$('vacResults').innerHTML='';$('vacAllocation').innerHTML=''};
+$('vacYear').onchange=()=>{$('vacResults').innerHTML='';$('vacAllocation').innerHTML=''};
+document.querySelectorAll('input[name="vacAreaFilter"]').forEach(el=>el.addEventListener('change',()=>{$('vacResults').innerHTML='';$('vacAllocation').innerHTML=''}));
+$('vacFind').onclick=()=>{try{vacationPlanner()}catch(error){console.error('Ferienplaner-Suche fehlgeschlagen:',error);$('vacResults').innerHTML='<p class="notice">Bei der Suche ist ein Fehler aufgetreten. Bitte prüfe Planungsjahr und Dauer und versuche es erneut.</p>';$('vacAllocation').innerHTML=''}};
+let bridgeYear=new Date().getFullYear();
+function scrollReminderAboveCalendar(){const reminder=$('reminderNav');if(!reminder)return;requestAnimationFrame(()=>{const top=reminder.getBoundingClientRect().top+window.scrollY-12;window.scrollTo({top:Math.max(0,top),behavior:'smooth'});});}
+function tab(name){document.querySelectorAll('main section').forEach(s=>s.classList.toggle('hidden',s.id!==name));document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));if(name==='day')render();if(name==='year')renderYearOverview();if(name==='bridge')renderBridgePlanner();if(name==='birthdays')renderBirthdays();if(name==='reminders')renderReminders();if(name==='vacation'){$('vacYear').value=String(Math.max(2026,new Date().getFullYear()));$('vacResults').innerHTML='';$('vacAllocation').innerHTML=''}if(name==='calendar')scrollReminderAboveCalendar()}
+document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>tab(b.dataset.tab));
+document.querySelector('[data-action=share]').onclick=()=>$('shareDialog').showModal();
+$('yearPrev').onclick=()=>{overviewYear--;renderYearOverview()};$('yearNext').onclick=()=>{overviewYear++;renderYearOverview()};
+$('bridgePrev').onclick=()=>{bridgeYear--;renderBridgePlanner()};$('bridgeNext').onclick=()=>{bridgeYear++;renderBridgePlanner()};
+$('todayBtn').onclick=()=>{selected=todayISO();month=new Date(parseDate(selected).getFullYear(),parseDate(selected).getMonth(),1);rangeStart=rangeEnd=null;tab('calendar');render();};
+$('dayTodayBtn').onclick=()=>{selected=todayISO();month=new Date(parseDate(selected).getFullYear(),parseDate(selected).getMonth(),1);rangeStart=rangeEnd=null;render();const todayRow=$('monthDayList').querySelector(`[data-date="${selected}"]`);if(todayRow)todayRow.scrollIntoView({block:'center',behavior:'smooth'});};
+$('prevMonth').onclick=()=>{month=new Date(month.getFullYear(),month.getMonth()-1,1);selected=iso(new Date(month.getFullYear(),month.getMonth(),1));render()};
+$('nextMonth').onclick=()=>{month=new Date(month.getFullYear(),month.getMonth()+1,1);selected=iso(new Date(month.getFullYear(),month.getMonth(),1));render()};
+$('openDay').onclick=()=>tab('day');$('dayDate').onchange=e=>{selected=e.target.value;render()};
+$('themeBtn').onclick=()=>{state.theme=state.theme==='dark'?'light':'dark';sessionStorage.setItem('nordlandThemeChosen','1');save();render()};
+$('planSelect').onchange=e=>{activePlan=e.target.value;state.activePlan=activePlan;save();render();if(!$('year').classList.contains('hidden'))renderYearOverview();if(!$('bridge').classList.contains('hidden'))renderBridgePlanner()};
+$('saveSettings').onclick=()=>{let vals={};for(const k of ['A','B','C','D']){vals[k]=$('anchor'+k).value;if(!vals[k]||parseDate(vals[k]).getDay()!==1){alert('Bitte für Plan '+k+' einen gültigen Montag auswählen.');return}}state.anchors=vals;state.activePlan=activePlan;save();render();if(!$('year').classList.contains('hidden'))renderYearOverview();if(!$('bridge').classList.contains('hidden'))renderBridgePlanner();alert('Alle vier Schichtpläne wurden gespeichert.')};
+$('addEvent').onclick=()=>openEvent();
+function openEvent(e){editingId=e?.id||null;$('eventDate').value=e?.date||selected;$('eventTitle').value=e?.title||'';$('eventTime').value=e?.time||'';$('eventNote').value=e?.note||'';$('reminderOne').value=e?.reminderOne??(e?.reminder?'1d':'off');$('reminderOneTime').value=e?.reminderOneTime||'09:00';$('reminderTwo').value=e?.reminderTwo??'off';$('reminderTwoTime').value=e?.reminderTwoTime||'07:00';$('eventDialog').showModal()}
+function editEvent(id){openEvent(state.events.find(e=>e.id===id))}
+$('cancelEvent').onclick=()=>$('eventDialog').close();
+$('saveEvent').onclick=()=>{let title=$('eventTitle').value.trim();if(!title){alert('Bitte einen Titel eingeben.');return}let e={id:editingId||String(Date.now()),date:$('eventDate').value,title,time:$('eventTime').value,note:$('eventNote').value,reminderOne:$('reminderOne').value,reminderOneTime:$('reminderOneTime').value,reminderTwo:$('reminderTwo').value,reminderTwoTime:$('reminderTwoTime').value,reminder:$('reminderOne').value!=='off'||$('reminderTwo').value!=='off'};if(editingId)state.events=state.events.map(x=>x.id===editingId?e:x);else state.events.push(e);state.events.sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));selected=e.date;save();$('eventDialog').close();render();if(!$('year').classList.contains('hidden'))renderYearOverview()};
+$('saveBirthday').onclick=()=>{const first=$('birthdayFirst').value.trim(),last=$('birthdayLast').value.trim(),day=Number($('birthdayDay').value),month=Number($('birthdayMonth').value);if(!first||!last){alert('Bitte Vorname und Nachname eingeben.');return}if(month===2&&day>29||[4,6,9,11].includes(month)&&day>30){alert('Dieses Datum gibt es nicht.');return}const item={id:editingBirthdayId||('birthday-'+Date.now()),first,last,day,month};if(editingBirthdayId)state.birthdays=state.birthdays.map(b=>b.id===editingBirthdayId?item:b);else state.birthdays.push(item);editingBirthdayId=null;$('birthdayFirst').value='';$('birthdayLast').value='';$('birthdayDay').value='1';$('birthdayMonth').value='1';$('saveBirthday').textContent='Geburtstag speichern';$('cancelBirthdayEdit').classList.add('hidden');save();renderBirthdays();render();alert('Geburtstag wurde gespeichert.')};
+$('cancelBirthdayEdit').onclick=()=>{editingBirthdayId=null;$('birthdayFirst').value='';$('birthdayLast').value='';$('saveBirthday').textContent='Geburtstag speichern';$('cancelBirthdayEdit').classList.add('hidden')};
+function renderLeaveDrafts(){
+ const root=$('leaveDraftList');
+ if(!leaveDrafts.length){root.innerHTML='<p class="hint">Noch keine Zeiträume vorgemerkt.</p>';return}
+ root.innerHTML=leaveDrafts.map((p,i)=>`<div class="item"><div class="row"><span><strong>${fmt(parseDate(p.start))}</strong> bis <strong>${fmt(parseDate(p.end))}</strong><br><span class="pill">${escapeHtml(p.type)}</span></span><span class="actions" style="margin:0"><button type="button" data-leave-edit="${i}">Ändern</button><button type="button" data-leave-remove="${i}">Entfernen</button></span></div></div>`).join('');
+ root.querySelectorAll('[data-leave-remove]').forEach(b=>b.onclick=()=>{leaveDrafts.splice(Number(b.dataset.leaveRemove),1);renderLeaveDrafts()});
+ root.querySelectorAll('[data-leave-edit]').forEach(b=>b.onclick=()=>{const i=Number(b.dataset.leaveEdit),p=leaveDrafts[i];$('leaveStart').value=p.start;$('leaveEnd').value=p.end;$('leaveType').value=p.type;leaveDrafts.splice(i,1);renderLeaveDrafts();$('leaveStart').scrollIntoView({behavior:'smooth',block:'center'});});
+}
+$('leaveAdd').onclick=()=>{
+ const a=$('leaveStart').value,b=$('leaveEnd').value,t=$('leaveType').value;
+ if(!a||!b){alert('Bitte Von- und Bis-Datum auswählen.');return}
+ if(b<a){alert('Das Bis-Datum darf nicht vor dem Von-Datum liegen.');return}
+ leaveDrafts.push({start:a,end:b,type:t});leaveDrafts.sort((x,y)=>x.start.localeCompare(y.start));renderLeaveDrafts();
+ $('leaveStart').value='';$('leaveEnd').value='';
+};
+$('leaveApply').onclick=()=>{
+ if(!leaveDrafts.length){alert('Bitte zuerst mindestens einen Zeitraum zur Liste hinzufügen.');return}
+ const ordered=leaveDrafts.slice().sort((a,b)=>a.start.localeCompare(b.start));
+ const lines=ordered.map((p,i)=>`${i+1}. ${p.type}: ${fmt(parseDate(p.start))} bis ${fmt(parseDate(p.end))}`).join('\n');
+ const existingOverlaps=ordered.some(d=>state.periods.some(p=>d.start<=p.end&&d.end>=p.start));
+ const draftOverlaps=ordered.some((d,i)=>ordered.slice(i+1).some(n=>d.start<=n.end&&d.end>=n.start));
+ let question='Bitte prüfe deine Zeiträume:\n\n'+lines+'\n\nSollen diese '+ordered.length+' Zeiträume jetzt in den Schichtkalender übernommen werden?';
+ if(existingOverlaps)question+='\n\nAchtung: Mindestens ein Zeitraum überschneidet sich mit einem bereits gespeicherten Kalendereintrag.';
+ if(draftOverlaps)question+='\nAchtung: Auch innerhalb deiner Vormerkliste gibt es überlappende Zeiträume.';
+ question+='\n\nBereits vorhandene Einträge bleiben bestehen.';
+ if(!confirm(question))return;
+ const stamp=Date.now();ordered.forEach((p,i)=>state.periods.push({id:'leave-'+stamp+'-'+i+'-'+Math.random().toString(36).slice(2,7),...p}));
+ const first=ordered[0].start;leaveDrafts=[];save();selected=first;month=new Date(parseDate(first).getFullYear(),parseDate(first).getMonth(),1);tab('calendar');render();if(!$('year').classList.contains('hidden'))renderYearOverview();alert('Alle vorgemerkten Zeiträume wurden in den Schichtkalender übernommen.');
+};
+$('leaveClear').onclick=()=>{if(!leaveDrafts.length)return;if(confirm('Alle nur vorgemerkten Zeiträume aus der Liste entfernen?')){leaveDrafts=[];renderLeaveDrafts()}};
+$('savePeriod').onclick=()=>{let a=$('periodStart').value,b=$('periodEnd').value,t=$('periodType').value;if(!a||!b){alert('Bitte Von- und Bis-Datum auswählen.');return}if(b<a){alert('Das Bis-Datum darf nicht vor dem Von-Datum liegen.');return}let overlap=state.periods.filter(p=>a<=p.end&&b>=p.start);if(overlap.length&&!confirm('Der Zeitraum überschneidet sich mit einem bestehenden Eintrag. Soll der neue Eintrag trotzdem gespeichert werden?'))return;state.periods.push({id:String(Date.now()),start:a,end:b,type:t});state.periods.sort((x,y)=>x.start.localeCompare(y.start));rangeStart=rangeEnd=null;save();render();if(!$('year').classList.contains('hidden'))renderYearOverview();alert('Zeitraum wurde gespeichert.')};
+$('cancelPeriod').onclick=()=>{rangeStart=rangeEnd=null;$('periodStart').value=selected;$('periodEnd').value='';render()};
+$('periodStart').onchange=e=>{rangeStart=e.target.value;rangeEnd=null;render()};$('periodEnd').onchange=e=>{rangeEnd=e.target.value;if(rangeStart&&rangeEnd&&rangeEnd<rangeStart){[rangeStart,rangeEnd]=[rangeEnd,rangeStart]}render()};
+$('randomMode').onchange=()=>{const names=$('randomMode').value==='names';$('diceOptions').classList.toggle('hidden',names);$('nameOptions').classList.toggle('hidden',!names)};
+const pipPatterns={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
+function dieMarkup(value){const faces=[['front',value],['back',7-value],['right',2],['left',5],['top',3],['bottom',4]];return `<span class="die" role="img" aria-label="Würfel zeigt ${value}"><span class="die-cube">${faces.map(([side,n])=>`<span class="die-face ${side}">${Array.from({length:9},(_,i)=>`<i class="pip ${pipPatterns[n].includes(i)?'on':''}"></i>`).join('')}</span>`).join('')}</span></span>`}
+let diceRolling=false,nameRolling=false;
+let diceAudioContext=null;
+function playDiceSound(type='roll'){
+ try{
+  const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
+  diceAudioContext=diceAudioContext||new AC();if(diceAudioContext.state==='suspended')diceAudioContext.resume();
+  const ctx=diceAudioContext,now=ctx.currentTime;
+  const osc=ctx.createOscillator(),gain=ctx.createGain();
+  osc.type=type==='wall'?'triangle':'square';
+  osc.frequency.setValueAtTime(type==='wall'?620:210+Math.random()*120,now);
+  osc.frequency.exponentialRampToValueAtTime(type==='wall'?115:72,now+(type==='wall'?.12:.075));
+  gain.gain.setValueAtTime(.0001,now);
+  gain.gain.exponentialRampToValueAtTime(type==='wall'?.10:.045,now+.006);
+  gain.gain.exponentialRampToValueAtTime(.0001,now+(type==='wall'?.15:.09));
+  osc.connect(gain);gain.connect(ctx.destination);osc.start(now);osc.stop(now+(type==='wall'?.16:.10));
+  // Kurzes gefiltertes Rasseln wie ein echter Würfel auf dem Tisch.
+  const length=Math.floor(ctx.sampleRate*(type==='wall'?.075:.045)),buffer=ctx.createBuffer(1,length,ctx.sampleRate),data=buffer.getChannelData(0);
+  for(let i=0;i<length;i++)data[i]=(Math.random()*2-1)*(1-i/length);
+  const noise=ctx.createBufferSource(),filter=ctx.createBiquadFilter(),ng=ctx.createGain();noise.buffer=buffer;filter.type='lowpass';filter.frequency.value=type==='wall'?1800:950;ng.gain.setValueAtTime(type==='wall'?.12:.055,now);ng.gain.exponentialRampToValueAtTime(.0001,now+(type==='wall'?.08:.05));noise.connect(filter);filter.connect(ng);ng.connect(ctx.destination);noise.start(now);
+ }catch(e){}
+}
+function speakRollResult(text){
+ try{if(!('speechSynthesis'in window))return;window.speechSynthesis.cancel();const utterance=new SpeechSynthesisUtterance(text);utterance.lang='de-DE';utterance.rate=.92;utterance.pitch=1;const voices=window.speechSynthesis.getVoices();const german=voices.find(v=>v.lang&&v.lang.toLowerCase().startsWith('de'));if(german)utterance.voice=german;window.speechSynthesis.speak(utterance);}catch(e){}
+}
+function showRollStage(caption,html,kind='dice'){const el=document.createElement('div');el.className='roll-fullscreen rolling-stage';el.innerHTML=`<div class="stage-caption">${caption}</div><div class="stage-result">${html}</div>`;document.body.appendChild(el);return el}
+function updateRollStage(el,html){const target=el&&el.querySelector('.stage-result');if(target)target.innerHTML=html}
+function slowRollStage(el,ticks){if(!el)return;const duration=Math.min(2.8,.62+ticks*.055);el.querySelectorAll('.die-cube,.name-die-cube').forEach(cube=>cube.style.animationDuration=duration+'s')}
+function finishRollStage(el,caption,html,winner=false){if(!el)return;el.classList.remove('rolling-stage');if(winner)el.classList.add('winner-stage');const cap=el.querySelector('.stage-caption');if(cap)cap.textContent=caption;updateRollStage(el,html);setTimeout(()=>{el.style.transition='opacity .35s ease,transform .35s ease';el.style.opacity='0';el.style.transform='scale(.82)';setTimeout(()=>el.remove(),380)},850)}
+$('rollDice').onclick=()=>{if(diceRolling)return;diceRolling=true;const btn=$('rollDice'),box=$('diceResult'),count=Number($('diceCount').value);btn.disabled=true;box.classList.add('rolling');$('diceTotal').textContent='';$('diceTotal').style.display='none';let ticks=0;const stage=showRollStage('',Array.from({length:count},()=>dieMarkup(1)).join(''));playDiceSound('roll');const animate=()=>{const preview=Array.from({length:count},()=>1+Math.floor(Math.random()*6));const html=preview.map(dieMarkup).join('');box.innerHTML=html;updateRollStage(stage,html);ticks++;slowRollStage(stage,ticks);playDiceSound([3,7,11,15,19].includes(ticks)?'wall':'roll');if(ticks<22){setTimeout(animate,55+ticks*11)}else{const values=Array.from({length:count},()=>1+Math.floor(Math.random()*6));const finalHtml=values.map(dieMarkup).join('');box.classList.remove('rolling');box.innerHTML=finalHtml;finishRollStage(stage,'',finalHtml);const total=values.reduce((a,b)=>a+b,0);speakRollResult(count===2?`Die Würfel zeigen ${values[0]} und ${values[1]}. Zusammen ${total}.`:`Die Zahl ist ${values[0]}.`);btn.textContent='Neu würfeln';btn.disabled=false;diceRolling=false;}};animate()};
+const namesStorageKey='nordland_random_names_v1';
+try{$('randomNames').value=localStorage.getItem(namesStorageKey)||'';}catch(e){}
+$('randomNames').addEventListener('input',()=>{try{localStorage.setItem(namesStorageKey,$('randomNames').value);$('namesSavedStatus').textContent='✓ Namensliste automatisch auf diesem Gerät gespeichert.';}catch(e){$('namesSavedStatus').textContent='Speichern im Browser nicht möglich. Bitte Datensicherung beachten.';}});
+const makeNameDie=(name)=>`<div class="name-die" aria-label="Namenswürfel ${escapeHtml(name)}"><div class="name-die-cube">${['front','back','right','left','top','bottom'].map(side=>`<div class="name-die-face ${side}">${escapeHtml(name)}</div>`).join('')}</div></div>`;
+$('drawName').onclick=()=>{if(nameRolling)return;const names=$('randomNames').value.split(/[\n,;]+/).map(x=>x.trim()).filter(Boolean);if(!names.length){alert('Bitte zuerst mindestens einen Namen eingeben.');return}try{localStorage.setItem(namesStorageKey,$('randomNames').value)}catch(e){}nameRolling=true;const btn=$('drawName'),result=$('nameResult');btn.disabled=true;result.classList.remove('winner-ready');result.classList.add('rolling-stage-mini');let ticks=0;const totalTicks=42;const stage=showRollStage('',makeNameDie(names[0]));playDiceSound('roll');const animate=()=>{const shown=names[Math.floor(Math.random()*names.length)];const html=makeNameDie(shown);updateRollStage(stage,html);result.innerHTML=html;ticks++;slowRollStage(stage,ticks);slowRollStage(result,ticks);playDiceSound([4,9,14,19,24,29,34,38].includes(ticks)?'wall':'roll');if(ticks<totalTicks){setTimeout(animate,38+ticks*9)}else{const winner=names[Math.floor(Math.random()*names.length)];const finalHtml=makeNameDie(winner);result.innerHTML=finalHtml;result.classList.remove('rolling-stage-mini');result.classList.add('winner-ready');finishRollStage(stage,'',finalHtml,true);speakRollResult(winner);btn.textContent='Neu würfeln';btn.disabled=false;nameRolling=false;}};animate()};
+$('savePin').onclick=()=>{let p=$('pinInput').value;if(p&& !/^\d{4}$/.test(p)){alert('Der PIN muss genau 4 Ziffern haben.');return}state.pin=p;save();alert(p?'PIN auf diesem Gerät aktiviert.':'PIN-Schutz ausgeschaltet.');};
+$('refreshReminders').onclick=()=>renderReminders();
+$('enableNotifications').onclick=async()=>{if(!('Notification'in window)){alert('Dieser Browser unterstützt keine Benachrichtigungen.');return}let p=await Notification.requestPermission();alert(p==='granted'?'Benachrichtigungen erlaubt. Geburtstage werden zusätzlich am Vortag und am Geburtstag um 08:00 Uhr gemeldet.':'Benachrichtigungen nicht erlaubt. Die Erinnerungsübersicht in der App bleibt verfügbar.');birthdayReminderCheck();renderReminders()};
+$('reminderToggle').onchange=e=>{state.reminders=e.target.checked;save()};
+function exportPayload(include){return {app:'Nordland-Schichtplan',version:2,exportedAt:new Date().toISOString(),anchors:state.anchors,activePlan,theme:state.theme,events:include?state.events:undefined,periods:include?state.periods:undefined,birthdays:include?state.birthdays:undefined,reminders:include?state.reminders:undefined}}
+function download(obj,name){let blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();URL.revokeObjectURL(url)}
+$('backupBtn').onclick=()=>tab('settings');
+$('exportAll').onclick=()=>download(exportPayload(true),'nordland-datensicherung.json');
+$('exportICS').onclick=()=>{const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Nordland//Schichtplan//DE','CALSCALE:GREGORIAN'];const esc=x=>String(x).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\n/g,'\\n');const dt=x=>x.replace(/-/g,'');for(const k of ['A','B','C','D']){const anchor=state.anchors[k];if(!anchor)continue;for(let i=0;i<365;i++){const d=plus(parseDate(anchor),i),date=iso(d),sh=shiftForForPlan(date,k);if(sh.code==='X')continue;const end=plus(d,1);lines.push('BEGIN:VEVENT','UID:'+k+'-'+date+'@nordland-schichtplan','DTSTAMP:'+new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,''),'DTSTART;VALUE=DATE:'+dt(date),'DTEND;VALUE=DATE:'+dt(iso(end)),'SUMMARY:'+esc('Plan '+k+' – '+sh.name),'DESCRIPTION:'+esc(sh.name+' '+(shiftHours[sh.code]||'')),'END:VEVENT')}}state.events.forEach(e=>{lines.push('BEGIN:VEVENT','UID:event-'+e.id+'@nordland-schichtplan','DTSTAMP:'+new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,''),'DTSTART;VALUE=DATE:'+dt(e.date),'DTEND;VALUE=DATE:'+dt(iso(plus(parseDate(e.date),1))),'SUMMARY:'+esc(e.title),'DESCRIPTION:'+esc(e.note||''),'END:VEVENT')});lines.push('END:VCALENDAR');const blob=new Blob([lines.join('\r\n')],{type:'text/calendar;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Nordland-Kalender.ics';a.click();URL.revokeObjectURL(url)};
+function shiftForForPlan(dateStr,plan){const old=activePlan;activePlan=plan;const result=shiftFor(dateStr);activePlan=old;return result;}
+// Übernahmelink: Die ausgewählten Daten liegen komprimiert im Link (ohne Server).
+function bytesToB64url(bytes){let bin='';for(let i=0;i<bytes.length;i++)bin+=String.fromCharCode(bytes[i]);return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+function b64urlToBytes(str){str=str.replace(/-/g,'+').replace(/_/g,'/');while(str.length%4)str+='=';const bin=atob(str);return Uint8Array.from(bin,c=>c.charCodeAt(0))}
+async function encodeShareLink(payload){const raw=new TextEncoder().encode(JSON.stringify(payload));let bytes=raw,tag='j';if('CompressionStream'in window){try{const stream=new Blob([raw]).stream().pipeThrough(new CompressionStream('gzip'));bytes=new Uint8Array(await new Response(stream).arrayBuffer());tag='g'}catch(e){}}const token=tag+bytesToB64url(bytes);return location.origin+location.pathname+'#nordland-share='+token}
+async function decodeShareLink(token){const tag=token[0],bytes=b64urlToBytes(token.slice(1));let raw=bytes;if(tag==='g'){if(!('DecompressionStream'in window))throw Error('Dieser Browser kann den Übernahmelink nicht öffnen. Bitte die Datendatei verwenden.');const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));raw=new Uint8Array(await new Response(stream).arrayBuffer())}const data=JSON.parse(new TextDecoder().decode(raw));if(data.app!=='Nordland-Schichtplan')throw Error('Der Link gehört nicht zur Nordland-App.');return data}
+function mergeSharedData(data){if(data.anchors&&typeof data.anchors==='object')state.anchors={...state.anchors,...data.anchors};
+ const periodKey=p=>[p.start||p.date||'',p.end||'',p.type||'',p.title||''].join('|').toLowerCase();
+ if(Array.isArray(data.periods)){const keys=new Set(state.periods.map(periodKey));data.periods.forEach(p=>{const k=periodKey(p);if(!keys.has(k)){state.periods.push(p);keys.add(k)}})}
+ const eventKey=e=>[e.date||'',e.title||'',e.time||'',e.note||''].join('|').toLowerCase();
+ if(Array.isArray(data.events)){const keys=new Set(state.events.map(eventKey));data.events.forEach(e=>{const k=eventKey(e);if(!keys.has(k)){state.events.push(e);keys.add(k)}})}
+ const birthdayKey=b=>[b.first||'',b.last||'',b.day||'',b.month||''].join('|').toLowerCase();
+ if(Array.isArray(data.birthdays)){const keys=new Set(state.birthdays.map(birthdayKey));data.birthdays.forEach(b=>{const k=birthdayKey(b);if(!keys.has(k)){state.birthdays.push(b);keys.add(k)}})}
+ save();render();if(!$('year').classList.contains('hidden'))renderYearOverview();
+}
+let pendingReceive=null;
+async function checkIncomingShare(){const prefix='#nordland-share=';if(!location.hash.startsWith(prefix))return;try{pendingReceive=await decodeShareLink(location.hash.slice(prefix.length));const names={shift:'Schichteinteilung',Urlaub:'Urlaubstage',AZK:'AZK',LZK:'LZK',Krank:'Kranktage',Termine:'Termine',birthdays:'Geburtstage','Opa-Tage':'Opa-Tage'};const list=(pendingReceive.sharedCategories||[]).map(x=>names[x]||x);$('receiveSummary').textContent='Geteilt wurden: '+(list.join(', ')||'Daten für deinen Schichtkalender')+'.';$('receiveDialog').showModal()}catch(err){alert('Der Übernahmelink konnte nicht gelesen werden: '+err.message)}}
+$('cancelReceive').onclick=()=>{$('receiveDialog').close();pendingReceive=null;history.replaceState(null,'',location.pathname+location.search)};
+$('confirmReceive').onclick=()=>{if(!pendingReceive)return;mergeSharedData(pendingReceive);pendingReceive=null;$('receiveDialog').close();history.replaceState(null,'',location.pathname+location.search);alert('Die ausgewählten Daten wurden in deinen Schichtkalender übernommen.')};
+
+$('importBtn').onclick=()=>$('importFile').click();
+$('importFile').onchange=async e=>{let f=e.target.files[0];if(!f)return;try{pendingImport=JSON.parse(await f.text());if(pendingImport.app!=='Nordland-Schichtplan')throw Error('Diese Datei gehört nicht zur Nordland-App.');$('importDialog').showModal()}catch(err){alert('Import nicht möglich: '+err.message)}e.target.value=''};
+$('cancelImport').onclick=()=>$('importDialog').close();
+$('confirmImport').onclick=()=>{if(!pendingImport)return;let mode=document.querySelector('input[name=importMode]:checked').value;if(pendingImport.anchors&&typeof pendingImport.anchors==='object')state.anchors={...state.anchors,...pendingImport.anchors};else if(pendingImport.anchor)state.anchors.A=pendingImport.anchor;if(Array.isArray(pendingImport.events)){if(mode==='replace')state.events=pendingImport.events;else{let ids=new Set(state.events.map(e=>e.id));state.events.push(...pendingImport.events.filter(e=>!ids.has(e.id)))}}if(Array.isArray(pendingImport.periods)){if(mode==='replace')state.periods=pendingImport.periods;else{let ids=new Set(state.periods.map(p=>p.id));state.periods.push(...pendingImport.periods.filter(p=>!ids.has(p.id)))}}if(Array.isArray(pendingImport.birthdays)){if(mode==='replace')state.birthdays=pendingImport.birthdays;else{let keys=new Set(state.birthdays.map(b=>(b.first+'|'+b.last+'|'+b.day+'|'+b.month).toLowerCase()));state.birthdays.push(...pendingImport.birthdays.filter(b=>!keys.has((b.first+'|'+b.last+'|'+b.day+'|'+b.month).toLowerCase())))}}if(typeof pendingImport.reminders==='boolean')state.reminders=pendingImport.reminders;save();pendingImport=null;$('importDialog').close();render();if(!$('year').classList.contains('hidden'))renderYearOverview();alert('Daten wurden importiert.')};
+$('shareBtn').onclick=()=>$('shareDialog').showModal();$('cancelShare').onclick=()=>$('shareDialog').close();
+$('shareSelectAll').onclick=()=>document.querySelectorAll('#shareChoices input[type=checkbox]').forEach(x=>x.checked=true);
+$('shareSelectNone').onclick=()=>document.querySelectorAll('#shareChoices input[type=checkbox]').forEach(x=>x.checked=false);
+function selectedSharePayload(){
+ const chosen=[...document.querySelectorAll('#shareChoices input[type=checkbox]:checked')].map(x=>x.dataset.share);
+ const payload={app:'Nordland-Schichtplan',version:2,exportedAt:new Date().toISOString(),sharedCategories:chosen};
+ if(chosen.includes('shift')){payload.anchors=state.anchors;payload.activePlan=activePlan;}
+ const periodTypes=chosen.filter(x=>['Urlaub','AZK','LZK','Krank','Opa-Tage','Termine'].includes(x));
+ if(periodTypes.length)payload.periods=state.periods.filter(p=>periodTypes.includes(p.type));
+ if(chosen.includes('Termine'))payload.events=state.events;
+ if(chosen.includes('birthdays'))payload.birthdays=state.birthdays;
+ return payload;
+}
+$('doShare').onclick=async()=>{
+ const chosen=[...document.querySelectorAll('#shareChoices input[type=checkbox]:checked')].map(x=>x.dataset.share);
+ if(!chosen.length){alert('Bitte mindestens eine Datenart auswählen.');return;}
+ const payload=selectedSharePayload();
+ const names={shift:'Schichteinteilung',Urlaub:'Urlaubstage',AZK:'AZK',LZK:'LZK',Krank:'Kranktage',Termine:'Termine',birthdays:'Geburtstage','Opa-Tage':'Opa-Tage'};
+ const summary=chosen.map(x=>names[x]).join(', ');
+ $('doShare').disabled=true;
+ try{
+  const link=await encodeShareLink(payload);
+  const message='Nordland-Schichtplan – für dich freigegeben: '+summary+'.\n\nTippe auf diesen Übernahme-Link und bestätige einmal „Daten jetzt übernehmen“:\n'+link+'\n\nEs werden nur die oben genannten Daten ergänzt. Deine eigenen Einträge bleiben erhalten.';
+  $('shareDialog').close();
+  // WhatsApp direkt mit Nachricht und Link öffnen. Keine Android-Dateifreigabe,
+  // da diese auf manchen Geräten den Nachrichtentext samt Link unterschlägt.
+  const wa='https://wa.me/?text='+encodeURIComponent(message);
+  location.href=wa;
+ }catch(err){
+  alert('Der Übernahme-Link konnte nicht erstellt werden: '+(err&&err.message?err.message:'Unbekannter Fehler'));
+ }finally{$('doShare').disabled=false;}
+};
+function reminderCheck(){if(!state.reminders||!('Notification'in window)||Notification.permission!=='granted')return;let now=new Date();const offsets={ '1d':86400000,'2d':172800000,'3h':10800000,'2h':7200000,'1h':3600000,'30m':1800000,'ontime':0};state.events.forEach(e=>{if(!e.reminder)return;[['one',e.reminderOne,e.reminderOneTime],['two',e.reminderTwo,e.reminderTwoTime]].forEach(([slot,kind,clock])=>{if(!kind||kind==='off')return;let eventDate=parseDate(e.date);if(e.time){let [hh,mm]=e.time.split(':').map(Number);eventDate.setHours(hh,mm,0,0)}else eventDate.setHours(9,0,0,0);let target;if(kind==='ontime'){target=parseDate(e.date);let [hh,mm]=(clock||'07:00').split(':').map(Number);target.setHours(hh,mm,0,0)}else{target=new Date(eventDate.getTime()-offsets[kind]);let [hh,mm]=(clock||'09:00').split(':').map(Number);target.setHours(hh,mm,0,0)}let delta=now-target;if(delta>=0&&delta<60000){let key='notified_'+e.id+'_'+slot+'_'+e.date;if(!localStorage.getItem(key)){new Notification('Erinnerung: '+e.title,{body:'Termin '+fmt(parseDate(e.date))+(e.time?' um '+e.time+' Uhr':'')});localStorage.setItem(key,'1')}}})})}
+setInterval(reminderCheck,30000);setInterval(birthdayReminderCheck,30000);
+setInterval(updateReminderNav,60000);
+if(state.pin&&!sessionStorage.getItem('nordlandUnlocked')){$('pinDialog').showModal()}
+$('unlockBtn').onclick=()=>{if($('unlockPin').value===state.pin){sessionStorage.setItem('nordlandUnlocked','1');$('pinDialog').close()}else alert('PIN ist nicht korrekt.')};
+if('serviceWorker'in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{});
+render();reminderCheck();birthdayReminderCheck();updateReminderNav();scrollReminderAboveCalendar();checkIncomingShare();
+</script>
+</body></html>
