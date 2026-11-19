@@ -16,7 +16,7 @@ header{background:#173b63;color:white;padding:18px max(18px,calc((100vw - 980px)
 main{max-width:980px;margin:0 auto;padding:18px 14px 90px}.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
 button,.btn{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:11px;padding:10px 13px;font:inherit;font-weight:650;cursor:pointer}
 button.primary{background:var(--accent);border-color:var(--accent);color:white}button:disabled{opacity:.45;cursor:not-allowed}
-.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin:8px 0 20px;padding:0}.tabs button{min-height:86px;padding:13px 9px;border:2px solid var(--accent);border-radius:15px;background:var(--soft);color:var(--text);font-size:15px;font-weight:900;line-height:1.25;white-space:normal;box-shadow:0 4px 12px #173b6320}.tabs button.active{background:var(--blue);color:white;border-color:var(--blue);box-shadow:0 5px 15px #173b6330}.tabs button[data-action=share]{background:#173b63;border-color:#173b63;color:#fff}.tabs button:active{transform:scale(.98)}.tabs button.birthday-nav{justify-self:stretch;width:100%}.tabs button.share-nav{grid-column:1/-1;justify-self:stretch;width:100%}.bottom-settings{display:flex;justify-content:flex-end;margin:22px 2px 4px;padding-top:10px;border-top:1px solid var(--line)}.bottom-settings button{min-height:30px;padding:5px 11px;font-size:11px;font-weight:600;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--muted);box-shadow:none}
+.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin:8px 0 20px;padding:0}.tabs button{min-height:86px;padding:13px 9px;border:2px solid var(--accent);border-radius:15px;background:var(--soft);color:var(--text);font-size:15px;font-weight:900;line-height:1.25;white-space:normal;box-shadow:0 4px 12px #173b6320}.tabs button.active{background:var(--blue);color:white;border-color:var(--blue);box-shadow:0 5px 15px #173b6330}.tabs button[data-action=share]{background:#173b63;border-color:#173b63;color:#fff}.tabs button:active{transform:scale(.98)}.tabs button.birthday-nav{justify-self:stretch;width:100%}.tabs button.share-nav,.tabs button.random-nav{grid-column:1/-1;justify-self:stretch;width:100%}.bottom-settings{display:flex;justify-content:flex-end;margin:22px 2px 4px;padding-top:10px;border-top:1px solid var(--line)}.bottom-settings button{min-height:30px;padding:5px 11px;font-size:11px;font-weight:600;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--muted);box-shadow:none}
 .tabs button.reminder-nav{grid-column:1/-1;justify-self:stretch;width:100%;min-height:76px;background:#e65100;border:3px solid #ff9800;color:#fff;font-size:18px;letter-spacing:.4px;box-shadow:0 5px 18px #e6510050}
 .tabs button.reminder-nav.has-unread{animation:reminderPulse 1.25s ease-in-out infinite}
 .tabs button.reminder-nav .reminder-count{display:inline-flex;align-items:center;justify-content:center;min-width:25px;height:25px;padding:0 7px;margin-left:8px;border-radius:99px;background:#fff;color:#c62828;font-size:14px;font-weight:950}
@@ -85,7 +85,7 @@ textarea{min-height:85px;resize:vertical}.actions{display:flex;flex-wrap:wrap;ga
 .vacation-result{border:1px solid var(--line);border-radius:12px;padding:13px;margin:10px 0;background:var(--panel)}.vacation-result h3{margin:0 0 5px;font-size:15px}.vacation-result .actions{margin-top:9px}.mode-active{outline:2px solid var(--accent);font-weight:900}.hidden{display:none!important}
 dialog{border:1px solid var(--line);border-radius:18px;background:var(--panel);color:var(--text);width:min(92vw,480px);padding:20px;box-shadow:0 20px 80px #0005}
 dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
-@media(max-width:560px){main{padding:12px 10px 28px}.tabs{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:7px 0 16px}.tabs button.birthday-nav{grid-column:auto;width:100%;justify-self:stretch}.tabs button.share-nav{grid-column:1/-1;width:100%}.tabs button{min-height:88px;font-size:14px;padding:11px 7px}.card{padding:13px}.day{min-height:76px;padding:4px}.day.selected{padding:3px}.shift{font-size:12px;padding:5px 3px}.grid2{grid-template-columns:1fr}.brand{font-size:18px}}
+@media(max-width:560px){main{padding:12px 10px 28px}.tabs{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:7px 0 16px}.tabs button.birthday-nav{grid-column:auto;width:100%;justify-self:stretch}.tabs button.share-nav,.tabs button.random-nav{grid-column:1/-1;width:100%}.tabs button{min-height:88px;font-size:14px;padding:11px 7px}.card{padding:13px}.day{min-height:76px;padding:4px}.day.selected{padding:3px}.shift{font-size:12px;padding:5px 3px}.grid2{grid-template-columns:1fr}.brand{font-size:18px}}
 
 /* Vollbild-Bühne für den Wurf: wächst während des Würfelns auf den ganzen Bildschirm */
 .roll-fullscreen{position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:22px;background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;color:#fff;pointer-events:none;animation:stage-in .22s ease-out both}
@@ -132,7 +132,6 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
 .roll-fullscreen .die-face.left{transform:rotateY(-90deg) translateZ(calc(clamp(88px,15vw,116px) / 2))}
 .roll-fullscreen .die-face.top{transform:rotateX(90deg) translateZ(calc(clamp(88px,15vw,116px) / 2))}
 .roll-fullscreen .die-face.bottom{transform:rotateX(-90deg) translateZ(calc(clamp(88px,15vw,116px) / 2))}
-.roll-fullscreen.rolling-stage .die-cube{animation:full-cube-roll 3.2s cubic-bezier(.12,.72,.16,1) both}
 .roll-fullscreen.rolling-stage .stage-result:after{content:'';position:absolute;left:5vw;right:5vw;bottom:9vh;height:12px;border-radius:50%;background:#14223530;filter:blur(9px);z-index:-1}
 .roll-fullscreen.rolling-stage .name-cube{animation:full-name-cube-roll 1.05s cubic-bezier(.35,.02,.6,.98) infinite}
 @keyframes full-cube-roll{0%{transform:translateZ(calc(clamp(88px,15vw,116px) / -2)) translate(-42vw,22vh) rotateX(0) rotateY(0) rotateZ(0)}18%{transform:translateZ(calc(clamp(88px,15vw,116px) / -2)) translate(40vw,-20vh) rotateX(180deg) rotateY(145deg) rotateZ(100deg)}38%{transform:translateZ(calc(clamp(88px,15vw,116px) / -2)) translate(-39vw,17vh) rotateX(360deg) rotateY(290deg) rotateZ(200deg)}58%{transform:translateZ(calc(clamp(88px,15vw,116px) / -2)) translate(38vw,14vh) rotateX(540deg) rotateY(435deg) rotateZ(300deg)}78%{transform:translateZ(calc(clamp(88px,15vw,116px) / -2)) translate(-28vw,-12vh) rotateX(690deg) rotateY(560deg) rotateZ(385deg)}100%{transform:translateZ(calc(clamp(88px,15vw,116px) / -2)) translate(0,0) rotateX(780deg) rotateY(650deg) rotateZ(440deg)}}
@@ -142,10 +141,10 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
 /* Namenswürfel als echter Spielwürfel: sechs Flächen, Name auf jeder Seite. */
 .name-die{position:relative;width:clamp(115px,18vw,165px);height:clamp(115px,18vw,165px);perspective:1300px;flex:0 0 auto;filter:drop-shadow(0 28px 24px #0007)}
 .name-die-cube{position:absolute;inset:0;transform-style:preserve-3d;transform:translateZ(calc(clamp(115px,18vw,165px) / -2));}
-.name-die-face{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:12%;overflow:hidden;border-radius:19%;border:3px solid #c1cad6;background:linear-gradient(145deg,#fff 0%,#f1f4f8 58%,#c7d0dc 100%);box-shadow:inset 7px 7px 15px #fff,inset -9px -10px 17px #9da8b8;color:#172334;font-size:clamp(24px,5vw,48px);font-weight:1000;line-height:1.05;text-align:center;overflow-wrap:anywhere;backface-visibility:hidden;text-shadow:0 1px 0 #fff}
+.name-die-face{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:12%;overflow:hidden;border-radius:19%;border:3px solid #c1cad6;background:linear-gradient(145deg,#fff 0%,#f1f4f8 58%,#c7d0dc 100%);box-shadow:inset 7px 7px 15px #fff,inset -9px -10px 17px #9da8b8;color:#172334;font-size:clamp(14px,4vw,42px);font-weight:1000;line-height:1.05;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:clip;backface-visibility:hidden;text-shadow:0 1px 0 #fff}
 .name-die-face.front{transform:rotateY(0deg) translateZ(calc(clamp(115px,18vw,165px) / 2))}.name-die-face.back{transform:rotateY(180deg) translateZ(calc(clamp(115px,18vw,165px) / 2))}.name-die-face.right{transform:rotateY(90deg) translateZ(calc(clamp(115px,18vw,165px) / 2))}.name-die-face.left{transform:rotateY(-90deg) translateZ(calc(clamp(115px,18vw,165px) / 2))}.name-die-face.top{transform:rotateX(90deg) translateZ(calc(clamp(115px,18vw,165px) / 2))}.name-die-face.bottom{transform:rotateX(-90deg) translateZ(calc(clamp(115px,18vw,165px) / 2))}
-.roll-fullscreen.rolling-stage .name-die-cube{animation:name-die-traverse 3.2s cubic-bezier(.12,.72,.16,1) both}
-@keyframes name-die-traverse{0%{transform:translateZ(calc(clamp(115px,18vw,165px) / -2)) translate(-42vw,22vh) rotateX(0) rotateY(0) rotateZ(0) scale(.88)}18%{transform:translateZ(calc(clamp(115px,18vw,165px) / -2)) translate(40vw,-20vh) rotateX(180deg) rotateY(145deg) rotateZ(100deg) scale(.92)}38%{transform:translateZ(calc(clamp(115px,18vw,165px) / -2)) translate(-39vw,17vh) rotateX(360deg) rotateY(290deg) rotateZ(200deg) scale(.92)}58%{transform:translateZ(calc(clamp(115px,18vw,165px) / -2)) translate(38vw,14vh) rotateX(540deg) rotateY(435deg) rotateZ(300deg) scale(.92)}78%{transform:translateZ(calc(clamp(115px,18vw,165px) / -2)) translate(-28vw,-12vh) rotateX(690deg) rotateY(560deg) rotateZ(385deg) scale(.9)}100%{transform:translateZ(calc(clamp(115px,18vw,165px) / -2)) translate(0,0) rotateX(780deg) rotateY(650deg) rotateZ(440deg) scale(.9)}}
+.roll-fullscreen.rolling-stage .name-die{position:absolute;left:50%;top:50%;margin:0;transform-style:preserve-3d;will-change:transform}
+.roll-fullscreen.rolling-stage .name-die-cube{animation:none!important;will-change:transform}
 .roll-fullscreen.winner-stage .name-die-face{background:linear-gradient(145deg,#fff9dc,#ffe18a 55%,#d99c2d);border-color:#c58b1b;color:#402900}
 #nameResult.rolling-stage-mini .name-die-cube{animation:name-die-traverse 1.08s cubic-bezier(.35,.02,.6,.98) infinite}
 #nameResult.winner-ready .name-die-face{background:linear-gradient(145deg,#fff9dc,#ffe18a 55%,#d99c2d);border-color:#c58b1b;color:#402900}
@@ -169,10 +168,11 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
   <button data-tab="vacation"><span style="display:block;font-size:25px;margin-bottom:5px">☀</span>Ferienplaner</button>
   <button data-tab="bridge"><span style="display:block;font-size:25px;margin-bottom:5px">↔</span>Brückentagsplaner</button>
   <button data-tab="tasks"><span style="display:block;font-size:25px;margin-bottom:5px">☑</span>Aufgaben &amp; Notizen</button>
-  <button data-tab="random"><span style="display:block;font-size:25px;margin-bottom:5px">🥤</span>Knobelbecher</button>
   <button class="birthday-nav" data-tab="birthdays"><span style="display:block;font-size:25px;margin-bottom:5px">🎂</span>Geburtstagskalender</button>
+  <button class="random-nav" data-tab="random" aria-label="Knobelbecher öffnen" title="Knobelbecher öffnen"><svg class="knobelbecher-icon" viewBox="0 0 120 92" role="img" aria-label="Abbildung eines Knobelbechers mit zwei Würfeln" style="display:block;width:100%;max-width:190px;height:72px;margin:0 auto"><defs><linearGradient id="cupLeather" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8d5634"/><stop offset=".55" stop-color="#4b2819"/><stop offset="1" stop-color="#24130e"/></linearGradient><linearGradient id="cupRim" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d6a46b"/><stop offset="1" stop-color="#754321"/></linearGradient></defs><ellipse cx="59" cy="80" rx="43" ry="7" fill="#000" opacity=".18"/><path d="M24 22 Q60 10 96 22 L87 70 Q60 84 33 70 Z" fill="url(#cupLeather)" stroke="#2a170f" stroke-width="3"/><ellipse cx="60" cy="22" rx="36" ry="11" fill="url(#cupRim)" stroke="#3b2115" stroke-width="3"/><ellipse cx="60" cy="22" rx="28" ry="6" fill="#1d120d"/><path d="M34 37 Q60 48 86 37" fill="none" stroke="#d6a46b" stroke-width="2" opacity=".55"/><g transform="translate(4 1) rotate(-13 26 19)"><rect x="10" y="3" width="30" height="30" rx="6" fill="#fff" stroke="#aab3c0" stroke-width="2"/><g fill="#202631"><circle cx="18" cy="11" r="3"/><circle cx="32" cy="25" r="3"/><circle cx="25" cy="18" r="3"/></g></g><g transform="translate(73 2) rotate(12 16 17)"><rect x="2" y="2" width="29" height="29" rx="6" fill="#fff" stroke="#aab3c0" stroke-width="2"/><g fill="#202631"><circle cx="9" cy="9" r="2.7"/><circle cx="24" cy="9" r="2.7"/><circle cx="9" cy="24" r="2.7"/><circle cx="24" cy="24" r="2.7"/></g></g></svg></button>
   <button class="reminder-nav" data-tab="reminders" id="reminderNav"><span style="display:block;font-size:27px;margin-bottom:4px">🔔</span>WICHTIGE ERINNERUNGEN <span id="reminderNavCount" class="reminder-count">0</span><small style="display:block;font-size:11px;font-weight:700;margin-top:3px">Neue Meldungen ansehen</small></button>
   <button class="share-nav" type="button" data-action="share"><span style="display:block;font-size:25px;margin-bottom:5px">↗</span>Daten teilen</button>
+
  </nav>
  <section id="calendar">
   <div class="card">
@@ -195,12 +195,22 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
    <div id="leaveDraftList"><p class="hint">Noch keine Zeiträume vorgemerkt.</p></div>
    <div class="actions" style="margin-top:18px"><button class="primary" id="leaveApply">Alle Zeiträume in den Schichtkalender übernehmen</button><button id="leaveClear">Liste leeren</button></div>
    <p class="hint">Die übernommenen Zeiträume erscheinen anschließend direkt im Schichtkalender. Bereits vorhandene Einträge bleiben erhalten.</p>
+   <hr style="border:0;border-top:1px solid var(--line);margin:22px 0 16px">
+   <h3 class="title" style="font-size:16px">Alle gespeicherten Urlaubseinträge</h3>
+   <p class="hint">Hier werden sämtliche gespeicherten Urlaubszeiträume angezeigt – auch wenn sie direkt im Schichtkalender eingetragen oder durch Datenübernahme importiert wurden.</p>
+   <div id="savedVacationList"><p class="hint">Noch keine Urlaubseinträge gespeichert.</p></div>
+   <div class="actions"><button type="button" id="deleteAllVacation" style="background:#a32626;color:white;border-color:#a32626">Alle Urlaubseinträge vollständig löschen</button></div>
+   <p class="hint">Dieser Knopf löscht Urlaub in allen Jahren. AZK, LZK, Krank, Termine und Opa-Tage bleiben erhalten.</p>
+   <hr style="border:0;border-top:1px solid var(--line);margin:22px 0 16px">
+   <h3 class="title" style="font-size:16px">Urlaubs- und Zeitkonten eines ganzen Jahres löschen</h3>
+   <p class="hint">Löscht für das ausgewählte Jahr automatisch alle gespeicherten Einträge der Kategorien Urlaub, AZK, LZK und Krank – unabhängig davon, ob sie über den Schichtkalender, Urlaubsplaner, Ferienplaner oder durch Datenübernahme eingetragen wurden. Termine und Opa-Tage bleiben erhalten.</p>
+   <div class="range-tools"><div class="field"><label>Ausgewähltes Jahr</label><div class="monthhead" style="justify-content:flex-start;gap:14px;margin:0"><button type="button" id="deleteVacationYearPrev" aria-label="Vorheriges Jahr">‹</button><strong id="deleteVacationYearLabel" style="min-width:58px;text-align:center;font-size:18px">2026</strong><button type="button" id="deleteVacationYearNext" aria-label="Nächstes Jahr">›</button></div></div><div class="field" style="justify-content:flex-end"><button type="button" id="deleteYearVacation" style="background:#a32626;color:white;border-color:#a32626">Urlaub, AZK, LZK und Krank löschen</button></div></div>
   </div>
  </section>
  <section id="random" class="hidden">
   <div class="card">
    <h2 class="title">🥤 Knobelbecher</h2>
-   <p class="hint">Wähle einen oder zwei Zahlenwürfel oder ziehe einen Namen. Der Würfel rollt über das Spielfeld und spricht das Ergebnis aus.</p>
+   <p class="hint">Wähle einen oder zwei Zahlenwürfel oder ziehe einen Vornamen. Der Würfel rollt über das Spielfeld und spricht das Ergebnis aus.</p>
    <div class="field"><label for="randomMode">Würfelart</label><select id="randomMode"><option value="dice">Zahlenwürfel – 1 bis 6</option><option value="names">Namenswürfel</option></select></div>
    <div id="diceOptions">
     <div class="field"><label for="diceCount">Anzahl der Würfel</label><select id="diceCount"><option value="1">Ein Würfel</option><option value="2">Zwei Würfel</option></select></div>
@@ -208,7 +218,7 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
     <div class="actions"><button class="primary" id="rollDice">Würfeln</button></div>
    </div>
    <div id="nameOptions" class="hidden">
-    <div class="field"><label for="randomNames">Namensliste (jeweils ein Name pro Zeile)</label><textarea id="randomNames" rows="7" placeholder="Max Mustermann&#10;Erika Musterfrau&#10;…"></textarea><p class="hint" id="namesSavedStatus" aria-live="polite">Deine Namensliste wird automatisch auf diesem Gerät gespeichert.</p></div>
+    <div class="field"><label for="randomNames">Vornamen (jeweils ein Vorname pro Zeile)</label><textarea id="randomNames" rows="7" placeholder="Manfred&#10;Markus&#10;Daniel&#10;…"></textarea><p class="hint" id="namesSavedStatus" aria-live="polite">Deine Namensliste wird automatisch auf diesem Gerät gespeichert.</p></div>
     <div class="actions"><button class="primary" id="drawName">Namen ziehen</button></div>
    </div>
   </div>
@@ -265,7 +275,7 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
    <h2 class="title">Ferien- und Urlaubsplaner</h2>
    <p class="hint">Plane zusammenhängende Freizeit passend zu deinem ausgewählten Schichtplan. Die App zählt nur Tage, an denen laut Schichtplan tatsächlich Dienst wäre.</p>
    <div class="grid2">
-    <div class="field"><label for="vacYear">Planungsjahr</label><input id="vacYear" type="number" min="2026" step="1" value="2026" inputmode="numeric" aria-describedby="vacYearHint"><small class="hint" id="vacYearHint">Ab 2026 frei auswählbar – ohne festes Endjahr. Du kannst auch 2031, 2040 oder ein späteres Jahr eingeben.</small></div>
+    <div class="field"><label for="vacYear">Planungsjahr</label><div class="monthhead" style="justify-content:flex-start;gap:14px;margin:0"><button type="button" id="vacYearPrev" aria-label="Vorheriges Planungsjahr">‹</button><strong id="vacYearLabel" style="min-width:58px;text-align:center;font-size:18px">2026</strong><button type="button" id="vacYearNext" aria-label="Nächstes Planungsjahr">›</button><input id="vacYear" type="number" min="2026" step="1" value="2026" inputmode="numeric" aria-describedby="vacYearHint" style="width:1px;height:1px;opacity:0;position:absolute;pointer-events:none"></div><small class="hint" id="vacYearHint">Das Planungsjahr kannst du bequem mit den Pfeilen links und rechts auswählen.</small></div>
    </div>
    <div class="vacation-modes">
     <div class="mode-heading">Wo soll deine freie Zeit liegen?</div>
@@ -522,7 +532,7 @@ function render(){
  $('eventList').innerHTML=eventsOn(selected).length?eventsOn(selected).map(e=>`<div class="item"><div class="row"><strong>${escapeHtml(e.title)}</strong><span class="pill">${e.time||'ohne Uhrzeit'}</span></div>${e.note?`<div class="muted small">${escapeHtml(e.note)}</div>`:''}<div class="row small muted"><span>${e.reminder?('Erinnerung: '+(e.reminderOne||'')+' '+(e.reminderOneTime||'')+(e.reminderTwo&&e.reminderTwo!=='off'?' · '+e.reminderTwo+' '+(e.reminderTwoTime||'') :'')):'Keine Erinnerung'}</span><span><button data-edit="${e.id}">Bearbeiten</button> <button data-del="${e.id}">Löschen</button></span></div></div>`).join(''):'<p class="muted">Für diesen Tag sind keine Termine eingetragen.</p>';
  $('periodStart').value=rangeStart||selected;$('periodEnd').value=rangeEnd||'';
  $('periodList').innerHTML=state.periods.length?'<h3 class="title" style="font-size:15px;margin-top:16px">Gespeicherte Zeiträume</h3>'+state.periods.slice().sort((a,b)=>a.start.localeCompare(b.start)).map(p=>`<div class="item row"><span><strong>${fmt(parseDate(p.start))}</strong> bis <strong>${fmt(parseDate(p.end))}</strong><br><span class="pill">${p.type}</span>${p.type==='Urlaub'?`<br><span class="hint">${workdaysInPeriod(p)} tatsächliche Urlaubstage im Plan ${activePlan}</span>`:''}</span><button data-period-del="${p.id}">Gesamten Zeitraum löschen</button></div>`).join(''):'<p class="hint">Noch keine Urlaubs-, AZK- oder LZK-Zeiträume gespeichert.</p>';
- document.querySelectorAll('[data-period-del]').forEach(b=>b.onclick=()=>{state.periods=state.periods.filter(p=>p.id!==b.dataset.periodDel);save();render();if(!$('year').classList.contains('hidden'))renderYearOverview()});
+ document.querySelectorAll('[data-period-del]').forEach(b=>b.onclick=()=>{state.periods=state.periods.filter(p=>p.id!==b.dataset.periodDel);save();render();renderSavedVacationList();if(!$('year').classList.contains('hidden'))renderYearOverview()});
  ['A','B','C','D'].forEach(k=>{const el=$('anchor'+k);if(el)el.value=state.anchors[k]||''});$('planSelect').value=activePlan;$('pinInput').value='';$('reminderToggle').checked=!!state.reminders;
  document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editEvent(b.dataset.edit));
  document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{state.events=state.events.filter(e=>e.id!==b.dataset.del);save();render();if(!$('year').classList.contains('hidden'))renderYearOverview()});
@@ -818,12 +828,15 @@ function applyVacationSuggestion(c,assign){
  state.periods.sort((a,b)=>a.start.localeCompare(b.start));save();render();alert('Die geplanten Urlaub-/AZK-/LZK-Tage wurden übernommen.');
 }
 $('vacWeeks').onchange=()=>{$('vacCustomWrap').classList.toggle('hidden',$('vacWeeks').value!=='custom');$('vacResults').innerHTML='';$('vacAllocation').innerHTML=''};
-$('vacYear').onchange=()=>{$('vacResults').innerHTML='';$('vacAllocation').innerHTML=''};
+function updateVacationYear(){const y=Math.max(2026,Number($('vacYear').value)||2026);$('vacYear').value=String(y);$('vacYearLabel').textContent=String(y);$('vacResults').innerHTML='';$('vacAllocation').innerHTML=''}
+$('vacYear').onchange=updateVacationYear;
+$('vacYearPrev').onclick=()=>{$('vacYear').value=String(Math.max(2026,(Number($('vacYear').value)||2026)-1));updateVacationYear()};
+$('vacYearNext').onclick=()=>{$('vacYear').value=String((Number($('vacYear').value)||2026)+1);updateVacationYear()};
 document.querySelectorAll('input[name="vacAreaFilter"]').forEach(el=>el.addEventListener('change',()=>{$('vacResults').innerHTML='';$('vacAllocation').innerHTML=''}));
 $('vacFind').onclick=()=>{try{vacationPlanner()}catch(error){console.error('Ferienplaner-Suche fehlgeschlagen:',error);$('vacResults').innerHTML='<p class="notice">Bei der Suche ist ein Fehler aufgetreten. Bitte prüfe Planungsjahr und Dauer und versuche es erneut.</p>';$('vacAllocation').innerHTML=''}};
 let bridgeYear=new Date().getFullYear();
 function scrollReminderAboveCalendar(){const reminder=$('reminderNav');if(!reminder)return;requestAnimationFrame(()=>{const top=reminder.getBoundingClientRect().top+window.scrollY-12;window.scrollTo({top:Math.max(0,top),behavior:'smooth'});});}
-function tab(name){document.querySelectorAll('main section').forEach(s=>s.classList.toggle('hidden',s.id!==name));document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));if(name==='day')render();if(name==='tasks')renderTasks();if(name==='year')renderYearOverview();if(name==='bridge')renderBridgePlanner();if(name==='birthdays')renderBirthdays();if(name==='reminders')renderReminders();if(name==='vacation'){$('vacYear').value=String(Math.max(2026,new Date().getFullYear()));$('vacResults').innerHTML='';$('vacAllocation').innerHTML=''}if(name==='calendar')scrollReminderAboveCalendar()}
+function tab(name){document.querySelectorAll('main section').forEach(s=>s.classList.toggle('hidden',s.id!==name));document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));if(name==='day')render();if(name==='tasks')renderTasks();if(name==='year')renderYearOverview();if(name==='bridge')renderBridgePlanner();if(name==='birthdays')renderBirthdays();if(name==='reminders')renderReminders();if(name==='vacation'){$('vacYear').value=String(Math.max(2026,new Date().getFullYear()));$('vacYearLabel').textContent=$('vacYear').value;$('vacResults').innerHTML='';$('vacAllocation').innerHTML=''}if(name==='calendar')scrollReminderAboveCalendar();if(name==='leave'){renderLeaveDrafts();renderSavedVacationList()}requestAnimationFrame(()=>{const target=$(name);if(target)window.scrollTo({top:Math.max(0,target.getBoundingClientRect().top+window.scrollY-8),behavior:'smooth'})})}
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>tab(b.dataset.tab));
 document.querySelector('[data-action=share]').onclick=()=>$('shareDialog').showModal();
 $('yearPrev').onclick=()=>{overviewYear--;renderYearOverview()};$('yearNext').onclick=()=>{overviewYear++;renderYearOverview()};
@@ -850,6 +863,42 @@ function renderLeaveDrafts(){
  root.querySelectorAll('[data-leave-remove]').forEach(b=>b.onclick=()=>{leaveDrafts.splice(Number(b.dataset.leaveRemove),1);renderLeaveDrafts()});
  root.querySelectorAll('[data-leave-edit]').forEach(b=>b.onclick=()=>{const i=Number(b.dataset.leaveEdit),p=leaveDrafts[i];$('leaveStart').value=p.start;$('leaveEnd').value=p.end;$('leaveType').value=p.type;leaveDrafts.splice(i,1);renderLeaveDrafts();$('leaveStart').scrollIntoView({behavior:'smooth',block:'center'});});
 }
+function renderSavedVacationList(){
+ const root=$('savedVacationList');
+ const vacations=state.periods.filter(p=>p.type==='Urlaub').slice().sort((a,b)=>a.start.localeCompare(b.start));
+ if(!vacations.length){root.innerHTML='<p class="hint">Noch keine Urlaubseinträge gespeichert.</p>';return}
+ root.innerHTML=vacations.map(p=>`<div class="item"><div><strong>${fmt(parseDate(p.start))}</strong>${p.end!==p.start?' bis <strong>'+fmt(parseDate(p.end))+'</strong>':''}<br><span class="pill">Urlaub</span> <span class="hint">${workdaysInPeriod(p)} Arbeitstage nach Plan ${activePlan}</span></div></div>`).join('');
+}
+$('deleteAllVacation').onclick=()=>{
+ const vacations=state.periods.filter(p=>p.type==='Urlaub');
+ if(!vacations.length){alert('Es sind keine Urlaubseinträge gespeichert.');return}
+  if(!confirm('Wirklich ALLE Urlaubseinträge in ALLEN Jahren löschen?\n\nEs werden '+vacations.length+' gespeicherte Urlaubszeiträume entfernt.\n\nAZK, LZK, Krank, Termine und Opa-Tage bleiben erhalten.\n\nDiese Aktion kann nicht rückgängig gemacht werden.'))return;
+ state.periods=state.periods.filter(p=>p.type!=='Urlaub');
+ save();render();renderSavedVacationList();
+ if(!$('year').classList.contains('hidden'))renderYearOverview();
+ alert('Alle Urlaubseinträge wurden gelöscht. Andere Kategorien sind erhalten geblieben.');
+};
+let deleteVacationYear= new Date().getFullYear();
+function renderDeleteVacationYear(){ $('deleteVacationYearLabel').textContent=String(deleteVacationYear); }
+renderDeleteVacationYear();
+renderSavedVacationList();
+$('deleteVacationYearPrev').onclick=()=>{if(deleteVacationYear>2000){deleteVacationYear--;renderDeleteVacationYear()}};
+$('deleteVacationYearNext').onclick=()=>{if(deleteVacationYear<2100){deleteVacationYear++;renderDeleteVacationYear()}};
+$('deleteYearVacation').onclick=()=>{
+ const year=deleteVacationYear;
+ const from=year+'-01-01',to=year+'-12-31';
+ const categories=['Urlaub','AZK','LZK','Krank'];
+ const matches=state.periods.filter(p=>categories.includes(p.type)&&p.start<=to&&p.end>=from);
+ if(!matches.length){alert('Für '+year+' sind keine Einträge für Urlaub, AZK, LZK oder Krank gespeichert.');return}
+ const counts=categories.map(type=>({type,count:matches.filter(p=>p.type===type).length})).filter(x=>x.count);
+ const detail=counts.map(x=>x.type+': '+x.count).join('\n');
+ if(!confirm('ACHTUNG – wirklich alle folgenden Einträge für '+year+' löschen?\n\n'+detail+'\n\nEs werden alle Zeiträume entfernt, die dieses Jahr berühren – unabhängig davon, wo sie eingetragen oder importiert wurden. Ein Zeitraum über den Jahreswechsel wird vollständig gelöscht. Termine und Opa-Tage bleiben erhalten.\n\nDiese Aktion kann nicht rückgängig gemacht werden.'))return;
+ const ids=new Set(matches.map(p=>p.id));
+ state.periods=state.periods.filter(p=>!ids.has(p.id));
+ save();render();renderSavedVacationList();
+ if(!$('year').classList.contains('hidden'))renderYearOverview();
+ alert('Die Einträge für '+year+' wurden gelöscht: '+detail.replace(/\n/g,', ')+'. Termine und Opa-Tage sind erhalten geblieben.');
+};
 $('leaveAdd').onclick=()=>{
  const a=$('leaveStart').value,b=$('leaveEnd').value,t=$('leaveType').value;
  if(!a||!b){alert('Bitte Von- und Bis-Datum auswählen.');return}
@@ -869,10 +918,10 @@ $('leaveApply').onclick=()=>{
  question+='\n\nBereits vorhandene Einträge bleiben bestehen.';
  if(!confirm(question))return;
  const stamp=Date.now();ordered.forEach((p,i)=>state.periods.push({id:'leave-'+stamp+'-'+i+'-'+Math.random().toString(36).slice(2,7),...p}));
- const first=ordered[0].start;leaveDrafts=[];save();selected=first;month=new Date(parseDate(first).getFullYear(),parseDate(first).getMonth(),1);tab('calendar');render();if(!$('year').classList.contains('hidden'))renderYearOverview();alert('Alle vorgemerkten Zeiträume wurden in den Schichtkalender übernommen.');
+ const first=ordered[0].start;leaveDrafts=[];save();renderSavedVacationList();selected=first;month=new Date(parseDate(first).getFullYear(),parseDate(first).getMonth(),1);tab('calendar');render();if(!$('year').classList.contains('hidden'))renderYearOverview();alert('Alle vorgemerkten Zeiträume wurden in den Schichtkalender übernommen.');
 };
 $('leaveClear').onclick=()=>{if(!leaveDrafts.length)return;if(confirm('Alle nur vorgemerkten Zeiträume aus der Liste entfernen?')){leaveDrafts=[];renderLeaveDrafts()}};
-$('savePeriod').onclick=()=>{let a=$('periodStart').value,b=$('periodEnd').value,t=$('periodType').value;if(!a||!b){alert('Bitte Von- und Bis-Datum auswählen.');return}if(b<a){alert('Das Bis-Datum darf nicht vor dem Von-Datum liegen.');return}let overlap=state.periods.filter(p=>a<=p.end&&b>=p.start);if(overlap.length&&!confirm('Der Zeitraum überschneidet sich mit einem bestehenden Eintrag. Soll der neue Eintrag trotzdem gespeichert werden?'))return;state.periods.push({id:String(Date.now()),start:a,end:b,type:t});state.periods.sort((x,y)=>x.start.localeCompare(y.start));rangeStart=rangeEnd=null;save();render();if(!$('year').classList.contains('hidden'))renderYearOverview();alert('Zeitraum wurde gespeichert.')};
+$('savePeriod').onclick=()=>{let a=$('periodStart').value,b=$('periodEnd').value,t=$('periodType').value;if(!a||!b){alert('Bitte Von- und Bis-Datum auswählen.');return}if(b<a){alert('Das Bis-Datum darf nicht vor dem Von-Datum liegen.');return}let overlap=state.periods.filter(p=>a<=p.end&&b>=p.start);if(overlap.length&&!confirm('Der Zeitraum überschneidet sich mit einem bestehenden Eintrag. Soll der neue Eintrag trotzdem gespeichert werden?'))return;state.periods.push({id:String(Date.now()),start:a,end:b,type:t});state.periods.sort((x,y)=>x.start.localeCompare(y.start));rangeStart=rangeEnd=null;save();render();renderSavedVacationList();if(!$('year').classList.contains('hidden'))renderYearOverview();alert('Zeitraum wurde gespeichert.')};
 $('cancelPeriod').onclick=()=>{rangeStart=rangeEnd=null;$('periodStart').value=selected;$('periodEnd').value='';render()};
 $('periodStart').onchange=e=>{rangeStart=e.target.value;rangeEnd=null;render()};$('periodEnd').onchange=e=>{rangeEnd=e.target.value;if(rangeStart&&rangeEnd&&rangeEnd<rangeStart){[rangeStart,rangeEnd]=[rangeEnd,rangeStart]}render()};
 $('randomMode').onchange=()=>{const names=$('randomMode').value==='names';$('diceOptions').classList.toggle('hidden',names);$('nameOptions').classList.toggle('hidden',!names)};
@@ -918,7 +967,50 @@ function updateDiceStage(stage,values){
   if(cube){cube.getAnimations().forEach(a=>a.cancel());cube.style.animation='none';cube.style.transform='translateZ(calc(clamp(88px,15vw,116px) / -2)) rotateX(-90deg) rotateZ(0deg)';}
  });
 }
-function updateNameStage(stage,name){stage.querySelectorAll('.name-die-face').forEach(face=>face.textContent=name);const die=stage.querySelector('.name-die');if(die)die.setAttribute('aria-label',`Namenswürfel ${name}`)}
+function fitNameOnDie(stage,name){
+ const faces=stage.querySelectorAll('.name-die-face');
+ faces.forEach(face=>{
+  face.textContent=name;
+  face.style.whiteSpace='nowrap';
+  face.style.overflow='hidden';
+  const available=Math.max(20,face.clientWidth*.78);
+  let size=42;
+  const canvas=fitNameOnDie.canvas||(fitNameOnDie.canvas=document.createElement('canvas'));
+  const ctx=canvas.getContext('2d');
+  if(ctx){while(size>11){ctx.font=`1000 ${size}px system-ui`;if(ctx.measureText(name).width<=available)break;size-=1;}}
+  face.style.fontSize=size+'px';
+ });
+}
+function updateNameStage(stage,name){fitNameOnDie(stage,name);const die=stage.querySelector('.name-die');if(die)die.setAttribute('aria-label',`Namenswürfel ${name}`)}
+function animateNameDie(stage,duration=5200){
+ const die=stage.querySelector('.name-die'),cube=die?.querySelector('.name-die-cube');
+ if(!die||!cube)return Promise.resolve();
+ const starts={x:randomBetween(-38,-25),y:randomBetween(9,21)},ends={x:randomBetween(-6,6),y:randomBetween(-5,5)};
+ const c1={x:randomBetween(-30,30),y:randomBetween(-25,25)},c2={x:randomBetween(-30,30),y:randomBetween(-25,25)};
+ const direction=Math.random()<.5?1:-1;
+ const rx=(-90+360*(4+Math.floor(Math.random()*5)))*direction;
+ const ry=360*(3+Math.floor(Math.random()*4))*(Math.random()<.5?1:-1);
+ const rz=360*(1+Math.floor(Math.random()*2))*(Math.random()<.5?1:-1);
+ const mobile=window.innerWidth<560;
+ const depth=mobile?'calc(min(36vw,145px) / -2)':'calc(clamp(115px,18vw,165px) / -2)';
+ const frames=[],cubeFrames=[],steps=80;
+ for(let n=0;n<=steps;n++){
+  const t=n/steps;
+  const x=bezierPoint(starts.x,c1.x,c2.x,ends.x,t)+Math.sin(t*Math.PI*3)*1.7*(1-t);
+  const y=bezierPoint(starts.y,c1.y,c2.y,ends.y,t)+Math.sin(t*Math.PI*4)*1.2*(1-t);
+  const eased=t<.82?t:.82+.18*(1-Math.pow(1-(t-.82)/.18,2));
+  frames.push({transform:`translate(-50%,-50%) translate(${x}vw,${y}vh)`,offset:t,easing:'linear'});
+  cubeFrames.push({transform:`translateZ(${depth}) rotateX(${rx*eased}deg) rotateY(${ry*eased}deg) rotateZ(${rz*eased}deg)`,offset:t,easing:'linear'});
+ }
+ const outer=die.animate(frames,{duration,easing:'linear',fill:'forwards'});
+ const inner=cube.animate(cubeFrames,{duration,easing:'linear',fill:'forwards'});
+ return Promise.all([outer.finished,inner.finished]).then(()=>{
+  const finalPosition=getComputedStyle(die).transform;
+  outer.cancel();die.style.transform=finalPosition;
+  cube.getAnimations().forEach(a=>a.cancel());cube.style.animation='none';
+  cube.style.transform=`translateZ(${depth}) rotateX(0deg) rotateY(0deg) rotateZ(0deg)`;
+ });
+}
 function finishRollStage(el,caption,html,winner=false){if(!el)return;el.classList.remove('rolling-stage');if(winner)el.classList.add('winner-stage');const cap=el.querySelector('.stage-caption');if(cap)cap.textContent=caption;if(html!==null&&html!==undefined)updateRollStage(el,html);setTimeout(()=>{el.style.transition='opacity .45s ease,transform .45s ease';el.style.opacity='0';el.style.transform='scale(.94)';setTimeout(()=>el.remove(),480)},2200)}
 function randomBetween(min,max){return min+Math.random()*(max-min)}
 function bezierPoint(p0,p1,p2,p3,t){const u=1-t;return u*u*u*p0+3*u*u*t*p1+3*u*t*t*p2+t*t*t*p3}
@@ -928,7 +1020,7 @@ function animateDicePair(stage,duration=4200){
  if(!dice.length)return Promise.resolve();
  // Einzel- und Doppelwurf verwenden dieselbe echte Rollbewegung.
  result.classList.add(dice.length===1?'dice-single':'dice-pair');
- const angle=randomBetween(-Math.PI,Math.PI),distance=dice.length===2?randomBetween(7,18):0;
+ const angle=randomBetween(-Math.PI,Math.PI),distance=dice.length===2?randomBetween(window.innerWidth<560?46:25,window.innerWidth<560?51:31):0;
  const midX=randomBetween(-5,5),midY=randomBetween(-5,5);
  const end1={x:midX-Math.cos(angle)*distance/2,y:midY-Math.sin(angle)*distance/2};
  const end2={x:midX+Math.cos(angle)*distance/2,y:midY+Math.sin(angle)*distance/2};
@@ -941,15 +1033,15 @@ function animateDicePair(stage,duration=4200){
   const c2={x:randomBetween(-30,30),y:randomBetween(-26,26)};
   const frames=[],cubeFrames=[],steps=72;
   const direction=(Math.random()<.5?1:-1);
-  const rollX=randomBetween(5,8)*90*direction;
-  const rollY=randomBetween(2,5)*90*(Math.random()<.5?1:-1);
-  const rollZ=randomBetween(-35,35);
+  const rollX=(-90+360*(4+Math.floor(Math.random()*5)))*direction;
+  const rollY=360*(2+Math.floor(Math.random()*4))*(Math.random()<.5?1:-1);
+  const rollZ=360*(Math.random()<.5?1:-1);
   for(let n=0;n<=steps;n++){
    const t=n/steps;
    // Sanfte, durchgehende Bewegung mit mehreren weichen Richtungswechseln.
    const x=bezierPoint(a.x,c1.x,c2.x,b.x,t)+Math.sin(t*Math.PI*3+i)*1.8*(1-t);
    const y=bezierPoint(a.y,c1.y,c2.y,b.y,t)+Math.sin(t*Math.PI*4+i)*1.2*(1-t);
-   const eased=1-Math.pow(1-t,2.35);
+   const eased=t<.82?t:.82+.18*(1-Math.pow(1-(t-.82)/.18,2));
    frames.push({transform:`translate(-50%,-50%) translate(${x}vw,${y}vh)`,offset:t,easing:'linear'});
    // Die Rotation wird gleichmäßig weitergeführt und läuft am Ende in die flache Lage aus.
    const rx=rollX*eased,ry=rollY*eased,rz=rollZ*eased;
@@ -957,7 +1049,7 @@ function animateDicePair(stage,duration=4200){
   }
   const outer=die.animate(frames,{duration,easing:'linear',fill:'forwards'});
   const cube=die.querySelector('.die-cube');
-  const inner=cube?cube.animate(cubeFrames,{duration,easing:'cubic-bezier(.18,.68,.22,1)',fill:'forwards'}):null;
+  const inner=cube?cube.animate(cubeFrames,{duration,easing:'linear',fill:'forwards'}):null;
   return Promise.all([outer.finished,inner?inner.finished:Promise.resolve()]).then(()=>{
    const finalPosition=getComputedStyle(die).transform;
    outer.cancel();die.style.transform=finalPosition;
@@ -975,9 +1067,9 @@ $('rollDice').onclick=()=>{
  const stage=showRollStage('',values.map(()=>dieMarkup(1)).join(''));
  playDiceSound('roll');
  let ticks=0;
- const soundTick=()=>{ticks++;playDiceSound([3,7,11,15,19,23].includes(ticks)?'wall':'roll');if(ticks<26)setTimeout(soundTick,120)};
+ const soundTick=()=>{ticks++;playDiceSound([3,7,11,15,19,23].includes(ticks)?'wall':'roll');if(ticks<44)setTimeout(soundTick,120)};
  soundTick();
- const motion=animateDicePair(stage,3400);
+ const motion=animateDicePair(stage,5200);
  motion.then(()=>{
   updateDiceStage(stage,values);
   if(count===2)stage.classList.add('final-dice');
@@ -995,7 +1087,10 @@ const namesStorageKey='nordland_random_names_v1';
 try{$('randomNames').value=localStorage.getItem(namesStorageKey)||'';}catch(e){}
 $('randomNames').addEventListener('input',()=>{try{localStorage.setItem(namesStorageKey,$('randomNames').value);$('namesSavedStatus').textContent='✓ Namensliste automatisch auf diesem Gerät gespeichert.';}catch(e){$('namesSavedStatus').textContent='Speichern im Browser nicht möglich. Bitte Datensicherung beachten.';}});
 const makeNameDie=(name)=>`<div class="name-die" aria-label="Namenswürfel ${escapeHtml(name)}"><div class="name-die-cube">${['front','back','right','left','top','bottom'].map(side=>`<div class="name-die-face ${side}">${escapeHtml(name)}</div>`).join('')}</div></div>`;
-$('drawName').onclick=()=>{if(nameRolling)return;const names=$('randomNames').value.split(/[\n,;]+/).map(x=>x.trim()).filter(Boolean);if(!names.length){alert('Bitte zuerst mindestens einen Namen eingeben.');return}try{localStorage.setItem(namesStorageKey,$('randomNames').value)}catch(e){}nameRolling=true;const btn=$('drawName');btn.disabled=true;let ticks=0;const totalTicks=26;const stage=showRollStage('',makeNameDie(names[0]));playDiceSound('roll');const animate=()=>{const shown=names[Math.floor(Math.random()*names.length)];updateNameStage(stage,shown);ticks++;playDiceSound([4,8,12,16,20,24].includes(ticks)?'wall':'roll');if(ticks<totalTicks){setTimeout(animate,120)}else{const winner=names[Math.floor(Math.random()*names.length)];updateNameStage(stage,winner);finishRollStage(stage,'',makeNameDie(winner),true);speakRollResult(winner,1.4);btn.textContent='Neu würfeln';btn.disabled=false;nameRolling=false;}};animate()};
+// Gleichmäßige Zufallsauswahl und ein gemischter Namensstapel statt vieler unabhängiger Zufallstreffer.
+function secureRandomIndex(length){if(length<=1)return 0;try{const a=new Uint32Array(1);crypto.getRandomValues(a);return Math.floor((a[0]/4294967296)*length)}catch(e){return Math.floor(Math.random()*length)}}
+function shuffledNameDeck(source){const deck=source.slice();for(let i=deck.length-1;i>0;i--){const j=secureRandomIndex(i+1);[deck[i],deck[j]]=[deck[j],deck[i]]}return deck}
+$('drawName').onclick=()=>{if(nameRolling)return;const entered=$('randomNames').value.split(/[\n,;]+/).map(x=>x.trim()).filter(Boolean);const seen=new Set(),names=entered.filter(n=>{const key=n.toLocaleLowerCase('de-DE');if(seen.has(key))return false;seen.add(key);return true});if(!names.length){alert('Bitte zuerst mindestens einen Namen eingeben.');return}try{localStorage.setItem(namesStorageKey,$('randomNames').value)}catch(e){}nameRolling=true;const btn=$('drawName');btn.disabled=true;const duration=5200,totalTicks=48,stage=showRollStage('',makeNameDie(names[0]));updateNameStage(stage,names[0]);playDiceSound('roll');let ticks=0,active=true,deck=[],lastShown='';const nextMixedName=()=>{if(!deck.length){deck=shuffledNameDeck(names);if(deck.length>1&&deck[0]===lastShown){const swap=1+secureRandomIndex(deck.length-1);[deck[0],deck[swap]]=[deck[swap],deck[0]]}}lastShown=deck.shift();return lastShown};const soundTick=()=>{if(!active)return;updateNameStage(stage,nextMixedName());ticks++;playDiceSound([4,9,14,19,24,29,34,39,44].includes(ticks)?'wall':'roll');if(ticks<totalTicks)setTimeout(soundTick,Math.max(65,duration/totalTicks));};soundTick();const finish=()=>{active=false;const winner=names[secureRandomIndex(names.length)];updateNameStage(stage,winner);finishRollStage(stage,'',null,true);speakRollResult(winner,1.4);btn.textContent='Neu würfeln';btn.disabled=false;nameRolling=false};animateNameDie(stage,duration).then(finish).catch(finish);};
 $('savePin').onclick=()=>{let p=$('pinInput').value;if(p&& !/^\d{4}$/.test(p)){alert('Der PIN muss genau 4 Ziffern haben.');return}state.pin=p;save();alert(p?'PIN auf diesem Gerät aktiviert.':'PIN-Schutz ausgeschaltet.');};
 $('refreshReminders').onclick=()=>renderReminders();
 $('enableNotifications').onclick=async()=>{if(!('Notification'in window)){alert('Dieser Browser unterstützt keine Benachrichtigungen.');return}let p=await Notification.requestPermission();alert(p==='granted'?'Benachrichtigungen erlaubt. Geburtstage werden zusätzlich am Vortag und am Geburtstag um 08:00 Uhr gemeldet.':'Benachrichtigungen nicht erlaubt. Die Erinnerungsübersicht in der App bleibt verfügbar.');birthdayReminderCheck();renderReminders()};
