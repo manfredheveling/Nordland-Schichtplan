@@ -159,7 +159,7 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
 .days-side{border:0;padding:0;min-width:0}
 .shift-plan-heading{font-size:20px!important;margin:0 0 6px!important}
 .day-list{height:min(72vh,820px);max-height:min(72vh,820px);min-height:320px;gap:7px;padding:3px}
-.day-row{grid-template-columns:54px minmax(0,1fr) 14px;gap:12px;padding:9px 10px;min-height:66px;border:1px solid var(--line);background:var(--panel)}
+.day-row{grid-template-columns:50px minmax(0,1fr);gap:10px;padding:10px;min-height:70px;border:1px solid var(--line);background:var(--panel)}
 .day-row .shift-marker{display:flex;align-items:center;justify-content:center;width:43px;height:43px;border-radius:10px;font-size:21px;font-weight:1000;border:2px solid transparent;line-height:1}
 .day-row .shift-marker.F{background:#d9f2df;color:#17612c}
 .day-row .shift-marker.S{background:#fff0b8;color:#725300}
@@ -171,10 +171,10 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
 [data-theme=dark] .day-row .shift-marker.X{background:#294637;color:#c9f1d5}
 .day-row .shift-marker.today-marker{border:3px solid #239447;box-shadow:0 0 0 2px #23944722}
 .day-row .shift-marker.sunday-marker{border:2px solid #c62828}
-.day-row .date-details{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:0}
+.day-row .date-details{display:flex;flex-direction:column;align-items:stretch;gap:4px;min-width:0;width:100%}
 .day-row .weekday-date{font-size:14px;font-weight:900;color:var(--text)}
-.day-row .special-label{display:block;width:fit-content;max-width:100%;font-size:13px;font-weight:900;line-height:1.25;text-align:left;padding:5px 9px;margin-top:5px;border-radius:7px;letter-spacing:.1px}
-.day-row .special-label.category-Urlaub,.day-row .special-label.category-AZK,.day-row .special-label.category-LZK,.day-row .special-label.category-Krank{background:#000!important;color:#fff!important;border:1px solid #555}
+
+
 .date-picker-wrap{display:flex;align-items:center;justify-content:flex-start;gap:3px}
 .date-picker-wrap input{flex:0 1 165px;width:165px;max-width:calc(100% - 43px);min-width:0}
 .date-picker-button{flex:0 0 40px;width:40px;font-size:20px;padding:5px;border:1px solid var(--line);border-radius:10px;background:var(--soft);color:var(--text);margin:0}
@@ -186,11 +186,79 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
 .day-row.range-start,.day-row.range-end,.day-row.in-range{outline:2px solid #b68a24;background:var(--soft)}
 @media(max-width:650px){
  .day-list{height:min(72vh,820px);max-height:min(72vh,820px);min-height:280px}
- .day-row{grid-template-columns:46px minmax(0,1fr) 10px;gap:8px;padding:8px 7px;min-height:62px}
+ .day-row{grid-template-columns:44px minmax(0,1fr);gap:8px;padding:9px 7px;min-height:66px}
  .day-row .shift-marker{width:39px;height:39px;font-size:19px}
  .day-row .weekday-date{font-size:13px}
  .day-row .day-info{font-size:10px}
 }
+
+
+/* Schichtangabe bewusst deutlich sichtbar unter Datum und Wochentag */
+.day-row .shift-info{display:block;font-size:13px;font-weight:900;line-height:1.25;padding:4px 7px;border-radius:6px;width:fit-content;max-width:100%;color:var(--text);background:var(--soft);}
+.day-row .shift-info-F{background:#d9f2df;color:#17612c}
+.day-row .shift-info-S{background:#fff0b8;color:#725300}
+.day-row .shift-info-N{background:#ffd9d9;color:#8a2020}
+.day-row .shift-info-X{background:#e4ece7;color:#42624d}
+[data-theme=dark] .day-row .shift-info-F{background:#245b36;color:#e1ffe8}
+[data-theme=dark] .day-row .shift-info-S{background:#665018;color:#fff0b8}
+[data-theme=dark] .day-row .shift-info-N{background:#702d2d;color:#ffe2e2}
+[data-theme=dark] .day-row .shift-info-X{background:#294637;color:#d5f5df}
+@media(max-width:650px){.day-row .shift-info{font-size:12px}}
+/* Wichtig: Auf schmalen Bildschirmen darf die gesamte Datums-/Schichtspalte nicht ausgeblendet werden. */
+.day-row>span.date-details{display:flex!important;flex-direction:column;align-items:stretch;gap:4px;min-width:0;width:100%}
+
+
+/* Lotto-Fernsehziehung mit transparenter Kugel-Spirale */
+.lotto-machine{position:relative;max-width:430px;margin:14px auto 10px;padding:12px 12px 16px;border-radius:22px;background:linear-gradient(145deg,#092d50,#14618a 55%,#08243e);border:3px solid #e5bd4d;box-shadow:inset 0 0 22px #8bdcff55,0 8px 18px #0003;color:#fff;overflow:hidden}
+.lotto-machine-title{text-align:center;font-weight:1000;letter-spacing:1px;color:#ffe58a;margin-bottom:5px}
+.lotto-machine svg{display:block;width:100%;height:166px;overflow:visible}
+.lotto-spiral-path{fill:none;stroke:#b9eaff;stroke-width:7;stroke-linecap:round;opacity:.92;filter:drop-shadow(0 0 4px #8de3ff)}
+.lotto-chamber{fill:#d9f5ff18;stroke:#d8f5ff;stroke-width:4}
+.lotto-runner{opacity:0;filter:drop-shadow(0 2px 3px #0008)}
+.lotto-machine.running .lotto-runner{opacity:1;animation:lottoTrack 2.05s cubic-bezier(.2,.65,.3,1) both}
+@keyframes lottoTrack{0%{transform:translate(42px,25px) scale(.8)}18%{transform:translate(90px,48px) scale(1)}38%{transform:translate(170px,25px) scale(1)}58%{transform:translate(255px,62px) scale(1)}78%{transform:translate(315px,112px) scale(1)}100%{transform:translate(360px,132px) scale(.92)}}
+.lotto-machine-caption{text-align:center;font-size:12px;font-weight:800;color:#d9f3ff;margin-top:0}
+.lotto-machine.running .lotto-machine-caption{animation:lottoBlink .5s ease-in-out infinite alternate}@keyframes lottoBlink{to{opacity:.55}}
+@media(prefers-reduced-motion:reduce){.lotto-machine.running .lotto-runner{animation-duration:.01ms}}
+
+/* Vollbild-Lotto-Trommel */
+#lottoFullscreen{position:fixed;inset:0;z-index:99999;display:none;overflow:auto;background:radial-gradient(ellipse at 50% 35%,#164f79 0,#071b31 68%,#020812 100%);color:#fff;padding:clamp(10px,2vw,26px);box-sizing:border-box}
+#lottoFullscreen.active{display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
+.lotto-fs-head{width:min(1100px,100%);display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 auto 8px}
+.lotto-fs-head h2{margin:0;color:#ffe58a;text-align:center;font-size:clamp(19px,3vw,30px);text-shadow:0 2px 8px #000}
+.lotto-fs-close{background:#fff!important;color:#123!important;border:2px solid #e8c75a!important;border-radius:12px;padding:9px 13px;font-weight:900}
+.lotto-fs-sub{font-weight:800;text-align:center;color:#d6efff;margin:0 0 12px}
+.lotto-drum-wrap{position:relative;width:min(76vw, min(650px, 62vh));height:min(76vw, min(650px, 62vh));min-width:270px;min-height:270px;margin:4px auto 12px;flex:none}
+.lotto-drum-glass{position:absolute;inset:0;border-radius:50%;border:9px solid #d7f5ff;background:radial-gradient(circle at 28% 22%,#ffffff55 0 5%,#c9f3ff22 22%,#5ab5e322 58%,#d7f5ff18 75%);box-shadow:inset 0 0 35px #c7f4ff66,0 0 28px #6bcfff66,0 0 0 5px #ffffff22;overflow:hidden}
+.lotto-drum-glass:before{content:"";position:absolute;inset:5%;border:2px solid #e7fbff66;border-radius:50%;box-shadow:inset 0 0 18px #fff3}
+.lotto-drum-glass:after{content:"";position:absolute;left:12%;top:8%;width:34%;height:15%;border-radius:50%;background:#fff5;filter:blur(12px);transform:rotate(-35deg)}
+.lotto-drum-balls{position:absolute;inset:9%;transform-style:preserve-3d}
+.lotto-drum-ball{position:absolute;width:clamp(25px,4.2vw,39px);height:clamp(25px,4.2vw,39px);border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 30% 23%,#fff 0 9%,#ffe987 27%,#e9ad08 72%,#a86c00 100%);border:1px solid #fff8;color:#172338;font-size:clamp(10px,1.45vw,14px);font-weight:1000;box-shadow:inset 0 2px 4px #fff9,0 3px 6px #0008;left:var(--lx);top:var(--ly);transition:transform .45s,left .45s,top .45s;animation:lottoBallTumble var(--dur) ease-in-out infinite alternate;animation-delay:var(--delay)}
+@keyframes lottoBallTumble{0%{transform:translate(var(--dx1),var(--dy1)) rotate(0deg)}100%{transform:translate(var(--dx2),var(--dy2)) rotate(240deg)}}
+.lotto-drum-glass.spinning .lotto-drum-balls{animation:lottoDrumSpin 1.1s linear infinite}
+@keyframes lottoDrumSpin{to{transform:rotate(360deg) scale(.97)}}
+.lotto-drum-ball.selected{z-index:20!important;animation:lottoExtract .9s ease-in forwards;background:radial-gradient(circle at 30% 25%,#fff,#ffed8a 35%,#e8a900 75%,#9b5e00);box-shadow:0 0 0 5px #fff8,0 0 35px #ffe45e;transform:translate(0,0) scale(2.1)!important}
+@keyframes lottoExtract{0%{filter:brightness(1)}35%{filter:brightness(1.8)}100%{left:78%;top:4%;transform:scale(2.3)}}
+.lotto-fs-chute{width:min(900px,100%);min-height:62px;border:2px solid #9ddfff;border-radius:18px;background:#ffffff12;display:flex;align-items:center;justify-content:center;gap:12px;padding:8px;box-sizing:border-box}
+.lotto-fs-chute-label{font-weight:900;color:#cdeeff}
+.lotto-fs-results{display:flex;justify-content:center;flex-wrap:wrap;gap:8px}
+.lotto-fs-result{width:clamp(42px,6vw,58px);height:clamp(42px,6vw,58px);border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 30% 25%,#fff,#ffe987 35%,#e9ad08 75%,#a86c00);color:#172338;font-size:clamp(19px,3vw,25px);font-weight:1000;border:2px solid #fff8;box-shadow:0 4px 10px #0006}
+.lotto-fs-status{min-height:54px;text-align:center;font-weight:900;font-size:clamp(15px,2.3vw,21px);color:#fff4c2;margin:12px 0}
+.lotto-fs-super{display:none;text-align:center;font-weight:900;color:#ffdddd}
+.lotto-fs-super strong{display:inline-grid;place-items:center;margin-left:8px;width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 30% 25%,#fff,#ff8b8b 35%,#d71920 75%,#8b0000);font-size:26px;border:2px solid #fff}
+@media(max-width:600px){.lotto-fs-head{align-items:flex-start}.lotto-fs-close{padding:7px 9px;font-size:12px}.lotto-drum-wrap{width:min(88vw,58vh);height:min(88vw,58vh);min-width:250px;min-height:250px}.lotto-drum-ball{width:25px;height:25px;font-size:10px}}
+
+/* Lottozahlen-Zufallsgenerator */
+.lotto-nav{grid-column:span 1;justify-self:stretch;width:100%;background:linear-gradient(145deg,#075b32,#16a34a)!important;color:#fff!important;border-color:#f6c744!important;font-weight:950!important}
+.tabs button.random-nav{grid-column:span 1;width:100%;justify-self:stretch}
+.lotto-ticket{background:linear-gradient(145deg,#fffdf2,#fff2bd);color:#173b63;border:3px solid #d5a72d;border-radius:18px;padding:15px;box-shadow:0 8px 22px #0002}
+.lotto-ticket-head{text-align:center;font-weight:1000;font-size:20px;color:#075b32}.lotto-ticket-sub{text-align:center;font-weight:800;font-size:12px;margin:4px 0 14px;color:#7c5b13}
+.lotto-balls{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px}.lotto-ball{aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 30% 25%,#fff 0 8%,#ffe987 28%,#e9ad08 72%,#a86c00 100%);border:2px solid #b57b00;color:#1b2638;font-size:clamp(17px,4vw,25px);font-weight:1000;box-shadow:inset 0 2px 4px #fff9,0 3px 5px #0003;transform:scale(.85);opacity:.45}
+.lotto-ball.filled{opacity:1;transform:scale(1);animation:lottoPop .48s cubic-bezier(.2,1.7,.4,1)}@keyframes lottoPop{0%{transform:scale(.2) rotate(-35deg)}70%{transform:scale(1.18) rotate(8deg)}100%{transform:scale(1) rotate(0)}}
+.lotto-super-wrap{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:15px;font-weight:950;color:#7c5b13}.lotto-super{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 30% 25%,#fff,#ff8b8b 35%,#d71920 75%,#8b0000);border:3px solid #9f1515;color:white;font-size:25px;font-weight:1000;box-shadow:0 3px 8px #0003}.lotto-super.spinning{animation:lottoSpin .55s linear infinite}@keyframes lottoSpin{to{transform:rotate(360deg) scale(.9)}}
+.lotto-stage{text-align:center;padding:12px 8px;min-height:58px;font-weight:900;color:var(--text)}.lotto-mascot{font-size:42px;display:block;animation:lottoWiggle .8s ease-in-out infinite alternate}@keyframes lottoWiggle{to{transform:rotate(12deg) translateY(-4px)}}
+.lotto-action{width:100%;font-size:18px!important;font-weight:1000!important;background:linear-gradient(#24c65b,#087b36)!important;color:white!important;border:2px solid #f6d45b!important;box-shadow:0 5px 0 #075b32,0 8px 14px #0003!important}
+@media(max-width:560px){.tabs button.random-nav,.tabs button.lotto-nav{grid-column:span 1;width:100%;min-height:88px}.lotto-balls{gap:5px}}
 
 </style>
 </head>
@@ -210,6 +278,7 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
   <button data-tab="tasks"><span style="display:block;font-size:25px;margin-bottom:5px">☑</span>Aufgaben &amp; Notizen</button>
   <button class="birthday-nav" data-tab="birthdays"><span style="display:block;font-size:25px;margin-bottom:5px">🎂</span>Geburtstagskalender</button>
   <button class="random-nav" data-tab="random" aria-label="Knobelbecher öffnen" title="Knobelbecher öffnen"><svg class="knobelbecher-icon" viewBox="0 0 120 92" role="img" aria-label="Abbildung eines Knobelbechers mit zwei Würfeln" style="display:block;width:100%;max-width:190px;height:72px;margin:0 auto"><defs><linearGradient id="cupLeather" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8d5634"/><stop offset=".55" stop-color="#4b2819"/><stop offset="1" stop-color="#24130e"/></linearGradient><linearGradient id="cupRim" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d6a46b"/><stop offset="1" stop-color="#754321"/></linearGradient></defs><ellipse cx="59" cy="80" rx="43" ry="7" fill="#000" opacity=".18"/><path d="M24 22 Q60 10 96 22 L87 70 Q60 84 33 70 Z" fill="url(#cupLeather)" stroke="#2a170f" stroke-width="3"/><ellipse cx="60" cy="22" rx="36" ry="11" fill="url(#cupRim)" stroke="#3b2115" stroke-width="3"/><ellipse cx="60" cy="22" rx="28" ry="6" fill="#1d120d"/><path d="M34 37 Q60 48 86 37" fill="none" stroke="#d6a46b" stroke-width="2" opacity=".55"/><g transform="translate(4 1) rotate(-13 26 19)"><rect x="10" y="3" width="30" height="30" rx="6" fill="#fff" stroke="#aab3c0" stroke-width="2"/><g fill="#202631"><circle cx="18" cy="11" r="3"/><circle cx="32" cy="25" r="3"/><circle cx="25" cy="18" r="3"/></g></g><g transform="translate(73 2) rotate(12 16 17)"><rect x="2" y="2" width="29" height="29" rx="6" fill="#fff" stroke="#aab3c0" stroke-width="2"/><g fill="#202631"><circle cx="9" cy="9" r="2.7"/><circle cx="24" cy="9" r="2.7"/><circle cx="9" cy="24" r="2.7"/><circle cx="24" cy="24" r="2.7"/></g></g></svg></button>
+  <button class="lotto-nav" data-tab="lotto" aria-label="Lottozahlen-Zufallsgenerator öffnen"><span style="display:block;font-size:35px;margin-bottom:4px">🍀🎱</span>Lottozahlen-<br>Zufallsgenerator</button>
   <button class="reminder-nav" data-tab="reminders" id="reminderNav"><span style="display:block;font-size:27px;margin-bottom:4px">🔔</span>WICHTIGE ERINNERUNGEN <span id="reminderNavCount" class="reminder-count">0</span><small style="display:block;font-size:11px;font-weight:700;margin-top:3px">Neue Meldungen ansehen</small></button>
   <button class="share-nav" type="button" data-action="share"><span style="display:block;font-size:25px;margin-bottom:5px">↗</span>Daten teilen</button>
 
@@ -335,6 +404,37 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
    <div class="actions"><button class="primary" id="vacFind">Beste Zeiträume suchen</button></div>
    <div id="vacResults" aria-live="polite"></div>
    <div id="vacAllocation" aria-live="polite"></div>
+  </div>
+ </section>
+
+<div id="lottoFullscreen" aria-hidden="true">
+ <div class="lotto-fs-head"><span style="font-size:30px">🍀</span><h2>🎱 DIE GROSSE NORDLAND-LOTTOZIEHUNG 🎱</h2><button class="lotto-fs-close" id="lottoFsClose">✕ Zurück</button></div>
+ <p class="lotto-fs-sub">49 Kugeln in der gläsernen Trommel · 6 aus 49 · danach die Superzahl</p>
+ <div class="lotto-drum-wrap"><div class="lotto-drum-glass" id="lottoDrumGlass"><div class="lotto-drum-balls" id="lottoDrumBalls"></div></div></div>
+ <div class="lotto-fs-chute"><span class="lotto-fs-chute-label">GEZOGENE ZAHLEN</span><div class="lotto-fs-results" id="lottoFsResults"></div></div>
+ <div class="lotto-fs-status" id="lottoFsStatus">Der Glückskobold prüft die Trommel …</div>
+ <div class="lotto-fs-super" id="lottoFsSuper">SUPERZAHL <strong>?</strong></div>
+</div>
+
+ <section id="lotto" class="hidden">
+  <div class="card">
+   <h2 class="title">🍀 Lottozahlen-Zufallsgenerator</h2>
+   <p class="hint">Dein persönlicher Glücksschein – der Kobold wirft die Kugeln einzeln für dich! 6 aus 49 plus Superzahl.</p>
+   <div class="lotto-ticket">
+    <div class="lotto-ticket-head">🍀 NORDLAND-GLÜCKSSCHEIN 🍀</div>
+    <div class="lotto-ticket-sub">6 AUS 49 · AUTOMATISCH AUSGEFÜLLT</div>
+    <div class="hint" style="text-align:center;font-weight:900">🎱 Die Ziehung läuft nach dem Klick im großen Vollbild – mit einer echten 49-Kugel-Trommel!</div>
+    <div class="lotto-balls" id="lottoBalls"><div class="lotto-ball">?</div><div class="lotto-ball">?</div><div class="lotto-ball">?</div><div class="lotto-ball">?</div><div class="lotto-ball">?</div><div class="lotto-ball">?</div></div>
+    <div class="lotto-super-wrap">SUPERZAHL <span class="lotto-super" id="lottoSuper">?</span></div>
+   </div>
+   <div class="lotto-stage" id="lottoStage" aria-live="polite"><span class="lotto-mascot">🧝🍀</span>„Na los, Glück muss man schließlich herausfordern!“</div>
+   <button class="primary lotto-action" id="lottoDraw">🎱 LOTTO-SCHEIN AUSFÜLLEN!</button>
+   <div class="actions" style="margin-top:12px"><button id="lottoCopy" disabled>📋 Zahlen kopieren</button></div>
+   <div class="notice" style="margin-top:14px;border:1px dashed var(--border);background:var(--surface);text-align:center">
+    <strong>🧝 Kleingedrucktes vom Glückskobold</strong><br>
+    „Alle Zahlen sind reine Zufallstreffer – der Ersteller würfelt nur, er zaubert nicht! Für falsche Zahlen, verpasste Millionen oder enttäuschte Lottoträume wird keine Haftung übernommen. Beschwerden bitte direkt an den Zufall richten. Der Kobold war's nicht!“ 🍀😂<br>
+    <small>Nur Unterhaltung, keine offizielle Lottoannahmestelle und keine Gewinnzusage. Bitte Zahlen vor einer echten Spielteilnahme selbst prüfen.</small>
+   </div>
   </div>
  </section>
  <section id="reminders" class="hidden">
@@ -550,7 +650,8 @@ function makeDayRow(d){
  const marker=sh.code==='X'?'🙂':sh.code;
  b.dataset.date=s;
  b.className='day-row'+(isToday?' today-row':'')+(isSunday?' sunday-row':'')+(s===selected?' active':'')+(rangeStart===s?' range-start':'')+(rangeEnd===s?' range-end':'')+(rangeStart&&rangeEnd&&s>rangeStart&&s<rangeEnd?' in-range':'');
- b.innerHTML=`<span class="shift-marker ${sh.code}${isToday?' today-marker':''}${isSunday?' sunday-marker':''}">${marker}</span><span class="date-details"><strong class="weekday-date">${d.toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit'})} · ${d.toLocaleDateString('de-DE',{weekday:'long'})}</strong><span class="day-info">${sh.name}${shiftHours[sh.code]?' · '+shiftHours[sh.code]:''}${ev.length?' · '+ev.length+' Termin(e)':''}</span>${holidayNameOn(s)?`<span class="special-label holiday-label">${escapeHtml(holidayNameOn(s))}</span>`:''}${birthdaysOn(s).map(b=>`<span class="special-label birthday-label">🎂 GEBURTSTAG: ${escapeHtml(b.first+' '+b.last)}</span>`).join('')}${periodsOn(s).map(p=>`<span class="special-label ${categoryClass(p.type)}">${escapeHtml(p.type)}</span>`).join('')}</span><span class="day-info day-arrow">›</span>`;
+ const shiftText=sh.code==='X'?'Frei – keine Schicht':`${sh.name} · ${shiftHours[sh.code]||'Schichtzeit nicht hinterlegt'}`;
+ b.innerHTML=`<span class="shift-marker ${sh.code}${isToday?' today-marker':''}${isSunday?' sunday-marker':''}">${marker}</span><span class="date-details"><strong class="weekday-date">${d.toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit'})} · ${d.toLocaleDateString('de-DE',{weekday:'long'})}</strong><span class="shift-info shift-info-${sh.code}">${escapeHtml(shiftText)}</span>${periodsOn(s).map(p=>`<span class="special-label ${categoryClass(p.type)}">${escapeHtml(p.type)}</span>`).join('')}${ev.map(e=>`<span class="special-label category-Termine">Termin: ${escapeHtml(e.title)}</span>`).join('')}${holidayNameOn(s)?`<span class="special-label holiday-label">${escapeHtml(holidayNameOn(s))}</span>`:''}${birthdaysOn(s).map(b=>`<span class="special-label birthday-label">🎂 GEBURTSTAG: ${escapeHtml(b.first+' '+b.last)}</span>`).join('')}</span>`;
  let holdTimer=null,held=false;
  b.onpointerdown=()=>{held=false;holdTimer=setTimeout(()=>{held=true;dragSelecting=true;rangeStart=s;rangeEnd=s;selected=s;b.classList.add('active');$('periodStart').value=s;$('periodEnd').value=s;},2000)};
  b.onpointerleave=()=>clearTimeout(holdTimer);b.onpointercancel=()=>{clearTimeout(holdTimer);dragSelecting=false};
@@ -1203,6 +1304,61 @@ $('doShare').onclick=async()=>{
   alert('Der Übernahme-Link konnte nicht erstellt werden: '+(err&&err.message?err.message:'Unbekannter Fehler'));
  }finally{$('doShare').disabled=false;}
 };
+let lottoBusy=false,lottoLast=null;
+const lottoJokes=['Der Kobold schüttelt die Trommel. Hoffentlich auch dein Glück!','Eine Kugel nach der anderen – Spannung muss sein!','Wenn das kein Volltreffer wird, war es wenigstens unterhaltsam!','Der Glückskobold gibt alles. Mehr kann man von ihm nicht verlangen!','Achtung: Gleich könnten sechs kleine Hoffnungsträger landen!'];
+function lottoRandom(max){const a=new Uint32Array(1);if(window.crypto&&crypto.getRandomValues){crypto.getRandomValues(a);return Math.floor(a[0]/4294967296*max)}return Math.floor(Math.random()*max)}
+function lottoSample(){const pool=Array.from({length:49},(_,i)=>i+1);for(let i=pool.length-1;i>0;i--){const j=lottoRandom(i+1);[pool[i],pool[j]]=[pool[j],pool[i]]}return pool.slice(0,6)}
+$('lottoDraw').onclick=async()=>{
+ if(lottoBusy)return;
+ lottoBusy=true;
+ const btn=$('lottoDraw'),ticketBalls=[...$('lottoBalls').children],superBall=$('lottoSuper'),stage=$('lottoStage'),copy=$('lottoCopy');
+ const fs=$('lottoFullscreen'),drum=$('lottoDrumGlass'),drumBalls=$('lottoDrumBalls'),results=$('lottoFsResults'),status=$('lottoFsStatus'),fsSuper=$('lottoFsSuper');
+ btn.disabled=true;copy.disabled=true;lottoLast=null;btn.textContent='⏳ DIE ZIEHUNG LÄUFT …';
+ ticketBalls.forEach(b=>{b.textContent='?';b.classList.remove('filled')});superBall.textContent='?';superBall.classList.remove('spinning');
+ stage.innerHTML='<span class="lotto-mascot">📺🥁</span>Die große Fernseh-Lottoziehung startet …';
+ results.innerHTML='';fsSuper.style.display='none';fs.setAttribute('aria-hidden','false');fs.classList.add('active');
+ drumBalls.innerHTML='';
+ for(let n=1;n<=49;n++){
+  const b=document.createElement('div');b.className='lotto-drum-ball';b.textContent=n;
+  const angle=(n*137.508)*Math.PI/180,rad=18+Math.sqrt(n/49)*27;
+  const x=50+Math.cos(angle)*rad,y=50+Math.sin(angle)*rad;
+  b.style.setProperty('--lx',`calc(${x}% - 14px)`);b.style.setProperty('--ly',`calc(${y}% - 14px)`);
+  b.style.setProperty('--dx1',`${Math.round(Math.cos(angle+1)*20)}px`);b.style.setProperty('--dy1',`${Math.round(Math.sin(angle+1)*18)}px`);
+  b.style.setProperty('--dx2',`${Math.round(Math.cos(angle+3)*27)}px`);b.style.setProperty('--dy2',`${Math.round(Math.sin(angle+3)*24)}px`);
+  b.style.setProperty('--dur',`${(0.55+Math.random()*0.8).toFixed(2)}s`);b.style.setProperty('--delay',`${(-Math.random()*1.5).toFixed(2)}s`);
+  b.dataset.number=String(n);drumBalls.appendChild(b);
+ }
+ const numbers=lottoSample();
+ const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+ status.textContent='Die 49 Kugeln werden kräftig durchgemischt …';
+ drum.classList.add('spinning');await wait(3200);
+ for(let i=0;i<6;i++){
+  status.textContent=['Die erste Kugel wird gesucht …','Die zweite Kugel rollt in die Auslaufrinne …','Jetzt wird es spannend – die dritte Kugel!','Die vierte Kugel wird herausgefischt …','Nur noch zwei Kugeln fehlen!','Die letzte der sechs Zahlen wird gezogen!'][i];
+  await wait(1150);
+  const picked=numbers[i],ball=drumBalls.querySelector(`[data-number="${picked}"]`);
+  if(ball){ball.classList.add('selected');ball.style.left='78%';ball.style.top='4%';}
+  drum.classList.remove('spinning');await wait(650);
+  const result=document.createElement('span');result.className='lotto-fs-result';result.textContent=picked;results.appendChild(result);
+  ticketBalls[i].textContent=String(picked);ticketBalls[i].classList.add('filled');
+  status.textContent=`🎱 Gezogene Kugel Nummer ${i+1}: ${picked}`;
+  await wait(550);
+  if(i<5){drum.classList.add('spinning');await wait(450);}
+ }
+ drum.classList.remove('spinning');
+ status.textContent='Und jetzt entscheidet die Superzahl über das letzte Quäntchen Glück …';
+ await wait(1200);
+ const superValue=lottoRandom(10);fsSuper.style.display='block';fsSuper.querySelector('strong').textContent='?';
+ for(let k=0;k<18;k++){fsSuper.querySelector('strong').textContent=String(lottoRandom(10));await wait(100);}
+ fsSuper.querySelector('strong').textContent=String(superValue);superBall.textContent=String(superValue);
+ lottoLast={numbers,superValue};
+ status.textContent='🎉 Die Ziehung ist beendet! Der Glückskobold drückt alle Daumen!';
+ stage.innerHTML='<span class="lotto-mascot">🎉🍀🥳</span>„Der Millionär von morgen? Vielleicht! Erstmal Schein sichern!“';
+ copy.disabled=false;btn.disabled=false;btn.textContent='🔄 NOCHMAL GLÜCK VERSUCHEN';lottoBusy=false;
+};
+$('lottoFsClose').onclick=()=>{$('lottoFullscreen').classList.remove('active');$('lottoFullscreen').setAttribute('aria-hidden','true');};
+
+$('lottoCopy').onclick=async()=>{if(!lottoLast)return;const value='Nordland-Lotto: '+lottoLast.numbers.join(', ')+' | Superzahl: '+lottoLast.superValue;try{await navigator.clipboard.writeText(value);$('lottoStage').insertAdjacentHTML('beforeend','<br><strong>📋 Zahlen wurden kopiert!</strong>')}catch(e){alert(value)}};
+
 function reminderCheck(){if(!state.reminders||!('Notification'in window)||Notification.permission!=='granted')return;let now=new Date();const offsets={ '1d':86400000,'2d':172800000,'3h':10800000,'2h':7200000,'1h':3600000,'30m':1800000,'ontime':0};state.events.forEach(e=>{if(!e.reminder)return;[['one',e.reminderOne,e.reminderOneTime],['two',e.reminderTwo,e.reminderTwoTime]].forEach(([slot,kind,clock])=>{if(!kind||kind==='off')return;let eventDate=parseDate(e.date);if(e.time){let [hh,mm]=e.time.split(':').map(Number);eventDate.setHours(hh,mm,0,0)}else eventDate.setHours(9,0,0,0);let target;if(kind==='ontime'){target=parseDate(e.date);let [hh,mm]=(clock||'07:00').split(':').map(Number);target.setHours(hh,mm,0,0)}else{target=new Date(eventDate.getTime()-offsets[kind]);let [hh,mm]=(clock||'09:00').split(':').map(Number);target.setHours(hh,mm,0,0)}let delta=now-target;if(delta>=0&&delta<60000){let key='notified_'+e.id+'_'+slot+'_'+e.date;if(!localStorage.getItem(key)){new Notification('Erinnerung: '+e.title,{body:'Termin '+fmt(parseDate(e.date))+(e.time?' um '+e.time+' Uhr':'')});localStorage.setItem(key,'1')}}})})}
 setInterval(reminderCheck,30000);setInterval(birthdayReminderCheck,30000);
 setInterval(updateReminderNav,60000);
