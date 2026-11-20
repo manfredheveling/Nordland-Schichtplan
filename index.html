@@ -152,6 +152,46 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
 
 
 .task-done{opacity:.62}.task-done .task-title{text-decoration:line-through}.task-meta{font-size:12px;color:var(--muted);margin-top:5px}.task-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.task-actions button{padding:6px 10px;font-size:12px}
+
+/* Neue Schichtkalender-Ansicht nach der abgestimmten Tageslisten-Vorlage */
+.calendar-layout{display:block}
+.month-side{display:none!important}
+.days-side{border:0;padding:0;min-width:0}
+.shift-plan-heading{font-size:20px!important;margin:0 0 6px!important}
+.day-list{height:min(72vh,820px);max-height:min(72vh,820px);min-height:320px;gap:7px;padding:3px}
+.day-row{grid-template-columns:54px minmax(0,1fr) 14px;gap:12px;padding:9px 10px;min-height:66px;border:1px solid var(--line);background:var(--panel)}
+.day-row .shift-marker{display:flex;align-items:center;justify-content:center;width:43px;height:43px;border-radius:10px;font-size:21px;font-weight:1000;border:2px solid transparent;line-height:1}
+.day-row .shift-marker.F{background:#d9f2df;color:#17612c}
+.day-row .shift-marker.S{background:#fff0b8;color:#725300}
+.day-row .shift-marker.N{background:#ffd9d9;color:#8a2020}
+.day-row .shift-marker.X{background:#e4ece7;color:#42624d}
+[data-theme=dark] .day-row .shift-marker.F{background:#245b36;color:#d5ffe0}
+[data-theme=dark] .day-row .shift-marker.S{background:#665018;color:#fff0b8}
+[data-theme=dark] .day-row .shift-marker.N{background:#702d2d;color:#ffd9d9}
+[data-theme=dark] .day-row .shift-marker.X{background:#294637;color:#c9f1d5}
+.day-row .shift-marker.today-marker{border:3px solid #239447;box-shadow:0 0 0 2px #23944722}
+.day-row .shift-marker.sunday-marker{border:2px solid #c62828}
+.day-row .date-details{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:0}
+.day-row .weekday-date{font-size:14px;font-weight:900;color:var(--text)}
+.day-row .special-label{display:block;width:fit-content;max-width:100%;font-size:13px;font-weight:900;line-height:1.25;text-align:left;padding:5px 9px;margin-top:5px;border-radius:7px;letter-spacing:.1px}
+.day-row .special-label.category-Urlaub,.day-row .special-label.category-AZK,.day-row .special-label.category-LZK,.day-row .special-label.category-Krank{background:#000!important;color:#fff!important;border:1px solid #555}
+.date-picker-wrap{display:flex;align-items:center;justify-content:flex-start;gap:3px}
+.date-picker-wrap input{flex:0 1 165px;width:165px;max-width:calc(100% - 43px);min-width:0}
+.date-picker-button{flex:0 0 40px;width:40px;font-size:20px;padding:5px;border:1px solid var(--line);border-radius:10px;background:var(--soft);color:var(--text);margin:0}
+.day-row .day-info{font-size:11px;color:var(--muted)}
+.day-row .day-arrow{font-size:17px;text-align:right}
+.day-row.today-row{border-color:#239447}
+.day-row.sunday-row .weekday-date{color:#c62828}
+.day-row.active{outline:2px solid var(--accent);background:var(--soft)}
+.day-row.range-start,.day-row.range-end,.day-row.in-range{outline:2px solid #b68a24;background:var(--soft)}
+@media(max-width:650px){
+ .day-list{height:min(72vh,820px);max-height:min(72vh,820px);min-height:280px}
+ .day-row{grid-template-columns:46px minmax(0,1fr) 10px;gap:8px;padding:8px 7px;min-height:62px}
+ .day-row .shift-marker{width:39px;height:39px;font-size:19px}
+ .day-row .weekday-date{font-size:13px}
+ .day-row .day-info{font-size:10px}
+}
+
 </style>
 </head>
 <body>
@@ -177,7 +217,7 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
  <section id="calendar">
   <div class="card">
    <div class="monthhead"><button id="prevMonth" aria-label="Vorheriger Monat">‹</button><div style="display:flex;align-items:center;justify-content:center;gap:10px;min-width:0"><strong id="monthLabel"></strong><button id="dayTodayBtn" class="primary" type="button" style="padding:7px 12px;font-size:12px;white-space:nowrap">Heute</button></div><button id="nextMonth" aria-label="Nächster Monat">›</button></div>
-   <div class="calendar-layout"><div class="month-side"><h3 class="title" style="font-size:16px">Monat auswählen</h3><div class="month-picker" id="monthPicker"></div></div><div class="days-side"><h3 class="title" style="font-size:16px;margin:0 0 4px">Tagesübersicht</h3><p class="hint">Lange drücken (2 Sekunden) und über die Tage ziehen, um einen Zeitraum zu markieren.</p><div id="monthDayList" class="day-list"></div></div></div>
+   <div class="calendar-layout"><div class="month-side" aria-hidden="true"><div class="month-picker" id="monthPicker"></div></div><div class="days-side"><h3 class="title shift-plan-heading" id="shiftPlanHeading">C-Schicht</h3><p class="hint">F = Früh · S = Spät · N = Nacht · 🙂 = Frei. Lange drücken (2 Sekunden) und über die Tage ziehen, um einen Zeitraum zu markieren.</p><div id="monthDayList" class="day-list"></div></div></div>
   </div>
   <div class="card"><div class="row"><div><div class="title" id="selectedTitle">Ausgewählter Tag</div><div class="sub shift-summary" id="selectedShift"></div></div><button id="openDay">Details</button></div><div id="selectedEvents" class="muted small"></div></div>
  </section>
@@ -358,7 +398,7 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
 
 <dialog id="eventDialog">
  <h2 class="title">Termin oder Notiz</h2>
- <div class="field"><label>Datum</label><input id="eventDate" type="date"></div>
+ <div class="field"><label for="eventDate">Datum</label><div class="date-picker-wrap"><input id="eventDate" type="date"><button type="button" class="date-picker-button" id="eventDatePicker" aria-label="Kalender öffnen" title="Kalender öffnen">📅</button></div></div>
  <div class="field"><label>Titel</label><input id="eventTitle" maxlength="100" placeholder="z. B. Arzttermin"></div>
  <div class="field"><label>Uhrzeit (optional)</label><input id="eventTime" type="time"></div>
  <div class="field"><label>Notiz (optional)</label><textarea id="eventNote" maxlength="1000"></textarea></div>
@@ -506,9 +546,11 @@ function renderReminders(){
 }
 function makeDayRow(d){
  const s=iso(d),sh=shiftFor(s),ev=eventsOn(s),b=document.createElement('button');
+ const isSunday=d.getDay()===0,isToday=s===todayISO();
+ const marker=sh.code==='X'?'🙂':sh.code;
  b.dataset.date=s;
- b.className='day-row'+(s===todayISO()?' today-row':'')+(s===selected?' active':'')+(rangeStart===s?' range-start':'')+(rangeEnd===s?' range-end':'')+(rangeStart&&rangeEnd&&s>rangeStart&&s<rangeEnd?' in-range':'');
- b.innerHTML=`<span class="weekday-date">${d.toLocaleDateString('de-DE',{weekday:'short',day:'2-digit'})}</span><span><strong class="shift ${sh.code}">${sh.name}</strong>${holidayNameOn(s)?`<span class="special-label holiday-label">${escapeHtml(holidayNameOn(s))}</span>`:''}${birthdaysOn(s).map(b=>`<span class="special-label birthday-label">🎂 GEBURTSTAG: ${escapeHtml(b.first+' '+b.last)}</span>`).join('')}${periodsOn(s).map(p=>`<span class="special-label ${categoryClass(p.type)}">${escapeHtml(p.type)}</span>`).join('')}<br><span class="day-info">${shiftHours[sh.code]||'—'}${ev.length?' · '+ev.length+' Termin(e)':''}</span></span><span class="day-info">›</span>`;
+ b.className='day-row'+(isToday?' today-row':'')+(isSunday?' sunday-row':'')+(s===selected?' active':'')+(rangeStart===s?' range-start':'')+(rangeEnd===s?' range-end':'')+(rangeStart&&rangeEnd&&s>rangeStart&&s<rangeEnd?' in-range':'');
+ b.innerHTML=`<span class="shift-marker ${sh.code}${isToday?' today-marker':''}${isSunday?' sunday-marker':''}">${marker}</span><span class="date-details"><strong class="weekday-date">${d.toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit'})} · ${d.toLocaleDateString('de-DE',{weekday:'long'})}</strong><span class="day-info">${sh.name}${shiftHours[sh.code]?' · '+shiftHours[sh.code]:''}${ev.length?' · '+ev.length+' Termin(e)':''}</span>${holidayNameOn(s)?`<span class="special-label holiday-label">${escapeHtml(holidayNameOn(s))}</span>`:''}${birthdaysOn(s).map(b=>`<span class="special-label birthday-label">🎂 GEBURTSTAG: ${escapeHtml(b.first+' '+b.last)}</span>`).join('')}${periodsOn(s).map(p=>`<span class="special-label ${categoryClass(p.type)}">${escapeHtml(p.type)}</span>`).join('')}</span><span class="day-info day-arrow">›</span>`;
  let holdTimer=null,held=false;
  b.onpointerdown=()=>{held=false;holdTimer=setTimeout(()=>{held=true;dragSelecting=true;rangeStart=s;rangeEnd=s;selected=s;b.classList.add('active');$('periodStart').value=s;$('periodEnd').value=s;},2000)};
  b.onpointerleave=()=>clearTimeout(holdTimer);b.onpointercancel=()=>{clearTimeout(holdTimer);dragSelecting=false};
@@ -517,6 +559,7 @@ function makeDayRow(d){
 }
 function render(){
  document.documentElement.dataset.theme=state.theme;
+ const planHeading=$('shiftPlanHeading');if(planHeading)planHeading.textContent=activePlan+'-Schicht';
  updateMonthControls(true);
  const list=$('monthDayList');list.innerHTML='';
  // Start mit drei Monaten. Beim Scrollen werden davor und danach fortlaufend
@@ -850,6 +893,7 @@ $('themeBtn').onclick=()=>{state.theme=state.theme==='dark'?'light':'dark';sessi
 $('planSelect').onchange=e=>{activePlan=e.target.value;state.activePlan=activePlan;save();render();if(!$('year').classList.contains('hidden'))renderYearOverview();if(!$('bridge').classList.contains('hidden'))renderBridgePlanner()};
 $('saveSettings').onclick=()=>{let vals={};for(const k of ['A','B','C','D']){vals[k]=$('anchor'+k).value;if(!vals[k]||parseDate(vals[k]).getDay()!==1){alert('Bitte für Plan '+k+' einen gültigen Montag auswählen.');return}}state.anchors=vals;state.activePlan=activePlan;save();render();if(!$('year').classList.contains('hidden'))renderYearOverview();if(!$('bridge').classList.contains('hidden'))renderBridgePlanner();alert('Alle vier Schichtpläne wurden gespeichert.')};
 $('addEvent').onclick=()=>openEvent();
+$('eventDatePicker').onclick=()=>{const field=$('eventDate');if(typeof field.showPicker==='function'){try{field.showPicker();}catch(_){field.focus();}}else{field.focus();field.click();}};
 function openEvent(e){editingId=e?.id||null;$('eventDate').value=e?.date||selected;$('eventTitle').value=e?.title||'';$('eventTime').value=e?.time||'';$('eventNote').value=e?.note||'';$('reminderOne').value=e?.reminderOne??(e?.reminder?'1d':'off');$('reminderOneTime').value=e?.reminderOneTime||'09:00';$('reminderTwo').value=e?.reminderTwo??'off';$('reminderTwoTime').value=e?.reminderTwoTime||'07:00';$('eventDialog').showModal()}
 function editEvent(id){openEvent(state.events.find(e=>e.id===id))}
 $('cancelEvent').onclick=()=>$('eventDialog').close();
