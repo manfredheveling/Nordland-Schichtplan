@@ -595,6 +595,15 @@ dialog::backdrop{background:#06101dcc}.dialog-actions{display:flex;justify-conte
 </dialog>
 <dialog id="pinDialog"><h2 class="title">PIN eingeben</h2><div class="field"><input id="unlockPin" type="password" inputmode="numeric" maxlength="4" placeholder="4-stelliger PIN"></div><div class="dialog-actions"><button class="primary" id="unlockBtn">Entsperren</button></div><button type="button" id="forgotPinBtn" style="margin-top:12px;width:100%">PIN vergessen? – Admin über WhatsApp kontaktieren</button><p class="hint">Deine persönlichen Daten bleiben erhalten. Der Admin kann dir einen Rücksetz-Link senden; zurückgesetzt wird ausschließlich der Zugangspin.</p></dialog>
 <dialog id="pinResetDialog"><h2 class="title">Neuen persönlichen App-PIN festlegen</h2><p>Dein bisheriger Zugangspin wurde zurückgesetzt. Deine persönlichen Daten bleiben vollständig erhalten. Es wurden keine Kalender- oder sonstigen Daten gelöscht.</p><div class="field"><label for="resetNewPin">Neuer PIN (4 Ziffern)</label><input id="resetNewPin" type="password" inputmode="numeric" maxlength="4" placeholder="Neuen PIN eingeben"></div><div class="field"><label for="resetConfirmPin">Neuen PIN wiederholen</label><input id="resetConfirmPin" type="password" inputmode="numeric" maxlength="4" placeholder="PIN wiederholen"></div><div class="dialog-actions"><button class="primary" id="saveResetPinBtn">Neuen PIN speichern</button></div></dialog>
+<dialog id="adminPinDialog">
+ <h2 class="title">🔐 Admin-Bereich öffnen</h2>
+ <p class="sub">Bitte den separaten vierstelligen Admin-PIN eingeben.</p>
+ <div class="field"><label for="adminPinEntry">Admin-PIN</label><input id="adminPinEntry" type="password" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="4 Ziffern"></div>
+ <p id="adminPinMessage" class="hint" aria-live="polite"></p>
+ <div class="dialog-actions"><button type="button" id="adminPinCancel">Abbrechen</button><button type="button" class="primary" id="adminPinSubmit">Öffnen</button></div>
+ <button type="button" id="adminPinReset" style="width:100%;margin-top:12px">Admin-PIN auf 5478 zurücksetzen</button>
+ <p class="hint">Das Zurücksetzen betrifft ausschließlich den Admin-PIN auf diesem Handy. Persönliche Kalenderdaten, Schichtpläne und Einstellungen bleiben erhalten. Ohne gemeinsamen Server gilt diese Änderung nicht für andere Handys.</p>
+</dialog>
 <script>
 const $=id=>document.getElementById(id);
 const todayISO=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
@@ -1441,9 +1450,14 @@ function adminUsername(){return localStorage.getItem(ADMIN_USER_KEY)||'@Tweety00
 function adminPhone(){return localStorage.getItem(ADMIN_PHONE_KEY)||'015233948659'}
 function phoneForWa(){let p=adminPhone().replace(/\D/g,'');if(p.startsWith('00'))p=p.slice(2);else if(p.startsWith('0'))p='49'+p.slice(1);return p}
 function renderAdminContact(){const u=adminUsername();$('adminUsername').value=u;$('adminPhone').value=adminPhone();$('adminContactStatus').textContent=u+' · WhatsApp-Kontakt über die hinterlegte Admin-Nummer'}
-function openAdminArea(){let saved=localStorage.getItem(ADMIN_PIN_KEY);if(!saved){saved='5478';localStorage.setItem(ADMIN_PIN_KEY,saved);alert('Der erste Admin-PIN lautet 5478. Du kannst ihn nach dem Öffnen im Admin-Bereich ändern.');}let entered=prompt('Separaten 4-stelligen Admin-PIN eingeben:');if(entered===null)return;if(entered!==saved){alert('Der Admin-PIN ist nicht korrekt.');return}adminUnlocked=true;renderAdminContact();tab('admin')}
+function openAdminArea(){const saved=localStorage.getItem(ADMIN_PIN_KEY);if(!saved)localStorage.setItem(ADMIN_PIN_KEY,'5478');$('adminPinEntry').value='';$('adminPinMessage').textContent='';$('adminPinDialog').showModal();setTimeout(()=>$('adminPinEntry').focus(),80)}
+function submitAdminPin(){const saved=localStorage.getItem(ADMIN_PIN_KEY)||'5478';const entered=$('adminPinEntry').value.trim();if(!/^\d{4}$/.test(entered)){$('adminPinMessage').textContent='Bitte genau vier Ziffern eingeben.';return}if(entered!==saved){$('adminPinMessage').textContent='Der Admin-PIN stimmt nicht. Falls 5478 dein gewünschter Erst-PIN ist, kannst du ihn unten auf diesem Handy wiederherstellen.';return}$('adminPinDialog').close();adminUnlocked=true;renderAdminContact();tab('admin')}
 function openWhatsApp(message,sendToAdmin=true){const phone=phoneForWa();const url=sendToAdmin?('https://wa.me/'+phone+'?text='+encodeURIComponent(message)):('https://wa.me/?text='+encodeURIComponent(message));window.location.href=url}
 $('openAdminBtn').onclick=openAdminArea;
+$('adminPinSubmit').onclick=submitAdminPin;
+$('adminPinEntry').addEventListener('keydown',e=>{if(e.key==='Enter')submitAdminPin()});
+$('adminPinCancel').onclick=()=> $('adminPinDialog').close();
+$('adminPinReset').onclick=()=>{if(!confirm('Den Admin-PIN nur auf diesem Handy auf 5478 zurücksetzen? Alle persönlichen Daten und Einstellungen bleiben unverändert.'))return;localStorage.setItem(ADMIN_PIN_KEY,'5478');$('adminPinEntry').value='5478';$('adminPinMessage').textContent='Der Admin-PIN wurde auf diesem Handy auf 5478 zurückgesetzt. Tippe jetzt auf „Öffnen“. Persönliche Daten wurden nicht verändert.'};
 $('contactAdminBtn').onclick=()=>openWhatsApp('Hallo Admin, ich benötige Unterstützung mit dem Nordland-Schichtplan.');
 $('adminExitBtn').onclick=()=>{adminUnlocked=false;tab('calendar')};
 $('saveAdminContact').onclick=()=>{let u=$('adminUsername').value.trim(),p=$('adminPhone').value.trim();if(!/^@[A-Za-z0-9._-]{3,40}$/.test(u)){alert('Bitte einen gültigen WhatsApp-Benutzernamen mit @ eingeben.');return}if(p.replace(/\D/g,'').length<8){alert('Bitte eine gültige Admin-WhatsApp-Nummer eingeben.');return}localStorage.setItem(ADMIN_USER_KEY,u);localStorage.setItem(ADMIN_PHONE_KEY,p);renderAdminContact();alert('Admin-Kontakt gespeichert. Die Telefonnummer wird nur zum Öffnen des WhatsApp-Kontakts verwendet.');};
