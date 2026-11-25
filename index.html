@@ -1308,15 +1308,40 @@ function kallePopulateVoices(){
  const sel=$('kalleVoiceSelect');if(!sel)return;
  const voices=kalleVoices(),saved=kalleParseChoice(localStorage.getItem(KALLE_VOICE_KEY)||''),previous=kalleParseChoice(sel.value);
  sel.innerHTML='';
- if(!voices.length){const o=document.createElement('option');o.value='';o.textContent='Noch keine Gerätestimmen verfügbar';sel.appendChild(o);weatherUIMessage('kalleVoiceStatus','Das Gerät hat noch keine Stimmen gemeldet. Bitte die Stimmenliste später erneut öffnen.');return}
- const groups=[['🇩🇪 DEUTSCHE GERÄTESTIMMEN',voices.filter(v=>(v.lang||'').toLowerCase().startsWith('de'))],['🌍 ANDERE SPRACHEN',voices.filter(v=>!(v.lang||'').toLowerCase().startsWith('de'))]];
- groups.forEach(([label,list])=>{if(!list.length)return;const group=document.createElement('optgroup');group.label=`${label} (${list.length} echte Gerätestimme${list.length===1?'':'n'})`;list.sort((a,b)=>a.name.localeCompare(b.name));list.forEach(v=>{KALLE_CHARACTERS.forEach(c=>{const o=document.createElement('option');o.value=v.voiceURI+'::'+c.id;o.textContent=`${v.name} (${v.lang||'Sprache unbekannt'}) · ${c.name}`;group.appendChild(o)})});sel.appendChild(group)});
+ if(!voices.length){
+  const o=document.createElement('option');o.value='';o.textContent='Noch keine Gerätestimmen verfügbar';sel.appendChild(o);
+  weatherUIMessage('kalleVoiceStatus','Das Gerät meldet derzeit keine Stimmen. Bitte deutsche Sprachdaten in den Geräte-Einstellungen installieren und danach die Stimmenliste erneut öffnen.');
+  return;
+ }
+ const german=voices.filter(v=>(v.lang||'').toLowerCase().startsWith('de'));
+ const other=voices.filter(v=>!(v.lang||'').toLowerCase().startsWith('de'));
+ function addGroup(label,list,isGerman){
+  if(!list.length)return;
+  const group=document.createElement('optgroup');group.label=label;
+  list.forEach((v,index)=>{
+   const slot=isGerman?`Stimme ${index+1}`:'Weitere Stimme';
+   KALLE_CHARACTERS.forEach(c=>{
+    const o=document.createElement('option');
+    o.value=v.voiceURI+'::'+c.id;
+    o.textContent=`${slot} – ${v.name||'Gerätestimme'} (${v.lang||'Sprache unbekannt'}) · ${c.name}`;
+    group.appendChild(o);
+   });
+  });
+  sel.appendChild(group);
+ }
+ addGroup(`🇩🇪 DEUTSCHE STIMMEN DES GERÄTS (${german.length})`,german,true);
+ addGroup(`🌍 ANDERE SPRACHEN (${other.length})`,other,false);
  const exists=value=>value&&Array.from(sel.options).some(o=>o.value===value);
  const preferred=[saved&&saved.voiceURI+'::'+saved.character,previous&&previous.voiceURI+'::'+previous.character].find(exists);
  if(preferred)sel.value=preferred;else sel.selectedIndex=-1;
- const germanCount=groups[0][1].length;
- weatherUIMessage('kalleVoiceStatus',germanCount?`${germanCount} unterschiedliche deutsche Originalstimme(n) meldet dein Gerät. Bitte eine Stimme bewusst auswählen und probehören. Wichtig: Android/iOS liefern der App keine verlässliche Geschlechtsangabe. Ob eine Stimme männlich klingt, muss beim Probehören geprüft werden. Charakterprofile ändern nur Tempo und Tonhöhe.`:'Keine deutsche Gerätestimme gefunden. Installiere zusätzliche deutsche Stimmen in den Text-in-Sprache-Einstellungen deines Geräts.');
+ const genderNote=german.length>=4
+  ?'Auf dem Blackview BV5000 hast du geprüft: Stimme 1 und 2 klingen weiblich, Stimme 3 und 4 männlich. Auf anderen Handys kann die Stimmenreihenfolge anders sein; dort bitte jede Stimme probehören.'
+  :'Dieses Gerät stellt derzeit '+german.length+' deutsche Stimme(n) bereit. Fehlende Stimmen müssen in den Text-in-Sprache-Einstellungen des Geräts installiert werden.';
+ weatherUIMessage('kalleVoiceStatus',german.length
+  ?`${german.length} deutsche Originalstimme(n) gefunden. Sie stehen einzeln als Stimme 1, Stimme 2 usw. zur Auswahl. ${genderNote} Die Charakterprofile verändern zusätzlich Tempo und Tonhöhe, ersetzen aber keine andere Grundstimme.`
+  :'Keine deutsche Gerätestimme gefunden. Installiere deutsche Sprachdaten in den Text-in-Sprache-Einstellungen deines Geräts.');
 }
+
 function kalleSpeak(text,preview=false,choiceValue=null){
  if(!('speechSynthesis'in window)||!('SpeechSynthesisUtterance'in window))return false;
  try{
