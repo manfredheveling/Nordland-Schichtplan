@@ -1280,7 +1280,28 @@ function weatherSpeechText(data,condition,changed){
  const detail=currentLanguage==='de'?`Aktuell ${t[condition]}, ${temp} Grad, Wind ${wind} Kilometer pro Stunde. Heute werden ${low!==null&&high!==null?low+' bis '+high+' Grad':temp+' Grad'} erwartet${rainMax!==null?', Regenwahrscheinlichkeit bis '+rainMax+' Prozent':''}${windMax!==null?', Böen beziehungsweise Wind bis '+windMax+' km/h':''}.`:currentLanguage==='en'?`Currently ${t[condition]}, ${temp} degrees, wind ${wind} kilometres per hour. Today ${low!==null&&high!==null?'temperatures from '+low+' to '+high+' degrees':''}${rainMax!==null?', rain chance up to '+rainMax+' percent':''}${windMax!==null?', wind up to '+windMax+' kilometres per hour':''}.`:`${t[condition]}, ${temp}°. ${wind} km/h. ${low!==null&&high!==null?low+'–'+high+'°.':''}`;
  return `${lead}${joke} ${detail}`;
 }
-function weatherSpeak(text){if(!('speechSynthesis'in window)||!('SpeechSynthesisUtterance'in window))return false;try{window.speechSynthesis.cancel();const lang=({de:'de-DE',en:'en-GB',fr:'fr-FR',pl:'pl-PL',tr:'tr-TR',nl:'nl-NL',ro:'ro-RO',hr:'hr-HR',bs:'bs-BA',sr:'sr-RS',uk:'uk-UA',ru:'ru-RU'})[currentLanguage]||'de-DE';const u=new SpeechSynthesisUtterance(text);u.lang=lang;u.rate=.98;u.pitch=1.08;const prefix=lang.split('-')[0],v=window.speechSynthesis.getVoices().find(x=>x.lang&&x.lang.toLowerCase().startsWith(prefix));if(v)u.voice=v;window.speechSynthesis.speak(u);return true}catch(e){return false}}
+function weatherSpeak(text){
+ if(!('speechSynthesis'in window)||!('SpeechSynthesisUtterance'in window))return false;
+ try{
+  const synth=window.speechSynthesis;
+  synth.cancel();
+  const lang=({de:'de-DE',en:'en-GB',fr:'fr-FR',pl:'pl-PL',tr:'tr-TR',nl:'nl-NL',ro:'ro-RO',hr:'hr-HR',bs:'bs-BA',sr:'sr-RS',uk:'uk-UA',ru:'ru-RU'})[currentLanguage]||'de-DE';
+  const prefix=lang.split('-')[0].toLowerCase();
+  const voices=synth.getVoices().filter(v=>v.lang&&v.lang.toLowerCase().startsWith(prefix));
+  // Prefer installed high-quality/neural/natural voices when the device provides them.
+  const qualityRank=v=>{const n=(v.name||'').toLowerCase();let score=0;if(/neural|natural|enhanced|premium|high quality|hochwertig/.test(n))score+=100;if(/google/.test(n))score+=35;if(/samsung/.test(n))score+=20;if(v.lang&&v.lang.toLowerCase()===lang.toLowerCase())score+=15;if(v.localService)score+=2;return score};
+  voices.sort((a,b)=>qualityRank(b)-qualityRank(a));
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang=lang;
+  // Slightly slower, natural pacing; avoid exaggerated pitch that sounds synthetic.
+  u.rate=currentLanguage==='de'?.94:.96;
+  u.pitch=1.0;
+  u.volume=1;
+  if(voices.length)u.voice=voices[0];
+  synth.speak(u);
+  return true;
+ }catch(e){return false}
+}
 function weatherUIMessage(id,text){const el=$(id);if(el)el.textContent=text}
 function weatherPosition(){return new Promise((resolve,reject)=>{if(!navigator.geolocation)return reject(new Error('geo'));navigator.geolocation.getCurrentPosition(p=>resolve({lat:p.coords.latitude,lon:p.coords.longitude}),reject,{enableHighAccuracy:false,timeout:12000,maximumAge:900000})})}
 async function weatherReport(trigger='open'){
