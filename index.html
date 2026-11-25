@@ -300,7 +300,20 @@ body.reminder-alert-open{animation:reminderScreenGlow 1.3s ease-in-out infinite 
 #languagePickerWrap{display:flex;align-items:center;gap:6px}
 #languagePickerWrap.hidden{display:none!important}
 #languageBtn{font-weight:800;color:#fff!important;background:linear-gradient(135deg,#347f83,#245f68)!important;border:2px solid #a9d3d1;box-shadow:0 2px 8px #245f6833;text-shadow:0 1px 2px #173f44;}
-.weather-top-action{display:flex;justify-content:stretch;margin:8px 0 14px}.weather-top-action button{width:100%;min-height:62px;padding:14px 18px;font-size:20px;font-weight:900;letter-spacing:.2px;border-radius:14px;background:linear-gradient(135deg,#1686d9,#123b70);color:#fff;border:2px solid #8bcaff;box-shadow:0 5px 16px #123b7045;text-shadow:0 1px 2px #102b49}.weather-top-action button:active{transform:scale(.985)}#weatherSettingsPanel:not(.hidden){position:fixed;z-index:10050;left:50%;top:50%;transform:translate(-50%,-50%);width:min(92vw,520px);max-height:82vh;overflow-y:auto;margin:0!important;padding:22px;background:var(--card,#fff);color:var(--text,#172033);border:2px solid #3185c5;border-radius:18px;box-shadow:0 18px 60px #0008}body:has(#weatherSettingsPanel:not(.hidden)){overflow:hidden}
+.weather-top-action{display:flex;justify-content:stretch;margin:10px 0 16px;gap:9px}.weather-top-action button{width:100%;min-height:62px;padding:14px 18px;font-size:20px;font-weight:900;letter-spacing:.2px;border-radius:14px;background:linear-gradient(135deg,#1686d9,#123b70);color:#fff;border:2px solid #8bcaff;box-shadow:0 5px 16px #123b7045;text-shadow:0 1px 2px #102b49}.weather-top-action button:active{transform:scale(.985)}
+.weather-top-action #weatherDirectBtn.weather-show-button{position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:154px;padding:13px 12px 14px;border:3px solid #ffe16b;border-radius:20px;background:radial-gradient(ellipse at 50% -15%,#fff8a8 0%,transparent 42%),linear-gradient(135deg,#ff8a00 0%,#f04438 43%,#7025a8 100%);color:#fff;box-shadow:0 7px 0 #762c70,0 10px 24px #8a287b70,0 0 22px #ffd54f80; text-shadow:0 2px 3px #57204d;animation:weatherButtonPulse 2.8s ease-in-out infinite;cursor:pointer}
+.weather-show-button:before{content:"";position:absolute;z-index:-1;top:-60%;left:-35%;width:35%;height:230%;transform:rotate(25deg);background:linear-gradient(90deg,transparent,#ffffff75,transparent);animation:weatherButtonShine 4.2s ease-in-out infinite}
+.weather-show-kicker{font-size:clamp(10px,2.7vw,12px);font-weight:950;letter-spacing:1.5px;color:#fff8c9}
+.weather-show-title{font-size:clamp(23px,6vw,31px);font-weight:1000;line-height:1.05;letter-spacing:1px;color:#fff;text-shadow:0 3px 0 #70204d,0 5px 12px #3b123d}
+.weather-show-main{font-size:clamp(15px,4vw,19px);font-weight:950;line-height:1.2}
+.weather-show-sub{font-size:clamp(11px,3vw,13px);font-weight:750;color:#fff4d7}
+.weather-show-cta{margin-top:3px;padding:7px 13px;border:2px solid #fff4b5;border-radius:999px;background:linear-gradient(90deg,#fff2a6,#ffcf38);color:#64234c;font-size:clamp(11px,3vw,14px);font-weight:1000;text-shadow:none;box-shadow:0 3px 10px #41123b55}
+.weather-show-spark{position:absolute;right:10px;top:7px;font-size:18px;letter-spacing:2px;animation:weatherSpark 2s ease-in-out infinite alternate}
+@keyframes weatherButtonPulse{0%,100%{transform:translateY(0);box-shadow:0 7px 0 #762c70,0 10px 24px #8a287b70,0 0 17px #ffd54f70}50%{transform:translateY(-2px);box-shadow:0 9px 0 #762c70,0 14px 30px #8a287b90,0 0 28px #ffd54fb0}}
+@keyframes weatherButtonShine{0%,58%{left:-45%;opacity:0}70%{opacity:1}100%{left:130%;opacity:0}}
+@keyframes weatherSpark{from{transform:rotate(-12deg) scale(.85)}to{transform:rotate(12deg) scale(1.18)}}
+@media(prefers-reduced-motion:reduce){.weather-show-button,.weather-show-button:before,.weather-show-spark{animation:none!important}}
+#weatherSettingsPanel:not(.hidden){position:fixed;z-index:10050;left:50%;top:50%;transform:translate(-50%,-50%);width:min(92vw,520px);max-height:82vh;overflow-y:auto;margin:0!important;padding:22px;background:var(--card,#fff);color:var(--text,#172033);border:2px solid #3185c5;border-radius:18px;box-shadow:0 18px 60px #0008}body:has(#weatherSettingsPanel:not(.hidden)){overflow:hidden}
 @media(max-width:560px){.toolbar{gap:7px}.toolbar #languageBtn{flex:1 1 100%;min-height:42px}.toolbar #languagePickerWrap{flex:1 1 100%}.toolbar #languageSelect{flex:1;min-width:0}}
 
 </style>
@@ -316,7 +329,7 @@ body.reminder-alert-open{animation:reminderScreenGlow 1.3s ease-in-out infinite 
   <button type="button" id="contactAdminBtn">💬 Kontakt zum Admin<small>Direkter WhatsApp-Kontakt zum Admin</small></button>
   <button type="button" id="openAdminBtn">🔐 Admin-Bereich<small>Separater Admin-PIN</small></button>
  </div>
- <div class="weather-top-action" style="display:flex;gap:8px"><button type="button" id="weatherDirectBtn" style="flex:1">🌦️ Wetterbericht anhören</button><button type="button" id="weatherSettingsBtn" aria-label="Wetterbericht-Einstellungen öffnen" title="Wetterbericht-Einstellungen öffnen" style="width:58px;flex:0 0 58px">⚙️</button></div>
+ <div class="weather-top-action" style="display:flex;gap:8px;align-items:stretch"><button type="button" id="weatherDirectBtn" class="weather-show-button" style="flex:1"><span class="weather-show-kicker">🎙️ EXKLUSIV AUS DEM WETTERSTUDIO</span><span class="weather-show-title">KALLE KR AWALLO</span><span class="weather-show-main">🌦️ Was Petrus heute wieder treibt …</span><span class="weather-show-sub">Freche Sprüche · echte Wetterdaten · täglich anders</span><span class="weather-show-cta">▶ JETZT ANHÖREN – LACHEN GARANTIERT!</span><span class="weather-show-spark" aria-hidden="true">✨☀️🌧️</span></button><button type="button" id="weatherSettingsBtn" aria-label="Wetterbericht-Einstellungen öffnen" title="Wetterbericht-Einstellungen öffnen" style="width:58px;flex:0 0 58px">⚙️</button></div>
  <div class="toolbar">
   <button type="button" id="languageBtn" aria-expanded="false">🌐 Sprache / Language</button>
   <label id="languagePickerWrap" class="small hidden" style="display:flex;align-items:center;gap:6px"><span>Sprache</span><select id="languageSelect" aria-label="App-Sprache auswählen" style="width:auto;padding:8px"><option value="de">🇩🇪 Deutsch</option><option value="uk">🇺🇦 Українська</option><option value="ru">🇷🇺 Русский</option><option value="en">🇬🇧 English</option><option value="fr">🇫🇷 Français</option><option value="pl">🇵🇱 Polski</option><option value="tr">🇹🇷 Türkçe</option><option value="nl">🇳🇱 Nederlands</option><option value="ro">🇷🇴 Română</option><option value="hr">🇭🇷 Hrvatski</option><option value="bs">🇧🇦 Bosanski</option><option value="sr">🇷🇸 Српски</option></select></label>
@@ -1284,23 +1297,68 @@ function weatherSpeechText(data,condition,changed){
  if(extra[currentLanguage]&&extra[currentLanguage][condition])pool.push(...extra[currentLanguage][condition]);
  const key='nordlandWeatherJoke_'+currentLanguage+'_'+condition,last=Number(localStorage.getItem(key)||-1);let idx=Math.floor(Math.random()*pool.length);if(pool.length>1&&idx===last)idx=(idx+1+Math.floor(Math.random()*(pool.length-1)))%pool.length;localStorage.setItem(key,String(idx));
  const joke=pool[idx],temp=Math.round(data.current.temperature_2m),wind=Math.round(data.current.wind_speed_10m),rain=data.hourly&&data.hourly.precipitation_probability?data.hourly.precipitation_probability[0]:null;
- const kalleLead=currentLanguage==='de'?'Tach zusammen, hier ist wieder euer Kalle Krawallo. Ich habe Petrus kurz ins Gewissen geredet, aber der alte Wetterwerker macht natürlich sein eigenes Ding. ':'';
  const lead=changed?({de:'Achtung, Wetterwechsel! ',en:'Weather change! ',fr:'Changement météo ! ',pl:'Zmiana pogody! ',tr:'Hava değişikliği! ',nl:'Weersverandering! ',ro:'Schimbare de vreme! ',hr:'Promjena vremena! ',bs:'Promjena vremena! ',sr:'Промена времена! ',uk:'Зміна погоди! ',ru:'Смена погоды! '}[currentLanguage]||'') : '';
- const detail=currentLanguage==='de'?`Aktuell ${t[condition]}, ${temp} Grad, Wind ${wind} Kilometer pro Stunde${rain!==null?', Regenwahrscheinlichkeit '+rain+' Prozent':''}.`:currentLanguage==='en'?`Currently ${t[condition]}, ${temp} degrees, wind ${wind} kilometres per hour${rain!==null?', rain chance '+rain+' percent':''}.`:`${t[condition]}, ${temp}°. ${wind} km/h.`;
- return `${kalleLead}${lead}${joke} ${detail}${currentLanguage==='de'?' Und denkt dran: Wetter ist das, was draußen passiert, während wir drinnen darüber meckern. Euer Kalle Krawallo verabschiedet sich – bleibt trocken, soweit das heute noch möglich ist!':''}`;
+ const detail=currentLanguage==='de'?`Aktuell haben wir ${t[condition]}, ${temp} Grad und Wind mit ${wind} Kilometern pro Stunde${rain!==null?'. Die Regenwahrscheinlichkeit liegt bei '+rain+' Prozent':''}.`:currentLanguage==='en'?`Currently ${t[condition]}, ${temp} degrees, wind ${wind} kilometres per hour${rain!==null?', rain chance '+rain+' percent':''}.`:`${t[condition]}, ${temp}°. ${wind} km/h.`;
+ if(currentLanguage==='de'){
+  const openings=[
+   'Moin, ihr wettergeprüften Gestalten! Kalle Krawallo hier. Macht es euch bequem – oder bleibt besser stehen, falls gleich eine Warnung kommt. Denn Petrus hat offenbar wieder an sämtlichen Knöpfen herumgespielt.',
+   'Achtung, Achtung! Hier spricht Kalle Krawallo – live aus dem Studio für himmlische Fehlentscheidungen. Heute schauen wir dem Wettergott ganz genau auf die Finger. Und glaubt mir: Der Kerl hat einiges zu erklären.',
+   'Na, seid ihr bereit für die tägliche Portion Wetter-Wahnsinn? Kalle ist am Mikrofon. Ich habe da oben nachgefragt. Eine vernünftige Antwort gab es natürlich nicht. Typisch Petrus – große Klappe, null Kundenservice.'
+  ];
+  const stories={
+   sun:[
+    'Draußen macht die Sonne heute einen auf Superstar. Blendend, warm und offenbar völlig überzeugt von sich selbst. Fast so, als hätte sie persönlich die Stromrechnung bezahlt. Genießt es – bevor Petrus merkt, dass ihm ein schöner Tag durchgerutscht ist.',
+    'Heute kommt der Himmel tatsächlich mit brauchbaren Nachrichten um die Ecke. Sonne satt! Die Vitamin-D-Abteilung jubelt, die schlechte Laune bekommt hitzefrei. Wer jetzt noch meckert, hat vermutlich sein Hobby gefunden.'
+   ],
+   cloud:[
+    'Der Himmel trägt heute Grau in Grau. Sehr mutig, diese modische Entscheidung – sieht trotzdem aus wie eine schlecht gelaunte Betonwand. Die Wolken hängen herum, beraten sich und kriegen vermutlich wieder nichts auf die Reihe. Also genau wie eine Sitzung ohne Kaffee.',
+    'Heute ist Wolkenkino angesagt. Der Himmel sieht aus, als hätte jemand die Helligkeit auf null gedreht. Ob noch Regen kommt? Die Wolken halten sich bedeckt. Was für eine Überraschung – Geheimniskrämerei können sie.'
+   ],
+   rain:[
+    'Und jetzt haltet eure Frisuren fest: Der Himmel hat den Wasserhahn auf Vollgas gestellt! Petrus veranstaltet offenbar eine kostenlose Außenwäsche. Regenschirm mitnehmen, sonst seht ihr nachher aus wie ein begossener Pudel auf Betriebsausflug. Die Pflanzen feiern – der Rest darf fluchen.',
+    'Regen! Natürlich Regen. Weil wir ja alle nichts lieber mögen, als mit nassen Socken durch den Tag zu laufen. Petrus nennt das vermutlich Erfrischung. Ich nenne es eine himmlische Frechheit. Also: Jacke zu, Schirm auf und dem Wetter ordentlich die kalte Schulter zeigen.'
+   ],
+   snow:[
+    'Schnee – wunderschön anzusehen, solange man hinter einer Fensterscheibe sitzt. Draußen kann aus der Winterromantik schneller eine unfreiwillige Arschlandung werden, als ihr „Schlittenfahrt“ sagen könnt. Also bitte langsam machen. Der Gehweg ist keine Eislaufbahn und euer Hintern kein Airbag.',
+    'Frau Holle schüttelt offenbar die Kissen aus. Sieht nett aus, macht aber die Wege tückisch. Wer jetzt meint, mit Sommerreifen und Gottvertrauen sei alles geregelt, sollte vielleicht vorher sein Testament alphabetisch sortieren. Vorsicht ist angesagt.'
+   ],
+   storm:[
+    'Jetzt wird es ernst, Freunde: Der Himmel könnte ordentlich Krawall machen. Blitze und Donner sind keine Gratis-Lichtshow und kein Grund, draußen den Helden zu markieren. Sucht Schutz in einem Gebäude oder Auto und bleibt weg von Bäumen und offenen Flächen. Kalle macht Sprüche – mit Gewitter legt man sich nicht an.',
+    'Petrus hat möglicherweise die Sicherung verloren. Wenn es blitzt und kracht, bleibt bitte drinnen und sucht einen sicheren Platz. Keine Gartenparty, kein Selfie auf freiem Feld. Wir wollen doch nicht, dass der Wetterbericht zur Einsatzmeldung wird.'
+   ],
+   fog:[
+    'Nebel! Die Welt hat heute offenbar vergessen, ihre Brille aufzusetzen. Die Sicht kann plötzlich weg sein – wie eure Motivation am Montagmorgen. Fahrt vorsichtig, Abstand halten und Licht einschalten. Nicht raten, was vor euch fährt. Das ist Verkehr und kein verdammtes Quiz.',
+    'Heute spielt die Landschaft Verstecken. Ihr seht weniger, als ihr gerne würdet – und das ist keine Einladung, dichter aufzufahren. Tempo runter, Abstand rauf. Kalle möchte euch morgen wieder am Mikrofon begrüßen und nicht im Polizeibericht.'
+   ],
+   wind:[
+    'Der Wind hat heute offenbar einen persönlichen Kleinkrieg mit allem, was nicht festgeschraubt ist. Mülltonnen, Gartenstühle und schlecht sitzende Mützen stehen auf seiner Abschussliste. Sichert den Kram. Und wenn die Frisur danach aussieht wie ein explodierter Handfeger: Das ist kein Unfall, das ist Wetter.',
+    'Heute pustet es ordentlich. Petrus probiert wohl einen Laubbläser in XXL. Alles Lose festmachen und aufpassen, besonders draußen und auf dem Rad. Wer seine Mütze verliert, darf ihr hinterherwinken – aber bitte nicht kopflos auf die Straße rennen.'
+   ],
+   frost:[
+    'Achtung, Frost! Draußen ist es so kalt, dass selbst der eigene Atem kündigen möchte. Wege können glatt sein. Also keine heldenhaften Rutschpartien – wir sind hier nicht bei „Holiday on Ice“, und die Notaufnahme braucht keine zusätzlichen Stammkunden.',
+    'Die Temperaturen sind im Keller und haben offenbar die Heizung nicht gefunden. Zieht euch warm an und passt auf glatte Stellen auf. Kalte Ohren sind ärgerlich, ein gebrochener Arm ist noch beschissener.'
+   ]
+  };
+  const storyPool=stories[condition]||stories.cloud;
+  const story=storyPool[Math.floor(Math.random()*storyPool.length)];
+  const temp=Math.round(data.current.temperature_2m),feels=Math.round(data.current.apparent_temperature??temp),wind=Math.round(data.current.wind_speed_10m),gust=Math.round(data.current.wind_gusts_10m??wind),humidity=Math.round(data.current.relative_humidity_2m??0),rainChance=data.hourly&&data.hourly.precipitation_probability?data.hourly.precipitation_probability[0]:null;
+  const facts=`Und jetzt die nackten Zahlen – keine Sorge, ich ziehe mich dafür nicht aus: ${temp} Grad, gefühlt ${feels} Grad, Wind ${wind} Kilometer pro Stunde${gust>wind+8?`, in Böen sogar bis ${gust} Kilometer pro Stunde`:''}${rainChance!==null?`, Regenwahrscheinlichkeit ${rainChance} Prozent`:''}${humidity?`, Luftfeuchtigkeit ${humidity} Prozent`:''}.`;
+  const punchlines=[
+   'Und jetzt kommt der Teil, den Petrus am liebsten verschweigen würde: Das Wetter ist nicht beleidigt, wenn ihr einen Regenschirm benutzt. Also macht es einfach.',
+   'Mein Rat: Zieht euch passend an, benehmt euch halbwegs vernünftig und gebt dem Wetter nicht auch noch die Schuld für eure schlechte Laune. Dafür seid ihr schon selbst zuständig.',
+   'Falls ihr jetzt denkt, schlimmer kann es nicht werden: Unterschätzt niemals einen gelangweilten Wettergott. Ich behalte den Kerl im Auge.',
+   'Merkt euch: Der Wetterbericht ist kostenlos. Die nassen Schuhe, der Frisurschaden und die schlechte Laune sind leider euer Privatvergnügen.'
+  ];
+  const closers=[
+   'Das war Kalle Krawallo. Bleibt sauber, bleibt trocken – und wenn nicht, dann wenigstens mit Stil. Bis zur nächsten Wetter-Katastrophe, ihr Lieben!',
+   'Kalle macht Schluss für heute. Passt auf euch auf, haltet die Ohren steif und Petrus den Mittelfinger gedanklich in Sichtweite. Tschüss, ihr Wetteropfer!',
+   'Damit zurück in euren ganz normalen Wahnsinn. Kalle Krawallo sagt: Macht das Beste draus – mehr hat Petrus heute offensichtlich auch nicht im Angebot. Haut rein!'
+  ];
+  const intro=lead? 'Achtung, Wetterwechsel! Jetzt wird es interessant. ':'';
+  return `${intro}${openings[Math.floor(Math.random()*openings.length)]} ${story} ${facts} ${punchlines[Math.floor(Math.random()*punchlines.length)]} Und wartet, bevor ihr abschaltet: ${closers[Math.floor(Math.random()*closers.length)]}`;
+ }
+ return `${lead}${joke} ${detail}`;
 }
-const KALLE_VOICE_KEY='nordlandKalleVoiceURI';
-const KALLE_TEST_TEXT="Tach zusammen! Hier spricht euer Wettermoderator. Ich sach mal so: Wenn Petrus heute wieder Mist baut, dann kriegt der von mir höchstpersönlich eine Abmahnung wegen schlechtem Wettermanagement!";
-const KALLE_CHARACTERS=[
- {id:'brumm',name:'Bruno Brummbär – tief & gemütlich',rate:.86,pitch:.62},
- {id:'krawall',name:'Kalle Krawallo – rau & frech',rate:1.02,pitch:.78},
- {id:'boss',name:'Boss Bernd – dominant & bestimmt',rate:.91,pitch:.72},
- {id:'samthut',name:'Samtstimme Sven – weich & warm',rate:.88,pitch:1.12},
- {id:'flink',name:'Fiete Flitz – flott & energiegeladen',rate:1.13,pitch:1.12},
- {id:'trocken',name:' trocken-komischer Theo – ruhig & ironisch',rate:.94,pitch:.96},
- {id:'sonnenschein',name:'Sunny – freundlich & hell',rate:1.02,pitch:1.28},
- {id:'nacht',name:'Nachtwächter Norbert – dunkel & langsam',rate:.82,pitch:.68}
-];
 function kalleVoices(){try{return window.speechSynthesis.getVoices()||[]}catch(e){return []}}
 function kalleVoiceLabel(v){return `${v.name} (${v.lang||'Sprache unbekannt'})${v.default?' · Standard':''}`}
 function kalleParseChoice(value){if(!value)return null;let parts=value.split('::');return {voiceURI:parts[0],character:parts[1]||'krawall'}}
@@ -1413,9 +1471,9 @@ function weatherTranslateControls(){
  uk:{button:'⚙️ Налаштування погоди',close:'Закрити',off:'Вимкнено',one:'1 прогнозa на день',two:'2 прогнози на день',three:'3 прогнози на день',four:'4 прогнози на день',five:'5 прогноз на день',ten:'10 прогноз на день',twenty:'20 прогноз на день',fun:'Ведучий замовкає, коли ти захочеш, і не ображається.'},
  ru:{button:'⚙️ Настройки погоды',close:'Закрыть',off:'Выключено',one:'1 прогноз в день',two:'2 прогноза в день',three:'3 прогноза в день',four:'4 прогноза в день',five:'5 прогнозов в день',ten:'10 прогнозов в день',twenty:'20 прогнозов в день',fun:'Ведущий замолкает, когда ты захочешь, и не обижается.'}
  };
- const x=packs[currentLanguage]||packs.de,sel=$('weatherDailyLimit');const changeLabel=$('weatherChangeLabel');if(changeLabel)changeLabel.textContent=({de:'Bei deutlichem Wetterwechsel automatisch einen neuen Bericht sprechen',en:'Automatically announce a new report when the weather changes significantly',fr:'Annoncer automatiquement un nouveau bulletin en cas de changement météo important',pl:'Automatycznie odtwarzaj nowy komunikat przy znacznej zmianie pogody',tr:'Hava belirgin şekilde değiştiğinde otomatik yeni duyuru yap',nl:'Automatisch een nieuw bericht bij een duidelijke weersverandering',ro:'Anunță automat un nou buletin la schimbări importante ale vremii',hr:'Automatski najavi novu prognozu pri značajnoj promjeni vremena',bs:'Automatski najavi novu prognozu pri značajnoj promjeni vremena',sr:'Аутоматски објави нову прогнозу при значајној промени времена',uk:'Автоматично оголошувати новий прогноз за значної зміни погоди',ru:'Автоматически сообщать новый прогноз при заметном изменении погоды'})[currentLanguage]||'Bei deutlichem Wetterwechsel automatisch einen neuen Bericht sprechen';const weatherButton=$('weatherSettingsBtn');if(weatherButton){weatherButton.textContent='⚙️';weatherButton.title=currentLanguage==='de'?'Wetterbericht-Einstellungen':'Weather settings'}const directButton=$('weatherDirectBtn');if(directButton)directButton.textContent=currentLanguage==='de'?'🌦️ Wetterbericht anhören':'🌦️ Listen to weather report';$('weatherSettingsClose').textContent=x.close;const heading=$('weatherHeading');if(heading)heading.textContent=({de:'Wetterbericht',en:'Weather report',fr:'Bulletin météo',pl:'Prognoza pogody',tr:'Hava durumu',nl:'Weerbericht',ro:'Buletin meteo',hr:'Vremenska prognoza',bs:'Vremenska prognoza',sr:'Временска прогноза',uk:'Прогноз погоди',ru:'Прогноз погоды'})[currentLanguage]||'Wetterbericht';
+ const x=packs[currentLanguage]||packs.de,sel=$('weatherDailyLimit');const changeLabel=$('weatherChangeLabel');if(changeLabel)changeLabel.textContent=({de:'Bei deutlichem Wetterwechsel automatisch einen neuen Bericht sprechen',en:'Automatically announce a new report when the weather changes significantly',fr:'Annoncer automatiquement un nouveau bulletin en cas de changement météo important',pl:'Automatycznie odtwarzaj nowy komunikat przy znacznej zmianie pogody',tr:'Hava belirgin şekilde değiştiğinde otomatik yeni duyuru yap',nl:'Automatisch een nieuw bericht bij een duidelijke weersverandering',ro:'Anunță automat un nou buletin la schimbări importante ale vremii',hr:'Automatski najavi novu prognozu pri značajnoj promjeni vremena',bs:'Automatski najavi novu prognozu pri značajnoj promjeni vremena',sr:'Аутоматски објави нову прогнозу при значајној промени времена',uk:'Автоматично оголошувати новий прогноз за значної зміни погоди',ru:'Автоматически сообщать новый прогноз при заметном изменении погоды'})[currentLanguage]||'Bei deutlichem Wetterwechsel automatisch einen neuen Bericht sprechen';const weatherButton=$('weatherSettingsBtn');if(weatherButton){weatherButton.textContent='⚙️';weatherButton.title=currentLanguage==='de'?'Wetterbericht-Einstellungen':'Weather settings'}const directButton=$('weatherDirectBtn');if(directButton)directButton.innerHTML=currentLanguage==='de'?'<span class="weather-show-kicker">🎙️ EXKLUSIV AUS DEM WETTERSTUDIO</span><span class="weather-show-title">KALLE KRAWALLO</span><span class="weather-show-main">🌦️ Was Petrus heute wieder treibt …</span><span class="weather-show-sub">Freche Sprüche · echte Wetterdaten · täglich anders</span><span class="weather-show-cta">▶ JETZT ANHÖREN – LACHEN GARANTIERT!</span><span class="weather-show-spark" aria-hidden="true">✨☀️🌧️</span>':'<span class="weather-show-kicker">🎙️ LIVE FROM THE WEATHER STUDIO</span><span class="weather-show-title">KALLE KRAWALLO</span><span class="weather-show-main">🌦️ What is the weather up to today?</span><span class="weather-show-sub">Cheeky jokes · real weather · a new show every day</span><span class="weather-show-cta">▶ LISTEN NOW!</span><span class="weather-show-spark" aria-hidden="true">✨☀️🌧️</span>';$('weatherSettingsClose').textContent=x.close;const heading=$('weatherHeading');if(heading)heading.textContent=({de:'Wetterbericht',en:'Weather report',fr:'Bulletin météo',pl:'Prognoza pogody',tr:'Hava durumu',nl:'Weerbericht',ro:'Buletin meteo',hr:'Vremenska prognoza',bs:'Vremenska prognoza',sr:'Временска прогноза',uk:'Прогноз погоди',ru:'Прогноз погоды'})[currentLanguage]||'Wetterbericht';
  if(sel){const labels={0:x.off,1:x.one,2:x.two,3:x.three,4:x.four,5:x.five,10:x.ten,20:x.twenty};[...sel.options].forEach(o=>{if(labels[o.value])o.textContent=labels[o.value]})}
- let fun=$('weatherFunHint');if(!fun){fun=document.createElement('p');fun.id='weatherFunHint';fun.className='small';$('weatherSettingsDescription').after(fun)}fun.textContent=x.fun;
+ let fun=$('weatherFunHint');if(!fun){fun=document.createElement('p');fun.id='weatherFunHint';fun.className='small';$('weatherSettingsDescription').after(fun)}fun.textContent=currentLanguage==='de'?'😎 Kalle Krawallo liefert den Wetterbericht mit wechselnden Sprüchen, frechen Kommentaren zu Petrus und den echten Wetterdaten. Kein Tag klingt wie der andere.':x.fun;
 }
 
 function scrollReminderAboveCalendar(){const reminder=$('reminderNav');if(!reminder)return;requestAnimationFrame(()=>{const top=reminder.getBoundingClientRect().top+window.scrollY-12;window.scrollTo({top:Math.max(0,top),behavior:'smooth'});});}
